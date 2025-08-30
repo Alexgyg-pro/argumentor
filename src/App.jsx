@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PropositionInput } from "./components/PropositionInput";
 import { ArgumentList } from "./components/ArgumentList";
+import { ExportButton } from "./components/ExportButton";
 import "./App.css";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       </button>
       {/* US-6 : Intégration de la liste */}
       <ArgumentList argumentList={argumentList} />
+      <ExportButton proposition={proposition} />
     </div>
   );
 }
