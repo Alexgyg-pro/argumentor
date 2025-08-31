@@ -1,15 +1,7 @@
-import { useState } from 'react';
-
-export function PropositionInput({ onPropositionChange }) {
-  const [proposition, setProposition] = useState('');
-
+export function PropositionInput({ value, onValueChange }) {
   const handleChange = (event) => {
     const newValue = event.target.value;
-    setProposition(newValue);
-    // Si la prop est fournie, on prévient le parent du changement
-    if (onPropositionChange) {
-      onPropositionChange(newValue);
-    }
+    onValueChange(newValue); // On renvoie la nouvelle valeur au parent
   };
 
   return (
@@ -18,7 +10,7 @@ export function PropositionInput({ onPropositionChange }) {
       <input
         type="text"
         id="proposition"
-        value={proposition}
+        value={value} // On utilise la prop `value` venue du parent
         onChange={handleChange}
         placeholder="Entrez votre proposition principale..."
         className="proposition-field"
