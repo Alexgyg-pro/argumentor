@@ -6,6 +6,7 @@ export function EditingScreen({
   proposition,
   argumentList,
   isDirty,
+  setArgumentTree,
   handleNavigateAway,
   handleNew,
   handleImportInit,

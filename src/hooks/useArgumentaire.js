@@ -1,17 +1,48 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react"; // <-- Ajoute useEffect
 
 export function useArgumentaire() {
   // Tous les states et fonctions de App.jsx vont venir ici
   const [currentMode, setCurrentMode] = useState("choice");
   const [isDirty, setIsDirty] = useState(false);
   const [proposition, setProposition] = useState("");
-  const [argumentList, setArgumentList] = useState([]);
+  const [argumentTree, setArgumentTree] = useState({
+    id: "root",
+    text: "La Terre est ronde", // <-- Texte de test
+    causa: null,
+    children: [
+      {
+        id: 1,
+        text: "Si elle était ronde les habitants du Sud seraient en dessous",
+        causa: "contra",
+        parentId: "root",
+        children: [
+          {
+            id: 2,
+            text: "Si les habitants étaient en bas, ils tomberaient dans l'espace",
+            causa: "pro",
+            parentId: 1,
+            children: [],
+          },
+        ],
+      },
+    ],
+  });
+
+  const [argumentList, setArgumentList] = useState(argumentTree.children); // <-- Initialise avec les enfants
+  // const [argumentList, setArgumentList] = useState([]); // Garde pour compatibilité
   const fileInputRef = useRef(null);
 
   // Déplace toutes tes fonctions ici (handleNew, handleImportInit, etc.)
   const handleNew = () => {
     setProposition("");
-    setArgumentList([]);
+    setArgumentTree({
+      // <-- RESET l'arbre
+      id: "root",
+      text: "",
+      causa: null,
+      children: [],
+    });
+    setArgumentList([]); // <-- RESET la liste plate (compatibilité)
     setIsDirty(false);
     setCurrentMode("editing");
   };
@@ -33,7 +64,8 @@ export function useArgumentaire() {
     if (jsonData.proposition !== undefined) {
       setProposition(jsonData.proposition);
     }
-    setArgumentList(jsonData.arguments || []);
+    setArgumentTree(newTree);
+    setArgumentList(newTree.children);
     setIsDirty(false);
     setCurrentMode("editing");
 
@@ -76,15 +108,15 @@ export function useArgumentaire() {
   // MODIFIE handleAddArgument :
   const handleAddArgument = () => {
     const newArgument = {
-      id: Date.now(), // ID unique
-      text: "Nouvel argument", // Texte par défaut
-      causa: "pro", // Valeur par défaut
-      weight: 1, // Poids par défaut
-      parentId: null, // Argument racine
-      children: [], // Pas d'enfants initialement
+      id: Date.now(),
+      text: "Nouvel argument",
+      causa: "pro",
+      parentId: "root", // Référence directe à la racine
+      children: [],
     };
-    setArgumentList([...argumentList, newArgument]);
-    setIsDirty(true); // <-- Marque comme modifié
+    addChildToNode("root", newArgument);
+    setIsDirty(true);
+    setArgumentList((prev) => [...prev, newArgument]);
   };
 
   const handleImport = (jsonData) => {
@@ -109,7 +141,7 @@ export function useArgumentaire() {
     // 1. Créer l'objet de données complet (pour plus tard)
     const data = {
       proposition: proposition,
-      arguments: argumentList, // On ajoute déjà la structure pour les arguments
+      arguments: argumentTree.children, // On ajoute déjà la structure pour les arguments
       version: "1.0",
     };
 
@@ -165,19 +197,70 @@ export function useArgumentaire() {
   // ... déplace toutes les autres fonctions
 
   const onEditArgument = (id, newText) => {
-    setArgumentList(
-      argumentList.map((arg) =>
-        arg.id === id ? { ...arg, text: newText } : arg
-      )
-    );
+    setArgumentTree((prevTree) => {
+      const newTree = JSON.parse(JSON.stringify(prevTree)); // Deep clone
+      const nodeToEdit = findNodeById(newTree, id);
+      if (nodeToEdit) {
+        nodeToEdit.text = newText;
+      }
+      return newTree;
+    });
     setIsDirty(true);
   };
 
+  const deleteNodeRecursively = (node, targetId) => {
+    // Filtre les enfants qui ne sont pas la cible + applique récursivement
+    const newChildren = node.children
+      .filter((child) => child.id !== targetId)
+      .map((child) => deleteNodeRecursively(child, targetId));
+
+    return {
+      ...node,
+      children: newChildren,
+    };
+  };
+
+  // Modifie onDeleteArgument :
   const onDeleteArgument = (id) => {
-    if (window.confirm("Supprimer cet argument ?")) {
-      setArgumentList(argumentList.filter((arg) => arg.id !== id));
+    if (window.confirm("Supprimer cet argument et tous ses sous-arguments ?")) {
+      setArgumentTree((prevTree) => {
+        const newTree = deleteNodeRecursively(prevTree, id);
+        return newTree;
+      });
       setIsDirty(true);
     }
+  };
+
+  // Trouve un node par son ID (récursif)
+  const findNodeById = (node, targetId) => {
+    if (node.id === targetId) return node;
+    for (const child of node.children) {
+      const found = findNodeById(child, targetId);
+      if (found) return found;
+    }
+    return null;
+  };
+
+  // Trouve le parent d'un node (récursif)
+  const findParentById = (node, targetId, parent = null) => {
+    if (node.id === targetId) return parent;
+    for (const child of node.children) {
+      const found = findParentById(child, targetId, node);
+      if (found) return found;
+    }
+    return null;
+  };
+
+  // Ajoute un enfant à un parent
+  const addChildToNode = (parentId, newChild) => {
+    setArgumentTree((prevTree) => {
+      const newTree = JSON.parse(JSON.stringify(prevTree)); // Deep clone
+      const parent = findNodeById(newTree, parentId);
+      if (parent) {
+        parent.children.push(newChild);
+      }
+      return newTree;
+    });
   };
 
   // Return tout ce dont les composants auront besoin
@@ -185,8 +268,10 @@ export function useArgumentaire() {
     currentMode,
     isDirty,
     proposition,
-    argumentList,
+    argumentList: argumentTree.children,
+    argumentTree,
     fileInputRef,
+    setArgumentTree, // <-- Expose setArgumentTree pour le test
     onEditArgument,
     onDeleteArgument,
     handleNew,
