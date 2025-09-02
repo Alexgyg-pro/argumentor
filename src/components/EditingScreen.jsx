@@ -12,6 +12,8 @@ export function EditingScreen({
   handleExport,
   handlePropositionChange,
   handleAddArgument,
+  onEditArgument,
+  onDeleteArgument,
 }) {
   return (
     <div className="editing-screen">
@@ -34,7 +36,11 @@ export function EditingScreen({
         Ajouter un argument
       </button>
 
-      <ArgumentList argumentList={argumentList} />
+      <ArgumentList
+        argumentList={argumentList}
+        onEditArgument={onEditArgument}
+        onDeleteArgument={onDeleteArgument}
+      />
     </div>
   );
 }

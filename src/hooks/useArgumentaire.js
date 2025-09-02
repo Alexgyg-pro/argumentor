@@ -76,8 +76,12 @@ export function useArgumentaire() {
   // MODIFIE handleAddArgument :
   const handleAddArgument = () => {
     const newArgument = {
-      id: Date.now(),
-      text: "Argument exemple " + (argumentList.length + 1),
+      id: Date.now(), // ID unique
+      text: "Nouvel argument", // Texte par défaut
+      causa: "pro", // Valeur par défaut
+      weight: 1, // Poids par défaut
+      parentId: null, // Argument racine
+      children: [], // Pas d'enfants initialement
     };
     setArgumentList([...argumentList, newArgument]);
     setIsDirty(true); // <-- Marque comme modifié
@@ -160,6 +164,22 @@ export function useArgumentaire() {
   // };
   // ... déplace toutes les autres fonctions
 
+  const onEditArgument = (id, newText) => {
+    setArgumentList(
+      argumentList.map((arg) =>
+        arg.id === id ? { ...arg, text: newText } : arg
+      )
+    );
+    setIsDirty(true);
+  };
+
+  const onDeleteArgument = (id) => {
+    if (window.confirm("Supprimer cet argument ?")) {
+      setArgumentList(argumentList.filter((arg) => arg.id !== id));
+      setIsDirty(true);
+    }
+  };
+
   // Return tout ce dont les composants auront besoin
   return {
     currentMode,
@@ -167,6 +187,8 @@ export function useArgumentaire() {
     proposition,
     argumentList,
     fileInputRef,
+    onEditArgument,
+    onDeleteArgument,
     handleNew,
     handleImportInit,
     handleImportSuccess,
