@@ -3,7 +3,6 @@ import { ChoiceScreen } from "./components/ChoiceScreen";
 import { EditingScreen } from "./components/EditingScreen";
 import "./App.css";
 
-// Dans App.jsx
 function App() {
   const argumentaire = useArgumentaire();
 

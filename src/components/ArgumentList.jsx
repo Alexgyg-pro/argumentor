@@ -1,20 +1,22 @@
 import { useState } from "react";
 
-export function ArgumentList({
-  argumentList,
+// Composant récursif pour un argument
+function ArgumentItem({
+  argument,
   onEditArgument,
   onDeleteArgument,
+  depth = 0,
 }) {
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
 
-  const handleDoubleClick = (arg) => {
-    setEditingId(arg.id);
-    setEditText(arg.text);
+  const handleDoubleClick = () => {
+    setEditingId(argument.id);
+    setEditText(argument.text);
   };
 
-  const handleSave = (id) => {
-    onEditArgument(id, editText);
+  const handleSave = () => {
+    onEditArgument(argument.id, editText);
     setEditingId(null);
   };
 
@@ -23,6 +25,53 @@ export function ArgumentList({
   };
 
   return (
+    <li style={{ marginLeft: `${depth * 20}px` }}>
+      {editingId === argument.id ? (
+        <div>
+          <input
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            autoFocus
+          />
+          <button onClick={handleSave}>✓</button>
+          <button onClick={handleCancel}>✗</button>
+        </div>
+      ) : (
+        <div onDoubleClick={handleDoubleClick}>
+          <strong>{argument.text}</strong>
+          <button onClick={() => onDeleteArgument(argument.id)}>🗑️</button>
+          <br />
+          <small>
+            Causa: {argument.causa} | Poids: {argument.weight}
+          </small>
+        </div>
+      )}
+
+      {/* Rendu récursif des enfants */}
+      {argument.children && argument.children.length > 0 && (
+        <ul>
+          {argument.children.map((child) => (
+            <ArgumentItem
+              key={child.id}
+              argument={child}
+              onEditArgument={onEditArgument}
+              onDeleteArgument={onDeleteArgument}
+              depth={depth + 1}
+            />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
+
+// Composant principal
+export function ArgumentList({
+  argumentList,
+  onEditArgument,
+  onDeleteArgument,
+}) {
+  return (
     <div className="argument-list">
       <h2>Vos arguments</h2>
       {argumentList.length === 0 ? (
@@ -30,33 +79,12 @@ export function ArgumentList({
       ) : (
         <ul>
           {argumentList.map((arg) => (
-            <li key={arg.id} onDoubleClick={() => handleDoubleClick(arg)}>
-              {editingId === arg.id ? (
-                <div>
-                  <input
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    autoFocus
-                  />
-                  <button onClick={() => handleSave(arg.id)}>✓</button>
-                  <button onClick={handleCancel}>✗</button>
-                </div>
-              ) : (
-                <div>
-                  <strong>{arg.text}</strong>
-                  <button
-                    onClick={() => onDeleteArgument(arg.id)}
-                    style={{ marginLeft: "10px" }}
-                  >
-                    🗑️
-                  </button>
-                  <br />
-                  <small>
-                    Causa: {arg.causa} | Poids: {arg.weight}
-                  </small>
-                </div>
-              )}
-            </li>
+            <ArgumentItem
+              key={arg.id}
+              argument={arg}
+              onEditArgument={onEditArgument}
+              onDeleteArgument={onDeleteArgument}
+            />
           ))}
         </ul>
       )}

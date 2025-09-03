@@ -1,8 +1,10 @@
 export function ChoiceScreen({
   handleNew,
   handleImportInit,
+  handleImportSuccess,
   setArgumentTree,
   setArgumentList,
+  setCurrentMode,
 }) {
   const loadTestTree = () => {
     const testTree = {
@@ -27,9 +29,13 @@ export function ChoiceScreen({
         },
       ],
     };
-    setArgumentTree(testTree);
-    setArgumentList(testTree.children);
-    setCurrentMode("editing"); // Pour passer directement à l'écran d'édition
+    // setArgumentTree(testTree);
+    // setArgumentList(testTree.children);
+    // setCurrentMode("editing"); // Pour passer directement à l'écran d'édition
+    handleImportSuccess({
+      proposition: "La Terre est ronde",
+      arguments: testTree.children,
+    });
   };
 
   return (

@@ -28,8 +28,9 @@ export function useArgumentaire() {
     ],
   });
 
-  const [argumentList, setArgumentList] = useState(argumentTree.children); // <-- Initialise avec les enfants
-  // const [argumentList, setArgumentList] = useState([]); // Garde pour compatibilité
+  // argumentList n'est plus un état indépendant, mais une simple valeur dérivée de argumentTree.
+  const argumentList = argumentTree.children || [];
+
   const fileInputRef = useRef(null);
 
   // Déplace toutes tes fonctions ici (handleNew, handleImportInit, etc.)
@@ -42,7 +43,7 @@ export function useArgumentaire() {
       causa: null,
       children: [],
     });
-    setArgumentList([]); // <-- RESET la liste plate (compatibilité)
+    // setArgumentList([]); // <-- RESET la liste plate (compatibilité)
     setIsDirty(false);
     setCurrentMode("editing");
   };
@@ -57,31 +58,6 @@ export function useArgumentaire() {
       "2. Click déclenché - ref value après:",
       fileInputRef.current?.value
     );
-  };
-
-  const handleImportSuccess = (jsonData) => {
-    console.log("3. Import réussi - reset va s'executer");
-    if (jsonData.proposition !== undefined) {
-      setProposition(jsonData.proposition);
-    }
-    setArgumentTree(newTree);
-    setArgumentList(newTree.children);
-    setIsDirty(false);
-    setCurrentMode("editing");
-
-    // RÉINITIALISATION ÉLÉGANTE
-    if (fileInputRef.current) {
-      console.log("4. Ref value avant reset:", fileInputRef.current.value);
-      fileInputRef.current.value = "";
-      console.log("5. Ref value après reset:", fileInputRef.current.value);
-    }
-
-    // RÉINITIALISATION CRUCIALE DE L'INPUT FILE
-    // Ceci est une solution moins élégante au fait que input file ne peut avoir qu'une
-    // const fileInput = document.getElementById("hidden-file-input");
-    // if (fileInput) {
-    //   fileInput.value = ""; // Cette ligne reset la sélection
-    // }
   };
 
   const handleNavigateAway = (action) => {
@@ -116,14 +92,7 @@ export function useArgumentaire() {
     };
     addChildToNode("root", newArgument);
     setIsDirty(true);
-    setArgumentList((prev) => [...prev, newArgument]);
-  };
-
-  const handleImport = (jsonData) => {
-    if (jsonData.proposition !== undefined) {
-      setProposition(jsonData.proposition); // Pre-remplit le champ
-    }
-    // Plus tard, tu géreras aussi setArgumentList ici
+    //setArgumentList((prev) => [...prev, newArgument]);
   };
 
   // const handleNew = () => {
@@ -131,11 +100,6 @@ export function useArgumentaire() {
   //   setArgumentList([]);
   //   setIsDirty(false);
   // };
-
-  const handleImportWrapper = (jsonData) => {
-    // ... ta logique d'import existante
-    setIsDirty(false); // L'importé est considéré comme "propre"
-  };
 
   const handleExport = () => {
     // 1. Créer l'objet de données complet (pour plus tard)
@@ -181,10 +145,25 @@ export function useArgumentaire() {
     setIsDirty(false); // Reset l'état après l'action
   };
 
-  const handleNewArgumentaire = () => {
-    setProposition("");
-    setArgumentList([]);
+  const handleImportSuccess = (jsonData) => {
+    console.log("Données importées :", jsonData);
+
+    const newTree = {
+      id: "root",
+      text: jsonData.proposition || "",
+      causa: null,
+      children: jsonData.arguments || [],
+    };
+
+    setProposition(jsonData.proposition || "");
+    setArgumentTree(newTree); // <-- ICI, dans la fonction!
+    //setArgumentList(newTree.children);
     setIsDirty(false);
+    setCurrentMode("editing");
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   // const handleImportSuccess = (jsonData) => {
@@ -209,22 +188,61 @@ export function useArgumentaire() {
   };
 
   const deleteNodeRecursively = (node, targetId) => {
-    // Filtre les enfants qui ne sont pas la cible + applique récursivement
+    console.log("Visite du node:", node.id, "cible:", targetId);
+
     const newChildren = node.children
-      .filter((child) => child.id !== targetId)
-      .map((child) => deleteNodeRecursively(child, targetId));
+      .filter((child) => {
+        console.log(
+          "Filtrage de l'enfant:",
+          child.id,
+          "keep?",
+          child.id !== targetId
+        );
+        return child.id !== targetId;
+      })
+      .map((child) => {
+        console.log("Application récursive sur:", child.id);
+        return deleteNodeRecursively(child, targetId);
+      });
 
     return {
       ...node,
-      children: newChildren,
+      children: newChildren, // <-- C'EST LA CLÉ !
     };
   };
 
-  // Modifie onDeleteArgument :
+  // const onDeleteArgument = (id) => {
+  //   console.log("Tentative de suppression de l'argument ID:", id);
+  //   if (window.confirm("Supprimer cet argument et tous ses sous-arguments ?")) {
+  //     setArgumentTree((prevTree) => {
+  //       console.log("Arbre avant suppression:", prevTree);
+  //       const newTree = deleteNodeRecursively(prevTree, id);
+  //       console.log("Arbre après suppression:", newTree);
+  //       return newTree;
+  //     });
+  //     setIsDirty(true);
+  //   }
+  // };
+
   const onDeleteArgument = (id) => {
-    if (window.confirm("Supprimer cet argument et tous ses sous-arguments ?")) {
+    // 1. Trouver le node concerné dans l'arbre actuel
+    const nodeToDelete = findNodeById(argumentTree, id);
+
+    // 2. Vérifier s'il existe et s'il a des enfants
+    if (nodeToDelete && nodeToDelete.children.length > 0) {
+      // 3. S'il a des enfants, on alerte l'utilisateur et on annule la suppression
+      alert(
+        "Impossible de supprimer un argument qui a des sous-arguments. Veuillez d'abord supprimer ou déplacer ses sous-arguments."
+      );
+      return; // On quitte la fonction sans faire de suppression
+    }
+
+    // 4. S'il n'a pas d'enfants, on procède à la suppression comme avant
+    if (window.confirm("Supprimer cet argument ?")) {
       setArgumentTree((prevTree) => {
+        console.log("Arbre avant suppression:", prevTree);
         const newTree = deleteNodeRecursively(prevTree, id);
+        console.log("Arbre après suppression:", newTree);
         return newTree;
       });
       setIsDirty(true);
@@ -265,15 +283,17 @@ export function useArgumentaire() {
 
   // Return tout ce dont les composants auront besoin
   return {
+    argumentList: argumentTree.children,
     currentMode,
     isDirty,
     proposition,
-    argumentList: argumentTree.children,
     argumentTree,
     fileInputRef,
+    argumentList,
+    handleImportSuccess,
     setArgumentTree, // <-- Expose setArgumentTree pour le test
-    onEditArgument,
-    onDeleteArgument,
+    //setArgumentList, // <-- Expose setArgumentList pour le test
+    setCurrentMode, // <-- Expose setCurrentMode pour le test
     handleNew,
     handleImportInit,
     handleImportSuccess,
@@ -281,5 +301,7 @@ export function useArgumentaire() {
     handleExport,
     handlePropositionChange,
     handleAddArgument,
+    onEditArgument,
+    onDeleteArgument,
   };
 }
