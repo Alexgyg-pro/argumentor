@@ -16,22 +16,7 @@ function App() {
         ref={argumentaire.fileInputRef}
         accept=".json"
         style={{ display: "none" }}
-        onChange={(e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            try {
-              const jsonData = JSON.parse(e.target.result);
-              argumentaire.handleNavigateAway(() =>
-                argumentaire.handleImportSuccess(jsonData)
-              );
-            } catch (error) {
-              alert("Fichier JSON invalide");
-            }
-          };
-          reader.readAsText(file);
-        }}
+        onChange={argumentaire.handleFileChange}
       />
 
       {argumentaire.currentMode === "choice" ? (
