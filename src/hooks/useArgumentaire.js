@@ -111,6 +111,21 @@ export function useArgumentaire() {
     setIsDirty(true);
   };
 
+  // Fonction pour ajouter un argument enfant à un nœud spécifique
+  const handleAddChildArgument = (parentId) => {
+    const newArgument = {
+      id: Date.now(), // À terme, remplacer par uuid
+      text: "Nouvel argument",
+      causa: "pro", // Valeur par défaut
+      parentId: parentId, // L'ID du parent auquel l'ajouter
+      children: [],
+    };
+
+    // Utilise la fonction existante pour mettre à jour l'arbre
+    addChildToNode(parentId, newArgument);
+    setIsDirty(true);
+  };
+
   // Fonction pour ajouter un enfant à un nœud
   const addChildToNode = (parentId, newChild) => {
     setArgumentTree((prevTree) => {
@@ -218,5 +233,6 @@ export function useArgumentaire() {
     onEditArgument,
     onDeleteArgument,
     handleImportSuccess,
+    handleAddChildArgument,
   };
 }

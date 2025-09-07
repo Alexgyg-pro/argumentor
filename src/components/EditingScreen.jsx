@@ -15,6 +15,7 @@ export function EditingScreen({
   handleAddArgument,
   onEditArgument,
   onDeleteArgument,
+  handleAddChildArgument,
 }) {
   return (
     <div className="editing-screen">
@@ -41,6 +42,7 @@ export function EditingScreen({
         argumentList={argumentList}
         onEditArgument={onEditArgument}
         onDeleteArgument={onDeleteArgument}
+        onAddChildArgument={handleAddChildArgument}
       />
     </div>
   );
