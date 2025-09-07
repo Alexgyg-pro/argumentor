@@ -20,7 +20,11 @@ function App() {
       />
 
       {argumentaire.currentMode === "choice" ? (
-        <ChoiceScreen {...argumentaire} />
+        <ChoiceScreen
+          handleNew={argumentaire.handleNew}
+          handleImportInit={argumentaire.handleImportInit}
+          handleImportSuccess={argumentaire.handleImportSuccess}
+        />
       ) : (
         <EditingScreen {...argumentaire} />
       )}

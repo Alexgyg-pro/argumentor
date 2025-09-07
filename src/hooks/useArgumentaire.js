@@ -215,6 +215,72 @@ export function useArgumentaire() {
     }
   };
 
+  const getAllNodesExceptSubtree = (currentNode, excludedId, nodeList = []) => {
+    // Si le node actuel est celui qu'on exclut (et donc tout son sous-arbre), on skip.
+    if (currentNode.id === excludedId) {
+      return nodeList; // On retourne la liste actuelle sans ajouter ce node ni explorer ses enfants.
+    }
+    // Ajoute le node actuel à la liste (sauf la racine "root" si tu ne veux pas qu'elle soit choisie)
+    if (currentNode.id !== "root") {
+      // On exclut souvent la racine de la liste des parents possibles
+      nodeList.push({ id: currentNode.id, text: currentNode.text });
+    }
+    // Parcours récursif des enfants
+    currentNode.children.forEach((child) => {
+      getAllNodesExceptSubtree(child, excludedId, nodeList);
+    });
+    return nodeList;
+  };
+
+  const handleMoveArgument = (argumentId, newParentId) => {
+    setArgumentTree((prevTree) => {
+      // 1. Crée une copie profonde de l'arbre
+      const newTree = JSON.parse(JSON.stringify(prevTree));
+
+      // 2. Trouve le node à déplacer et son parent actuel
+      const nodeToMove = findNodeById(newTree, argumentId);
+      const currentParent = findParentById(newTree, argumentId);
+
+      // 3. Trouve le nouveau parent
+      const newParent = findNodeById(newTree, newParentId);
+
+      // DEBUG: Ajoute des logs pour voir ce qui est trouvé
+      console.log("Node à déplacer:", nodeToMove);
+      console.log("Parent actuel:", currentParent);
+      console.log("Nouveau parent:", newParent);
+      console.log("ID du nouveau parent demandé:", newParentId);
+
+      // 4. Si tout est trouvé, procède au déplacement
+      if (nodeToMove && currentParent && newParent) {
+        // a. Retire le node des enfants de son parent actuel
+        currentParent.children = currentParent.children.filter(
+          (child) => child.id !== argumentId
+        );
+        // b. Ajoute le node aux enfants du nouveau parent
+        newParent.children.push(nodeToMove);
+        // c. Met à jour le parentId du node déplacé (si tu utilises ce champ)
+        nodeToMove.parentId = newParentId;
+      } else {
+        console.error(
+          "Échec du déplacement : node, parent actuel ou nouveau parent introuvable."
+        );
+      }
+
+      return newTree;
+    });
+    setIsDirty(true);
+  };
+
+  // Trouve le parent d'un node (récursif) - FONCTION NÉCESSAIRE
+  const findParentById = (node, targetId, parent = null) => {
+    if (node.id === targetId) return parent;
+    for (const child of node.children) {
+      const found = findParentById(child, targetId, node);
+      if (found) return found;
+    }
+    return null;
+  };
+
   // On expose uniquement ce qui est nécessaire aux composants
   return {
     argumentList,
@@ -234,5 +300,7 @@ export function useArgumentaire() {
     onDeleteArgument,
     handleImportSuccess,
     handleAddChildArgument,
+    getAllNodesExceptSubtree,
+    handleMoveArgument,
   };
 }

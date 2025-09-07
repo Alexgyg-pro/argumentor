@@ -2,9 +2,6 @@ export function ChoiceScreen({
   handleNew,
   handleImportInit,
   handleImportSuccess,
-  setArgumentTree,
-  setArgumentList,
-  setCurrentMode,
 }) {
   const loadTestTree = () => {
     const testTree = {

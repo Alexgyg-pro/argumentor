@@ -16,6 +16,9 @@ export function EditingScreen({
   onEditArgument,
   onDeleteArgument,
   handleAddChildArgument,
+  getAllNodesExceptSubtree, // <-- Ajoute cette ligne
+  handleMoveArgument, // <-- Ajoute cette ligne
+  argumentTree, // <-- Ajoute cette ligne (crucial !)
 }) {
   return (
     <div className="editing-screen">
@@ -43,6 +46,9 @@ export function EditingScreen({
         onEditArgument={onEditArgument}
         onDeleteArgument={onDeleteArgument}
         onAddChildArgument={handleAddChildArgument}
+        getAllNodesExceptSubtree={getAllNodesExceptSubtree}
+        handleMoveArgument={handleMoveArgument}
+        argumentTree={argumentTree}
       />
     </div>
   );

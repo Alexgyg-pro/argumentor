@@ -7,6 +7,9 @@ export function ArgumentList({
   onEditArgument,
   onDeleteArgument,
   onAddChildArgument,
+  getAllNodesExceptSubtree,
+  handleMoveArgument,
+  argumentTree,
 }) {
   return (
     <div className="argument-list">
@@ -22,6 +25,9 @@ export function ArgumentList({
               onEditArgument={onEditArgument}
               onDeleteArgument={onDeleteArgument}
               onAddChildArgument={onAddChildArgument}
+              getAllNodesExceptSubtree={getAllNodesExceptSubtree}
+              handleMoveArgument={handleMoveArgument}
+              argumentTree={argumentTree}
             />
           ))}
         </ul>
