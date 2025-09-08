@@ -1,4 +1,5 @@
 import { useState } from "react"; // <-- IMPORT CRUCIAL ICI
+import { ArgumentEditForm } from "./ArgumentEditForm";
 
 export function ArgumentItem({
   argument,
@@ -10,6 +11,7 @@ export function ArgumentItem({
   argumentTree, // On a besoin de l'arbre pour lister les parents
   depth = 0,
 }) {
+  const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
   // State pour gérer la modale de déplacement
@@ -21,9 +23,10 @@ export function ArgumentItem({
     setEditText(argument.text);
   };
 
-  const handleSave = () => {
-    onEditArgument(argument.id, editText);
-    setEditingId(null);
+  const handleSave = (newProperties) => {
+    // On s'aligne sur le nom du paramètre
+    onEditArgument(argument.id, newProperties); // Utilise 'newProperties'
+    setIsEditing(false);
   };
 
   const handleCancel = () => {
@@ -52,26 +55,26 @@ export function ArgumentItem({
 
   return (
     <li style={{ marginLeft: `${depth * 20}px` }}>
-      {editingId === argument.id ? (
-        <div>
-          <input
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            autoFocus
-          />
-          <button onClick={handleSave}>✓</button>
-          <button onClick={handleCancel}>✗</button>
-        </div>
+      {isEditing ? (
+        <ArgumentEditForm
+          argument={argument}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
       ) : (
-        <div onDoubleClick={handleDoubleClick}>
+        /* Sinon, on affiche la vue normale */
+        <div>
           <strong>{argument.text}</strong>
-          {/* AJOUTE CES DEUX BOUTONS */}
-          <button onClick={() => onAddChildArgument(argument.id)}>➕</button>
-          <button onClick={handleMoveClick}>↕️</button>
+          {/* Bouton pour éditer */}
+          <button onClick={() => setIsEditing(true)}>✏️</button>
+          {/* Bouton pour supprimer */}
           <button onClick={() => onDeleteArgument(argument.id)}>🗑️</button>
+          {/* Bouton pour ajouter un enfant (futur) */}
+          <button onClick={() => onAddChildArgument(argument.id)}>➕</button>
           <br />
           <small>
             Causa: {argument.causa} | Poids: {argument.weight}
+            {/* Affichera aussi forma plus tard */}
           </small>
         </div>
       )}

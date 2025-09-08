@@ -138,12 +138,14 @@ export function useArgumentaire() {
     });
   };
 
-  const onEditArgument = (id, newText) => {
+  const onEditArgument = (id, newProperties) => {
+    // newProperties est un objet qui peut contenir { text, causa, forma, ... }
     setArgumentTree((prevTree) => {
-      const newTree = JSON.parse(JSON.stringify(prevTree));
+      const newTree = JSON.parse(JSON.stringify(prevTree)); // Deep clone
       const nodeToEdit = findNodeById(newTree, id);
       if (nodeToEdit) {
-        nodeToEdit.text = newText;
+        // On écrase les anciennes valeurs par les nouvelles
+        Object.assign(nodeToEdit, newProperties);
       }
       return newTree;
     });

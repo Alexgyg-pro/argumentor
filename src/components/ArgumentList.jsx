@@ -28,6 +28,7 @@ export function ArgumentList({
               getAllNodesExceptSubtree={getAllNodesExceptSubtree}
               handleMoveArgument={handleMoveArgument}
               argumentTree={argumentTree}
+              depth={0}
             />
           ))}
         </ul>
