@@ -1,9 +1,11 @@
-import { PropositionInput } from "./PropositionInput";
+// import { PropositionInput } from "./PropositionInput";
+import { ThesisEditor } from "./ThesisEditor";
 import { ArgumentList } from "./ArgumentList";
 import { ExportButton } from "./ExportButton";
 
 export function EditingScreen({
-  proposition,
+  // proposition,
+  thesis,
   argumentList,
   isDirty,
   setArgumentTree,
@@ -11,7 +13,8 @@ export function EditingScreen({
   handleNew,
   handleImportInit,
   handleExport,
-  handlePropositionChange,
+  // handlePropositionChange,
+  handleThesisChange,
   handleAddArgument,
   onEditArgument,
   onDeleteArgument,
@@ -32,12 +35,9 @@ export function EditingScreen({
         {isDirty && <button onClick={handleExport}>💾 Exporter</button>}
       </div>
 
-      <PropositionInput
-        value={proposition}
-        onValueChange={handlePropositionChange}
-      />
+      <ThesisEditor thesis={thesis} onThesisChange={handleThesisChange} />
 
-      <button onClick={handleAddArgument} disabled={proposition.trim() === ""}>
+      <button onClick={handleAddArgument} disabled={thesis.text.trim() === ""}>
         Ajouter un argument
       </button>
 

@@ -4,7 +4,11 @@ export function useArgumentaire() {
   // États principaux
   const [currentMode, setCurrentMode] = useState("choice");
   const [isDirty, setIsDirty] = useState(false);
-  const [proposition, setProposition] = useState("");
+  const [thesis, setThesis] = useState({
+    text: "", // L'ancienne "proposition"
+    forma: "deductif", // La nouvelle propriété
+    // ... autres propriétés futures (source, force, etc.)
+  });
   const [argumentTree, setArgumentTree] = useState({
     id: "root",
     text: "La Terre est ronde",
@@ -47,7 +51,10 @@ export function useArgumentaire() {
   // GESTIONNAIRES D'ÉVÉNEMENTS
 
   const handleNew = () => {
-    setProposition("");
+    setThesis({
+      text: "",
+      forma: "deductif", // ou une valeur par défaut
+    }); // <-- Maintenant correct
     setArgumentTree({
       id: "root",
       text: "",
@@ -94,8 +101,9 @@ export function useArgumentaire() {
     setIsDirty(false);
   };
 
-  const handlePropositionChange = (newValue) => {
-    setProposition(newValue);
+  // Remplacer l'ancienne version
+  const handleThesisChange = (newThesis) => {
+    setThesis(newThesis);
     setIsDirty(true);
   };
 
@@ -172,7 +180,7 @@ export function useArgumentaire() {
 
   const handleExport = () => {
     const data = {
-      proposition: proposition,
+      thesis: thesis, // <-- CHANGE ICI : Exporte l'objet thesis complet
       arguments: argumentTree.children,
       version: "1.0",
     };
@@ -202,12 +210,16 @@ export function useArgumentaire() {
 
     const newTree = {
       id: "root",
-      text: jsonData.proposition || "",
+      text: jsonData.thesis?.text || "", // <-- CHANGE ICI : Utilise thesis.text
       causa: null,
       children: normalizedArguments,
     };
 
-    setProposition(jsonData.proposition || "");
+    setThesis({
+      text: jsonData.thesis?.text || "",
+      forma: jsonData.thesis?.forma || "deductif",
+    });
+
     setArgumentTree(newTree);
     setIsDirty(false);
     setCurrentMode("editing");
@@ -288,7 +300,8 @@ export function useArgumentaire() {
     argumentList,
     currentMode,
     isDirty,
-    proposition,
+    // proposition,
+    thesis,
     argumentTree,
     fileInputRef,
     handleNew,
@@ -296,7 +309,8 @@ export function useArgumentaire() {
     handleFileChange, // NOUVEAU - exporté pour App.jsx
     handleNavigateAway,
     handleExport,
-    handlePropositionChange,
+    // handlePropositionChange,
+    handleThesisChange,
     handleAddArgument,
     onEditArgument,
     onDeleteArgument,
