@@ -6,7 +6,7 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
   const [text, setText] = useState(argument.text);
   const [causa, setCausa] = useState(argument.causa);
   // State pour la future propriété 'forma'
-  const [forma, setForma] = useState(argument.forma || "deductif"); // Valeur par défaut
+  const [forma, setForma] = useState(argument.forma || "descriptif"); // Valeur par défaut
 
   // Fonction pour soumettre le formulaire
   const handleSubmit = (e) => {
@@ -42,10 +42,11 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
       <label>
         Forme (Forma):
         <select value={forma} onChange={(e) => setForma(e.target.value)}>
-          <option value="deductif">Déductif</option>
-          <option value="inductif">Inductif</option>
-          <option value="abductif">Abductif</option>
-          {/* Ajoute d'autres options selon tes besoins */}
+          <option value="descriptif">Descriptif</option>
+          <option value="normatif">Normatif</option>
+          <option disabled value="esthétique">
+            Esthétique (bientôt disponible)
+          </option>
         </select>
       </label>
 

@@ -39,10 +39,11 @@ export function ThesisEditor({ thesis, onThesisChange }) {
           value={localThesis.forma}
           onChange={(e) => handleFieldChange("forma", e.target.value)}
         >
-          <option value="deductif">Déductif</option>
-          <option value="inductif">Inductif</option>
-          <option value="abductif">Abductif</option>
-          <option value="analogique">Analogique</option>
+          <option value="descriptif">Descriptif</option>
+          <option value="normatif">Normatif</option>
+          <option disabled value="esthétique">
+            Esthétique (bientôt disponible)
+          </option>
         </select>
 
         <div className="thesis-actions">

@@ -6,13 +6,15 @@ export function useArgumentaire() {
   const [isDirty, setIsDirty] = useState(false);
   const [thesis, setThesis] = useState({
     text: "", // L'ancienne "proposition"
-    forma: "deductif", // La nouvelle propriété
+    forma: "descriptif", // La nouvelle propriété
+    causa: "pro",
+    children: [],
     // ... autres propriétés futures (source, force, etc.)
   });
   const [argumentTree, setArgumentTree] = useState({
     id: "root",
     text: "La Terre est ronde",
-    causa: null,
+    causa: "pro",
     children: [],
   });
 
@@ -53,7 +55,7 @@ export function useArgumentaire() {
   const handleNew = () => {
     setThesis({
       text: "",
-      forma: "deductif", // ou une valeur par défaut
+      forma: "descriptif", // ou une valeur par défaut
     }); // <-- Maintenant correct
     setArgumentTree({
       id: "root",
@@ -108,10 +110,17 @@ export function useArgumentaire() {
   };
 
   const handleAddArgument = () => {
+    // 1. Trouver le node parent (la racine)
+    const parentNode = argumentTree; // La racine est directement argumentTree
+
+    // 2. Héritage de la forma depuis la racine
+    const childForma = parentNode.forma || "descriptif"; // Hérite de la thèse
+
     const newArgument = {
       id: Date.now(),
       text: "Nouvel argument",
       causa: "pro",
+      forma: childForma, // <-- Utilise la forma héritée de la racine
       parentId: "root",
       children: [],
     };
@@ -121,11 +130,23 @@ export function useArgumentaire() {
 
   // Fonction pour ajouter un argument enfant à un nœud spécifique
   const handleAddChildArgument = (parentId) => {
+    // 1. Trouver le node parent
+    const parentNode = findNodeById(argumentTree, parentId);
+
+    // 2. HÉRITAGE  : l'enfant hérite de la 'forma' du parent.
+    // C'est la seule règle automatique.
+    const childForma = parentNode.forma || "descriptif"; // Valeur par défaut
+
+    // 3. La 'causa' n'est PAS héritée. On initialise à "pro" par défaut.
+    // L'utilisateur devra la changer manuellement si besoin.
+    const childCausa = "pro";
+
     const newArgument = {
-      id: Date.now(), // À terme, remplacer par uuid
+      id: Date.now(), // ou uuid plus tard
       text: "Nouvel argument",
-      causa: "pro", // Valeur par défaut
-      parentId: parentId, // L'ID du parent auquel l'ajouter
+      causa: childCausa, // Toujours "pro" par défaut
+      forma: childForma, // Héritée du parent <-- LA SEULE RÈGLE MÉTIER
+      parentId: parentId,
       children: [],
     };
 
@@ -217,7 +238,7 @@ export function useArgumentaire() {
 
     setThesis({
       text: jsonData.thesis?.text || "",
-      forma: jsonData.thesis?.forma || "deductif",
+      forma: jsonData.thesis?.forma || "descriptif",
     });
 
     setArgumentTree(newTree);
