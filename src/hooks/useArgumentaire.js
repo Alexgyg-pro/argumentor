@@ -1,22 +1,24 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 
 export function useArgumentaire() {
   // États principaux
   const [currentMode, setCurrentMode] = useState("choice");
   const [isDirty, setIsDirty] = useState(false);
   const [thesis, setThesis] = useState({
-    text: "", // L'ancienne "proposition"
-    forma: "descriptif", // La nouvelle propriété
+    text: "",
+    forma: "descriptif",
     causa: "pro",
     children: [],
-    // ... autres propriétés futures (source, force, etc.)
   });
   const [argumentTree, setArgumentTree] = useState({
     id: "root",
-    text: "La Terre est ronde",
-    causa: "pro",
+    text: "",
+    causa: null,
     children: [],
   });
+
+  // Nouveau state pour mémoriser les codes
+  const [argumentCodes, setArgumentCodes] = useState({});
 
   // Référence pour l'input fichier caché
   const fileInputRef = useRef(null);
@@ -25,25 +27,17 @@ export function useArgumentaire() {
   const argumentList = argumentTree.children || [];
 
   // Fonction pour trouver un nœud par son ID (récursif)
-  // useArgumentaire.js
-  const findNodeById = (node, targetId) => {
-    if (node.id === targetId) {
-      // ✅ Comparaison directe string vs string
-      return node;
-    }
-
+  const findNodeById = useCallback((node, targetId) => {
+    if (node.id === targetId) return node;
     for (const child of node.children) {
       const found = findNodeById(child, targetId);
-      if (found) {
-        return found;
-      }
+      if (found) return found;
     }
-
     return null;
-  };
+  }, []);
 
   // Fonction récursive pour supprimer un nœud
-  const deleteNodeRecursively = (node, targetId) => {
+  const deleteNodeRecursively = useCallback((node, targetId) => {
     if (node.id === targetId) {
       return null;
     }
@@ -56,21 +50,79 @@ export function useArgumentaire() {
       ...node,
       children: newChildren,
     };
-  };
+  }, []);
+
+  // Trouve le parent d'un node (récursif)
+  const findParentById = useCallback((node, targetId, parent = null) => {
+    if (node.id === targetId) {
+      return parent;
+    }
+    for (const child of node.children) {
+      const found = findParentById(child, targetId, node);
+      if (found) return found;
+    }
+    return null;
+  }, []);
+
+  // Fonction pour recalculer TOUS les codes de manière optimisée
+  const recalculateAllCodes = useCallback(
+    (tree = argumentTree) => {
+      const newCodes = {};
+
+      const calculateCodeForNode = (node, parentCode = "") => {
+        if (node.id === "root") return;
+
+        // Trouver les frères et soeurs
+        const parent = findParentById(tree, node.id);
+        const siblings = parent?.children || [];
+        const index = siblings.findIndex((sibling) => sibling.id === node.id);
+
+        // Calculer le segment du code
+        const segment = `${node.causa === "pro" ? "P" : "C"}${index + 1}`;
+        const code = parentCode + segment;
+
+        newCodes[node.id] = code;
+
+        // Calculer récursivement pour les enfants
+        node.children.forEach((child) =>
+          calculateCodeForNode(child, code.toLowerCase())
+        );
+      };
+
+      // Calculer pour tous les enfants de la racine
+      tree.children.forEach((child) => calculateCodeForNode(child, ""));
+      setArgumentCodes(newCodes);
+    },
+    [argumentTree, findParentById]
+  );
+
+  // Mémorisation des codes - version optimisée
+  const getArgumentCode = useCallback(
+    (targetNodeId) => {
+      return argumentCodes[targetNodeId] || "";
+    },
+    [argumentCodes]
+  );
+
+  // Recalculer les codes quand l'arbre change
+  useEffect(() => {
+    recalculateAllCodes();
+  }, [argumentTree, recalculateAllCodes]);
 
   // GESTIONNAIRES D'ÉVÉNEMENTS
 
   const handleNew = () => {
     setThesis({
       text: "",
-      forma: "descriptif", // ou une valeur par défaut
-    }); // <-- Maintenant correct
+      forma: "descriptif",
+    });
     setArgumentTree({
       id: "root",
       text: "",
       causa: null,
       children: [],
     });
+    setArgumentCodes({}); // Reset les codes
     setIsDirty(false);
     setCurrentMode("editing");
   };
@@ -79,7 +131,6 @@ export function useArgumentaire() {
     fileInputRef.current?.click();
   };
 
-  // Gestionnaire de changement de fichier (NOUVEAU - centralisé ici)
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -111,37 +162,28 @@ export function useArgumentaire() {
     setIsDirty(false);
   };
 
-  // Remplacer l'ancienne version
   const handleThesisChange = (newThesis) => {
     setThesis(newThesis);
     setIsDirty(true);
   };
 
   const handleAddArgument = () => {
-    // 1. Trouver le node parent (la racine)
-    const parentNode = argumentTree; // La racine est directement argumentTree
-
-    // 2. Héritage de la forma depuis la racine
-    const childForma = thesis.forma || "descriptif"; // Hérite de la thèse
+    const childForma = thesis.forma || "descriptif";
 
     const newArgument = {
-      id: `arg${Date.now()}`, // ✅ Garanti string
+      id: `arg${Date.now()}`,
       text: "Nouvel argument",
       causa: "pro",
       forma: childForma,
-      parentId: "root", // ✅ Doit être string
+      parentId: "root",
       children: [],
     };
     addChildToNode("root", newArgument);
     setIsDirty(true);
   };
 
-  // Fonction pour ajouter un argument enfant à un nœud spécifique
   const handleAddChildArgument = (parentId) => {
-    // 1. Trouver le node parent dans l'état ACTUEL
-    const parentNode = findNodeById(argumentTree, parentId); // <-- Utilise argumentTree
-
-    // 2. HÉRITAGE  : l'enfant hérite de la 'forma' du parent.
+    const parentNode = findNodeById(argumentTree, parentId);
     const childForma = parentNode.forma || "descriptif";
 
     const newArgument = {
@@ -157,7 +199,6 @@ export function useArgumentaire() {
     setIsDirty(true);
   };
 
-  // Fonction pour ajouter un enfant à un nœud
   const addChildToNode = (parentId, newChild) => {
     setArgumentTree((prevTree) => {
       const newTree = JSON.parse(JSON.stringify(prevTree));
@@ -170,12 +211,10 @@ export function useArgumentaire() {
   };
 
   const onEditArgument = (id, newProperties) => {
-    // newProperties est un objet qui peut contenir { text, causa, forma, ... }
     setArgumentTree((prevTree) => {
-      const newTree = JSON.parse(JSON.stringify(prevTree)); // Deep clone
+      const newTree = JSON.parse(JSON.stringify(prevTree));
       const nodeToEdit = findNodeById(newTree, id);
       if (nodeToEdit) {
-        // On écrase les anciennes valeurs par les nouvelles
         Object.assign(nodeToEdit, newProperties);
       }
       return newTree;
@@ -203,7 +242,7 @@ export function useArgumentaire() {
 
   const handleExport = () => {
     const data = {
-      thesis: thesis, // <-- CHANGE ICI : Exporte l'objet thesis complet
+      thesis: thesis,
       arguments: argumentTree.children,
       version: "1.0",
     };
@@ -221,22 +260,18 @@ export function useArgumentaire() {
     setIsDirty(false);
   };
 
-  // IMPORTANT : Normalisation des données importées
   const handleImportSuccess = (jsonData) => {
-    // Normalisation des arguments pour s'assurer qu'ils ont tous la structure complète
-    // Dans useArgumentaire.js, fonction handleImportSuccess
-    // useArgumentaire.js
     const normalizedArguments = (jsonData.arguments || []).map((arg) => ({
       ...arg,
-      id: String(arg.id), // ✅ Force en string
-      parentId: arg.parentId ? String(arg.parentId) : "root", // ✅ Force en string
+      id: String(arg.id),
+      parentId: arg.parentId ? String(arg.parentId) : "root",
       causa: arg.causa || "pro",
       children: arg.children || [],
     }));
 
     const newTree = {
       id: "root",
-      text: jsonData.thesis?.text || "", // <-- CHANGE ICI : Utilise thesis.text
+      text: jsonData.thesis?.text || "",
       causa: null,
       children: normalizedArguments,
     };
@@ -256,16 +291,12 @@ export function useArgumentaire() {
   };
 
   const getAllNodesExceptSubtree = (currentNode, excludedId, nodeList = []) => {
-    // Si le node actuel est celui qu'on exclut (et donc tout son sous-arbre), on skip.
     if (currentNode.id === excludedId) {
-      return nodeList; // On retourne la liste actuelle sans ajouter ce node ni explorer ses enfants.
+      return nodeList;
     }
-    // Ajoute le node actuel à la liste (sauf la racine "root" si tu ne veux pas qu'elle soit choisie)
     if (currentNode.id !== "root") {
-      // On exclut souvent la racine de la liste des parents possibles
       nodeList.push({ id: currentNode.id, text: currentNode.text });
     }
-    // Parcours récursif des enfants
     currentNode.children.forEach((child) => {
       getAllNodesExceptSubtree(child, excludedId, nodeList);
     });
@@ -274,36 +305,17 @@ export function useArgumentaire() {
 
   const handleMoveArgument = (argumentId, newParentId) => {
     setArgumentTree((prevTree) => {
-      // 1. Crée une copie profonde de l'arbre
       const newTree = JSON.parse(JSON.stringify(prevTree));
-
-      // 2. Trouve le node à déplacer et son parent actuel
       const nodeToMove = findNodeById(newTree, argumentId);
       const currentParent = findParentById(newTree, argumentId);
-
-      // 3. Trouve le nouveau parent
       const newParent = findNodeById(newTree, newParentId);
 
-      // DEBUG: Ajoute des logs pour voir ce qui est trouvé
-      console.log("Node à déplacer:", nodeToMove);
-      console.log("Parent actuel:", currentParent);
-      console.log("Nouveau parent:", newParent);
-      console.log("ID du nouveau parent demandé:", newParentId);
-
-      // 4. Si tout est trouvé, procède au déplacement
       if (nodeToMove && currentParent && newParent) {
-        // a. Retire le node des enfants de son parent actuel
         currentParent.children = currentParent.children.filter(
           (child) => child.id !== argumentId
         );
-        // b. Ajoute le node aux enfants du nouveau parent
         newParent.children.push(nodeToMove);
-        // c. Met à jour le parentId du node déplacé (si tu utilises ce champ)
         nodeToMove.parentId = newParentId;
-      } else {
-        console.error(
-          "Échec du déplacement : node, parent actuel ou nouveau parent introuvable."
-        );
       }
 
       return newTree;
@@ -311,82 +323,19 @@ export function useArgumentaire() {
     setIsDirty(true);
   };
 
-  // Trouve le parent d'un node (récursif) - FONCTION NÉCESSAIRE
-  const findParentById = (node, targetId, parent = null) => {
-    if (node.id === targetId) {
-      // ✅ Comparaison directe string vs string
-      return parent;
-    }
-
-    for (const child of node.children) {
-      const found = findParentById(child, targetId, node);
-      if (found) {
-        return found;
-      }
-    }
-
-    return null;
-  };
-
-  const getArgumentCode = (targetNodeId) => {
-    console.log("🔍 getArgumentCode appelée pour l'ID:", targetNodeId);
-    const currentNode = findNodeById(argumentTree, targetNodeId);
-    if (!currentNode || currentNode.id === "root") {
-      console.log("↳ Cible non trouvée ou c'est la racine. Retourne ''");
-      return "";
-    }
-
-    const parentNode = findParentById(argumentTree, targetNodeId);
-    if (!parentNode) {
-      console.log("↳ Parent non trouvé. Retourne ''");
-      return "";
-    }
-
-    // 1. Récupère le code du parent (hérité, en minuscules)
-    let inheritedCode = "";
-    console.log(`↳ Parent ID: ${parentNode.id}, Target ID: ${targetNodeId}`);
-    if (parentNode.id !== "root") {
-      console.log(
-        `↳ Parent n'est pas la racine. Calcul récursif du code pour le parent ${parentNode.id}...`
-      );
-      inheritedCode = getArgumentCode(parentNode.id).toLowerCase();
-      console.log(`↳ Code hérité récupéré: '${inheritedCode}'`);
-    } else {
-      console.log("↳ Parent est la racine. Pas de code hérité.");
-    }
-
-    // 2. Trouve l'index du node cible parmi TOUS les enfants du parent
-    // (C'est une version simplifiée, on affine après)
-    const siblings = parentNode.children;
-    const ownIndex = siblings.findIndex(
-      (sibling) => sibling.id === targetNodeId
-    );
-    const position = ownIndex + 1; // findIndex retourne 0 pour le 1er, donc on +1
-
-    // 3. Construit la nouvelle partie du code basée sur la causa
-    const newSegment = `${currentNode.causa === "pro" ? "P" : "C"}${position}`;
-
-    // 4. Concatène et retourne
-    const finalCode = inheritedCode + newSegment;
-    console.log(`↳ Code final pour ${targetNodeId}: '${finalCode}'`);
-    return finalCode;
-  };
-
   // On expose uniquement ce qui est nécessaire aux composants
   return {
     argumentList,
     currentMode,
     isDirty,
-    // proposition,
     thesis,
     argumentTree,
     fileInputRef,
     handleNew,
     handleImportInit,
-    handleFileChange, // NOUVEAU - exporté pour App.jsx
+    handleFileChange,
     handleNavigateAway,
     handleExport,
-    // handlePropositionChange,
     handleThesisChange,
     handleAddArgument,
     onEditArgument,
