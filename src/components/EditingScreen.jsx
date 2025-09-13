@@ -23,13 +23,6 @@ export function EditingScreen({
   argumentTree, // <-- Ajoute cette ligne (crucial !)
   getArgumentCode,
 }) {
-  // DEBUT DU DEBUG TEMPORAIRE
-  console.log(
-    "📦 EditingScreen - getArgumentCode est:",
-    typeof getArgumentCode,
-    getArgumentCode
-  );
-  // FIN DU DEBUG
   return (
     <div className="editing-screen">
       <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>

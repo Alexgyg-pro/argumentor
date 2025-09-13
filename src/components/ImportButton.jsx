@@ -9,7 +9,6 @@ export function ImportButton({ onImport }) {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      console.log("Contenu du fichier :", e.target.result);
       try {
         const jsonContent = JSON.parse(e.target.result);
         onImport(jsonContent); // Envoie les données au parent

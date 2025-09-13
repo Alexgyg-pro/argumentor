@@ -13,13 +13,6 @@ export function ArgumentList({
   getArgumentCode,
   thesis,
 }) {
-  // DEBUT DU DEBUG TEMPORAIRE
-  console.log(
-    "📦 ArgumentList - getArgumentCode est:",
-    typeof getArgumentCode,
-    getArgumentCode
-  );
-  // FIN DU DEBUG
   return (
     <div className="argument-list">
       <h2>Vos arguments</h2>

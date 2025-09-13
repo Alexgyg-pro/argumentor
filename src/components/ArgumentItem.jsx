@@ -66,16 +66,6 @@ export function ArgumentItem({
     setIsMoveModalOpen(false);
   };
 
-  // DEBUT DU DEBUG TEMPORAIRE
-  console.log(
-    "📦 ArgumentItem - getArgumentCode pour l'argument",
-    argument.id,
-    "est:",
-    typeof getArgumentCode,
-    getArgumentCode
-  );
-  // FIN DU DEBUG
-
   // Récupère la liste des parents possibles
   // const potentialParents = getAllNodesExceptSubtree(argumentTree, argument.id);
 
