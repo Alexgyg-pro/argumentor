@@ -11,6 +11,7 @@ export function ArgumentList({
   handleMoveArgument,
   argumentTree,
   getArgumentCode,
+  thesis,
 }) {
   // DEBUT DU DEBUG TEMPORAIRE
   console.log(
@@ -37,6 +38,7 @@ export function ArgumentList({
               handleMoveArgument={handleMoveArgument}
               argumentTree={argumentTree}
               getArgumentCode={getArgumentCode}
+              thesis={thesis || {}}
               depth={0}
             />
           ))}

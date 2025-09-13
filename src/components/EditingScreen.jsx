@@ -57,6 +57,7 @@ export function EditingScreen({
         handleMoveArgument={handleMoveArgument}
         argumentTree={argumentTree}
         getArgumentCode={getArgumentCode}
+        thesis={thesis || {}}
       />
     </div>
   );

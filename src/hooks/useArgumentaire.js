@@ -23,6 +23,8 @@ export function useArgumentaire() {
   // Référence pour l'input fichier caché
   const fileInputRef = useRef(null);
 
+  const [potentialParents, setPotentialParents] = useState([]);
+
   // La liste d'arguments est désormais DÉRIVÉE de l'arbre
   const argumentList = argumentTree.children || [];
 
@@ -290,15 +292,30 @@ export function useArgumentaire() {
     }
   };
 
-  const getAllNodesExceptSubtree = (currentNode, excludedId, nodeList = []) => {
+  const getAllNodesExceptSubtree = (
+    currentNode,
+    excludedId,
+    nodeList = [],
+    thesisText = ""
+  ) => {
     if (currentNode.id === excludedId) {
+      if (excludedId !== "root") {
+        nodeList.push({
+          id: "root",
+          text: thesisText
+            ? `Thèse: ${thesisText.substring(0, 30)}${
+                thesisText.length > 30 ? "..." : ""
+              }`
+            : "[Thèse principale]",
+        });
+      }
       return nodeList;
     }
     if (currentNode.id !== "root") {
       nodeList.push({ id: currentNode.id, text: currentNode.text });
     }
     currentNode.children.forEach((child) => {
-      getAllNodesExceptSubtree(child, excludedId, nodeList);
+      getAllNodesExceptSubtree(child, excludedId, nodeList, thesisText);
     });
     return nodeList;
   };
@@ -308,14 +325,25 @@ export function useArgumentaire() {
       const newTree = JSON.parse(JSON.stringify(prevTree));
       const nodeToMove = findNodeById(newTree, argumentId);
       const currentParent = findParentById(newTree, argumentId);
-      const newParent = findNodeById(newTree, newParentId);
 
-      if (nodeToMove && currentParent && newParent) {
-        currentParent.children = currentParent.children.filter(
-          (child) => child.id !== argumentId
-        );
-        newParent.children.push(nodeToMove);
-        nodeToMove.parentId = newParentId;
+      // CAS SPÉCIAL : Déplacement vers la racine
+      if (newParentId === "root") {
+        if (currentParent) {
+          currentParent.children = currentParent.children.filter(
+            (child) => child.id !== argumentId
+          );
+        }
+        newTree.children.push(nodeToMove);
+        nodeToMove.parentId = "root";
+      } else {
+        const newParent = findNodeById(newTree, newParentId);
+        if (nodeToMove && currentParent && newParent) {
+          currentParent.children = currentParent.children.filter(
+            (child) => child.id !== argumentId
+          );
+          newParent.children.push(nodeToMove);
+          nodeToMove.parentId = newParentId;
+        }
       }
 
       return newTree;
