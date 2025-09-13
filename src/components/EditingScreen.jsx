@@ -1,4 +1,3 @@
-// import { PropositionInput } from "./PropositionInput";
 import { ThesisEditor } from "./ThesisEditor";
 import { ArgumentList } from "./ArgumentList";
 import { ExportButton } from "./ExportButton";
@@ -22,7 +21,15 @@ export function EditingScreen({
   getAllNodesExceptSubtree, // <-- Ajoute cette ligne
   handleMoveArgument, // <-- Ajoute cette ligne
   argumentTree, // <-- Ajoute cette ligne (crucial !)
+  getArgumentCode,
 }) {
+  // DEBUT DU DEBUG TEMPORAIRE
+  console.log(
+    "📦 EditingScreen - getArgumentCode est:",
+    typeof getArgumentCode,
+    getArgumentCode
+  );
+  // FIN DU DEBUG
   return (
     <div className="editing-screen">
       <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
@@ -49,6 +56,7 @@ export function EditingScreen({
         getAllNodesExceptSubtree={getAllNodesExceptSubtree}
         handleMoveArgument={handleMoveArgument}
         argumentTree={argumentTree}
+        getArgumentCode={getArgumentCode}
       />
     </div>
   );

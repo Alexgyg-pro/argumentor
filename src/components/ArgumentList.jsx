@@ -10,7 +10,15 @@ export function ArgumentList({
   getAllNodesExceptSubtree,
   handleMoveArgument,
   argumentTree,
+  getArgumentCode,
 }) {
+  // DEBUT DU DEBUG TEMPORAIRE
+  console.log(
+    "📦 ArgumentList - getArgumentCode est:",
+    typeof getArgumentCode,
+    getArgumentCode
+  );
+  // FIN DU DEBUG
   return (
     <div className="argument-list">
       <h2>Vos arguments</h2>
@@ -28,6 +36,7 @@ export function ArgumentList({
               getAllNodesExceptSubtree={getAllNodesExceptSubtree}
               handleMoveArgument={handleMoveArgument}
               argumentTree={argumentTree}
+              getArgumentCode={getArgumentCode}
               depth={0}
             />
           ))}

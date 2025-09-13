@@ -25,12 +25,20 @@ export function useArgumentaire() {
   const argumentList = argumentTree.children || [];
 
   // Fonction pour trouver un nœud par son ID (récursif)
+  // useArgumentaire.js
   const findNodeById = (node, targetId) => {
-    if (node.id === targetId) return node;
+    if (node.id === targetId) {
+      // ✅ Comparaison directe string vs string
+      return node;
+    }
+
     for (const child of node.children) {
       const found = findNodeById(child, targetId);
-      if (found) return found;
+      if (found) {
+        return found;
+      }
     }
+
     return null;
   };
 
@@ -114,14 +122,14 @@ export function useArgumentaire() {
     const parentNode = argumentTree; // La racine est directement argumentTree
 
     // 2. Héritage de la forma depuis la racine
-    const childForma = parentNode.forma || "descriptif"; // Hérite de la thèse
+    const childForma = thesis.forma || "descriptif"; // Hérite de la thèse
 
     const newArgument = {
-      id: Date.now(),
+      id: `arg${Date.now()}`, // ✅ Garanti string
       text: "Nouvel argument",
       causa: "pro",
-      forma: childForma, // <-- Utilise la forma héritée de la racine
-      parentId: "root",
+      forma: childForma,
+      parentId: "root", // ✅ Doit être string
       children: [],
     };
     addChildToNode("root", newArgument);
@@ -130,27 +138,21 @@ export function useArgumentaire() {
 
   // Fonction pour ajouter un argument enfant à un nœud spécifique
   const handleAddChildArgument = (parentId) => {
-    // 1. Trouver le node parent
-    const parentNode = findNodeById(argumentTree, parentId);
+    // 1. Trouver le node parent dans l'état ACTUEL
+    const parentNode = findNodeById(argumentTree, parentId); // <-- Utilise argumentTree
 
     // 2. HÉRITAGE  : l'enfant hérite de la 'forma' du parent.
-    // C'est la seule règle automatique.
-    const childForma = parentNode.forma || "descriptif"; // Valeur par défaut
-
-    // 3. La 'causa' n'est PAS héritée. On initialise à "pro" par défaut.
-    // L'utilisateur devra la changer manuellement si besoin.
-    const childCausa = "pro";
+    const childForma = parentNode.forma || "descriptif";
 
     const newArgument = {
-      id: Date.now(), // ou uuid plus tard
+      id: `arg${Date.now()}`,
       text: "Nouvel argument",
-      causa: childCausa, // Toujours "pro" par défaut
-      forma: childForma, // Héritée du parent <-- LA SEULE RÈGLE MÉTIER
+      causa: "pro",
+      forma: childForma,
       parentId: parentId,
       children: [],
     };
 
-    // Utilise la fonction existante pour mettre à jour l'arbre
     addChildToNode(parentId, newArgument);
     setIsDirty(true);
   };
@@ -222,10 +224,13 @@ export function useArgumentaire() {
   // IMPORTANT : Normalisation des données importées
   const handleImportSuccess = (jsonData) => {
     // Normalisation des arguments pour s'assurer qu'ils ont tous la structure complète
+    // Dans useArgumentaire.js, fonction handleImportSuccess
+    // useArgumentaire.js
     const normalizedArguments = (jsonData.arguments || []).map((arg) => ({
       ...arg,
+      id: String(arg.id), // ✅ Force en string
+      parentId: arg.parentId ? String(arg.parentId) : "root", // ✅ Force en string
       causa: arg.causa || "pro",
-      parentId: arg.parentId || "root",
       children: arg.children || [],
     }));
 
@@ -308,12 +313,63 @@ export function useArgumentaire() {
 
   // Trouve le parent d'un node (récursif) - FONCTION NÉCESSAIRE
   const findParentById = (node, targetId, parent = null) => {
-    if (node.id === targetId) return parent;
+    if (node.id === targetId) {
+      // ✅ Comparaison directe string vs string
+      return parent;
+    }
+
     for (const child of node.children) {
       const found = findParentById(child, targetId, node);
-      if (found) return found;
+      if (found) {
+        return found;
+      }
     }
+
     return null;
+  };
+
+  const getArgumentCode = (targetNodeId) => {
+    console.log("🔍 getArgumentCode appelée pour l'ID:", targetNodeId);
+    const currentNode = findNodeById(argumentTree, targetNodeId);
+    if (!currentNode || currentNode.id === "root") {
+      console.log("↳ Cible non trouvée ou c'est la racine. Retourne ''");
+      return "";
+    }
+
+    const parentNode = findParentById(argumentTree, targetNodeId);
+    if (!parentNode) {
+      console.log("↳ Parent non trouvé. Retourne ''");
+      return "";
+    }
+
+    // 1. Récupère le code du parent (hérité, en minuscules)
+    let inheritedCode = "";
+    console.log(`↳ Parent ID: ${parentNode.id}, Target ID: ${targetNodeId}`);
+    if (parentNode.id !== "root") {
+      console.log(
+        `↳ Parent n'est pas la racine. Calcul récursif du code pour le parent ${parentNode.id}...`
+      );
+      inheritedCode = getArgumentCode(parentNode.id).toLowerCase();
+      console.log(`↳ Code hérité récupéré: '${inheritedCode}'`);
+    } else {
+      console.log("↳ Parent est la racine. Pas de code hérité.");
+    }
+
+    // 2. Trouve l'index du node cible parmi TOUS les enfants du parent
+    // (C'est une version simplifiée, on affine après)
+    const siblings = parentNode.children;
+    const ownIndex = siblings.findIndex(
+      (sibling) => sibling.id === targetNodeId
+    );
+    const position = ownIndex + 1; // findIndex retourne 0 pour le 1er, donc on +1
+
+    // 3. Construit la nouvelle partie du code basée sur la causa
+    const newSegment = `${currentNode.causa === "pro" ? "P" : "C"}${position}`;
+
+    // 4. Concatène et retourne
+    const finalCode = inheritedCode + newSegment;
+    console.log(`↳ Code final pour ${targetNodeId}: '${finalCode}'`);
+    return finalCode;
   };
 
   // On expose uniquement ce qui est nécessaire aux composants
@@ -339,5 +395,6 @@ export function useArgumentaire() {
     handleAddChildArgument,
     getAllNodesExceptSubtree,
     handleMoveArgument,
+    getArgumentCode,
   };
 }

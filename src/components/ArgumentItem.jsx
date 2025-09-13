@@ -9,6 +9,7 @@ export function ArgumentItem({
   getAllNodesExceptSubtree, // Nouvelles props
   handleMoveArgument,
   argumentTree, // On a besoin de l'arbre pour lister les parents
+  getArgumentCode,
   depth = 0,
 }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -31,6 +32,7 @@ export function ArgumentItem({
 
   const handleCancel = () => {
     setEditingId(null);
+    setIsEditing(false);
   };
 
   const handleMoveClick = () => {
@@ -40,8 +42,9 @@ export function ArgumentItem({
 
   const confirmMove = () => {
     if (selectedNewParentId) {
-      const numericParentId = parseInt(selectedNewParentId, 10);
-      handleMoveArgument(argument.id, numericParentId);
+      // const numericParentId = parseInt(selectedNewParentId, 10);
+      // handleMoveArgument(argument.id, numericParentId);
+      handleMoveArgument(argument.id, selectedNewParentId);
     }
     setIsMoveModalOpen(false);
   };
@@ -49,6 +52,15 @@ export function ArgumentItem({
   const cancelMove = () => {
     setIsMoveModalOpen(false);
   };
+  // DEBUT DU DEBUG TEMPORAIRE
+  console.log(
+    "📦 ArgumentItem - getArgumentCode pour l'argument",
+    argument.id,
+    "est:",
+    typeof getArgumentCode,
+    getArgumentCode
+  );
+  // FIN DU DEBUG
 
   // Récupère la liste des parents possibles
   // const potentialParents = getAllNodesExceptSubtree(argumentTree, argument.id);
@@ -64,7 +76,14 @@ export function ArgumentItem({
       ) : (
         /* Sinon, on affiche la vue normale */
         <div>
-          <strong>{argument.text}</strong>
+          {/* <strong>{argument.text}</strong> */}
+          {/* Affiche le code SEULEMENT en mode visualisation, PAS en mode édition */}
+          <strong>
+            {!isEditing &&
+              getArgumentCode &&
+              `[${getArgumentCode(argument.id)}] `}
+            {argument.text}
+          </strong>
           {/* Bouton pour éditer */}
           <button onClick={() => setIsEditing(true)}>✏️</button>
           {/* Bouton pour supprimer */}
@@ -73,8 +92,8 @@ export function ArgumentItem({
           <button onClick={() => onAddChildArgument(argument.id)}>➕</button>
           <br />
           <small>
-            Causa: {argument.causa} | Poids: {argument.weight}
-            {/* Affichera aussi forma plus tard */}
+            Causa: {argument.causa} | Forma: {argument.forma}{" "}
+            {/* Poids: {argument.weight} */}{" "}
           </small>
         </div>
       )}
@@ -92,6 +111,7 @@ export function ArgumentItem({
               getAllNodesExceptSubtree={getAllNodesExceptSubtree}
               handleMoveArgument={handleMoveArgument}
               argumentTree={argumentTree}
+              getArgumentCode={getArgumentCode}
               depth={depth + 1}
             />
           ))}

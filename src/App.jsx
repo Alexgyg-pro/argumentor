@@ -23,7 +23,6 @@ function App() {
         <ChoiceScreen
           handleNew={argumentaire.handleNew}
           handleImportInit={argumentaire.handleImportInit}
-          handleImportSuccess={argumentaire.handleImportSuccess}
         />
       ) : (
         <EditingScreen {...argumentaire} />
