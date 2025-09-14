@@ -1,9 +1,15 @@
 // ThesisEditor.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function ThesisEditor({ thesis, onThesisChange }) {
   const [isEditing, setIsEditing] = useState(false);
   const [localThesis, setLocalThesis] = useState(thesis);
+
+  useEffect(() => {
+    if (!thesis.text || thesis.text.trim() === "") {
+      setIsEditing(true);
+    }
+  }, [thesis.text]);
 
   // Sauvegarde les modifications et quitte le mode édition
   const handleSave = () => {
@@ -13,6 +19,9 @@ export function ThesisEditor({ thesis, onThesisChange }) {
 
   // Annule les modifications et revient au mode affichage
   const handleCancel = () => {
+    console.log("🔄 handleCancel appelé");
+    console.log("isNewThesis:", isNewThesis);
+    console.log("thesis.text:", thesis.text);
     setLocalThesis(thesis); // Reset les modifications locales
     setIsEditing(false);
   };
@@ -22,7 +31,7 @@ export function ThesisEditor({ thesis, onThesisChange }) {
     setLocalThesis((prev) => ({ ...prev, [field]: value }));
   };
 
-  if (isEditing) {
+  if (isEditing || !thesis.text || thesis.text.trim() === "") {
     // MODE ÉDITION
     return (
       <div className="thesis-editor editing">
@@ -57,12 +66,10 @@ export function ThesisEditor({ thesis, onThesisChange }) {
   // MODE AFFICHAGE
   return (
     <div className="thesis-display">
-      <h2>{thesis.text || "Thèse principale"}</h2>
-      {thesis.text && (
-        <div className="thesis-content">
-          <small>Forme: {thesis.forma}</small>
-        </div>
-      )}
+      <h2>{thesis.text}</h2>
+      <div className="thesis-content">
+        <small>Forme: {thesis.forma}</small>
+      </div>
       <button onClick={() => setIsEditing(true)}>
         {thesis.text ? "✏️ Modifier" : "➕ Définir la thèse"}
       </button>

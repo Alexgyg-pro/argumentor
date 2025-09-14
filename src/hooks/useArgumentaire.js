@@ -124,7 +124,6 @@ export function useArgumentaire() {
       causa: null,
       children: [],
     });
-    setArgumentCodes({}); // Reset les codes
     setIsDirty(false);
     setCurrentMode("editing");
   };
