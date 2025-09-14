@@ -92,6 +92,10 @@ export function ArgumentItem({
           <br />
           <small>
             Causa: {argument.causa} | Forma: {argument.forma}
+            {argument.validity !== undefined &&
+              ` | Validité: ${argument.validity.toFixed(1)}`}
+            {argument.relevance !== undefined &&
+              ` | Pertinence: ${argument.relevance.toFixed(1)}`}
           </small>
         </div>
       )}

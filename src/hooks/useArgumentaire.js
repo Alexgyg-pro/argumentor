@@ -177,6 +177,8 @@ export function useArgumentaire() {
       text: "Nouvel argument",
       causa: "pro",
       forma: childForma,
+      validity: 0.5,
+      relevance: 0.5,
       parentId: "root",
       children: [],
     };
@@ -193,6 +195,8 @@ export function useArgumentaire() {
       text: "Nouvel argument",
       causa: "pro",
       forma: childForma,
+      validity: 0.5,
+      relevance: 0.5,
       parentId: parentId,
       children: [],
     };
@@ -246,7 +250,7 @@ export function useArgumentaire() {
     const data = {
       thesis: thesis,
       arguments: argumentTree.children,
-      version: "1.0",
+      version: "1.1",
     };
 
     const jsonString = JSON.stringify(data, null, 2);
@@ -268,6 +272,8 @@ export function useArgumentaire() {
       id: String(arg.id),
       parentId: arg.parentId ? String(arg.parentId) : "root",
       causa: arg.causa || "pro",
+      validity: arg.validity ?? 0.5, // ← Nouveau
+      relevance: arg.relevance ?? 0.5, // ← Nouveau
       children: arg.children || [],
     }));
 
@@ -351,6 +357,56 @@ export function useArgumentaire() {
     setIsDirty(true);
   };
 
+  const calculateArgumentScore = (argument, thesisForma) => {
+    // Descriptive: vérité + logique
+    if (thesisForma === "descriptif") {
+      return argument.validity * argument.relevance;
+    }
+    // Normative: conséquences + valeurs
+    else {
+      return argument.validity * argument.relevance;
+    }
+  };
+
+  // Fonction de calcul récursif avec prise en compte de la forma
+  const calculateGlobalScore = useCallback(
+    (node = argumentTree, forma = thesis.forma) => {
+      if (node.id === "root") {
+        // Racine : calculer sur les enfants seulement
+        if (!node.children || node.children.length === 0) return 0.5;
+        const childScores = node.children.map((child) =>
+          calculateGlobalScore(child, forma)
+        );
+        return (
+          childScores.reduce((sum, score) => sum + score, 0) /
+          childScores.length
+        );
+      }
+
+      // Calcul du score du nœud courant selon sa forma
+      const nodeScore = (node.validity ?? 0.5) * (node.relevance ?? 0.5);
+
+      if (!node.children || node.children.length === 0) {
+        return nodeScore; // Feuille de l'arbre
+      }
+
+      // Nœud avec enfants : combiner avec les scores enfants
+      const childScores = node.children.map((child) =>
+        calculateGlobalScore(child, forma)
+      );
+      const averageChildScore =
+        childScores.reduce((sum, score) => sum + score, 0) / childScores.length;
+
+      // Pondération selon le type de thèse
+      if (forma === "descriptif") {
+        return nodeScore * 0.6 + averageChildScore * 0.4;
+      } else {
+        return nodeScore * 0.4 + averageChildScore * 0.6;
+      }
+    },
+    [argumentTree, thesis.forma]
+  );
+
   // On expose uniquement ce qui est nécessaire aux composants
   return {
     argumentList,
@@ -373,5 +429,6 @@ export function useArgumentaire() {
     getAllNodesExceptSubtree,
     handleMoveArgument,
     getArgumentCode,
+    calculateGlobalScore,
   };
 }

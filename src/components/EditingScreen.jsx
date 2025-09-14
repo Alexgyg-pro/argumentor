@@ -22,9 +22,13 @@ export function EditingScreen({
   handleMoveArgument, // <-- Ajoute cette ligne
   argumentTree, // <-- Ajoute cette ligne (crucial !)
   getArgumentCode,
+  calculateGlobalScore,
 }) {
   return (
     <div className="editing-screen">
+      <div className="global-score">
+        <h3>Score global: {calculateGlobalScore().toFixed(2)}</h3>
+      </div>
       <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
         <button onClick={() => handleNavigateAway(handleNew)}>
           ➕ Nouveau

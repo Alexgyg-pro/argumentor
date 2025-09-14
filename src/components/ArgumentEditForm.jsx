@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 
 export function ArgumentEditForm({ argument, onSave, onCancel }) {
-  // State local pour chaque propriété éditable
   const [text, setText] = useState(argument.text);
   const [causa, setCausa] = useState(argument.causa);
-  // State pour la future propriété 'forma'
-  const [forma, setForma] = useState(argument.forma || "descriptif"); // Valeur par défaut
+  const [forma, setForma] = useState(argument.forma || "descriptif");
+  const [validity, setValidity] = useState(argument.validity ?? 0.5);
+  const [relevance, setRelevance] = useState(argument.relevance ?? 0.5);
 
   // Fonction pour soumettre le formulaire
   const handleSubmit = (e) => {
@@ -16,7 +16,8 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
       text: text,
       causa: causa,
       forma: forma,
-      // ... d'autres propriétés à venir
+      validity: validity,
+      relevance: relevance,
     });
   };
 
@@ -48,6 +49,30 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
             Esthétique (bientôt disponible)
           </option>
         </select>
+      </label>
+
+      <label>
+        Validité (0-1):
+        <input
+          type="number"
+          min="0"
+          max="1"
+          step="0.1"
+          value={validity}
+          onChange={(e) => setValidity(parseFloat(e.target.value))}
+        />
+      </label>
+
+      <label>
+        Pertinence (0-1):
+        <input
+          type="number"
+          min="0"
+          max="1"
+          step="0.1"
+          value={relevance}
+          onChange={(e) => setRelevance(parseFloat(e.target.value))}
+        />
       </label>
 
       <div className="form-actions">
