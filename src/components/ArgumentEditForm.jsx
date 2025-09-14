@@ -7,7 +7,7 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
   const [forma, setForma] = useState(argument.forma || "descriptif");
   const [validity, setValidity] = useState(argument.validity ?? 0.5);
   const [relevance, setRelevance] = useState(argument.relevance ?? 0.5);
-  const [value, setValue] = useState(argument.value ?? 0.5);
+  const [value, setValue] = useState((argument.value ?? 0.5).toFixed(2));
   const [natura, setNatura] = useState(argument.natura || "validity");
 
   // Fonction pour soumettre le formulaire
@@ -21,7 +21,7 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
       validity: validity,
       relevance: relevance,
       natura: natura,
-      value: value,
+      value: parseFloat(value),
     });
   };
 

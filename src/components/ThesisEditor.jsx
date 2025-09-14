@@ -57,12 +57,15 @@ export function ThesisEditor({ thesis, onThesisChange }) {
   // MODE AFFICHAGE
   return (
     <div className="thesis-display">
-      <h2>Thèse principale</h2>
-      <div className="thesis-content">
-        <p>{thesis.text}</p>
-        <small>Forme: {thesis.forma}</small>
-      </div>
-      <button onClick={() => setIsEditing(true)}>✏️ Modifier</button>
+      <h2>{thesis.text || "Thèse principale"}</h2>
+      {thesis.text && (
+        <div className="thesis-content">
+          <small>Forme: {thesis.forma}</small>
+        </div>
+      )}
+      <button onClick={() => setIsEditing(true)}>
+        {thesis.text ? "✏️ Modifier" : "➕ Définir la thèse"}
+      </button>
     </div>
   );
 }

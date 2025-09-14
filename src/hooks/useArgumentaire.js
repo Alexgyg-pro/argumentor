@@ -406,9 +406,11 @@ export function useArgumentaire() {
           }
         });
 
-        node.validity = validityScore;
-        node.relevance = relevanceScore;
-        node.value = (validityScore + relevanceScore) / 2;
+        node.validity = parseFloat(validityScore.toFixed(2));
+        node.relevance = parseFloat(relevanceScore.toFixed(2));
+        node.value = parseFloat(
+          ((validityScore + relevanceScore) / 2).toFixed(2)
+        );
       }
       // FEUILLE : value déjà définie par l'utilisateur
     },

@@ -9,6 +9,9 @@ function App() {
   return (
     <div className="app">
       <h1>Argumentor</h1>
+      <p style={{ fontWeight: "bold" }}>
+        A la mémoire de Charlie Kirk, 1993 - 2025
+      </p>
 
       {/* Input file toujours dans App.jsx */}
       <input
