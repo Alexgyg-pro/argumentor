@@ -177,6 +177,8 @@ export function useArgumentaire() {
       text: "Nouvel argument",
       causa: "pro",
       forma: childForma,
+      natura: "validity",
+      value: 0.5,
       validity: 0.5,
       relevance: 0.5,
       parentId: "root",
@@ -195,6 +197,8 @@ export function useArgumentaire() {
       text: "Nouvel argument",
       causa: "pro",
       forma: childForma,
+      natura: "validity",
+      value: 0.5,
       validity: 0.5,
       relevance: 0.5,
       parentId: parentId,
@@ -216,12 +220,25 @@ export function useArgumentaire() {
     });
   };
 
+  // const onEditArgument = (id, newProperties) => {
+  //   setArgumentTree((prevTree) => {
+  //     const newTree = JSON.parse(JSON.stringify(prevTree));
+  //     const nodeToEdit = findNodeById(newTree, id);
+  //     if (nodeToEdit) {
+  //       Object.assign(nodeToEdit, newProperties);
+  //     }
+  //     return newTree;
+  //   });
+  //   setIsDirty(true);
+  // };
+
   const onEditArgument = (id, newProperties) => {
     setArgumentTree((prevTree) => {
       const newTree = JSON.parse(JSON.stringify(prevTree));
       const nodeToEdit = findNodeById(newTree, id);
       if (nodeToEdit) {
         Object.assign(nodeToEdit, newProperties);
+        calculateArgumentValues(newTree); // ← Recalculer après edit
       }
       return newTree;
     });
@@ -367,6 +384,36 @@ export function useArgumentaire() {
       return argument.validity * argument.relevance;
     }
   };
+
+  const calculateArgumentValues = useCallback(
+    (node = argumentTree) => {
+      if (node.id === "root") {
+        node.children.forEach(calculateArgumentValues);
+        return;
+      }
+
+      if (node.children.length > 0) {
+        // NŒUD : calculer validity/relevance depuis les enfants
+        let validityScore = 0.5;
+        let relevanceScore = 0.5;
+
+        node.children.forEach((child) => {
+          calculateArgumentValues(child);
+          if (child.natura === "validity") {
+            validityScore = child.value;
+          } else {
+            relevanceScore = child.value;
+          }
+        });
+
+        node.validity = validityScore;
+        node.relevance = relevanceScore;
+        node.value = (validityScore + relevanceScore) / 2;
+      }
+      // FEUILLE : value déjà définie par l'utilisateur
+    },
+    [argumentTree]
+  );
 
   // Fonction de calcul récursif avec prise en compte de la forma
   const calculateGlobalScore = useCallback(

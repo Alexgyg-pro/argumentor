@@ -96,6 +96,9 @@ export function ArgumentItem({
               ` | Validité: ${argument.validity.toFixed(1)}`}
             {argument.relevance !== undefined &&
               ` | Pertinence: ${argument.relevance.toFixed(1)}`}
+            {argument.value !== undefined &&
+              ` | Valeur: ${argument.value.toFixed(1)}`}
+            {argument.natura && ` | Natura: ${argument.natura}`}
           </small>
         </div>
       )}

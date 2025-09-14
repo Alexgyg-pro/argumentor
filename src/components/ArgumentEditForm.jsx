@@ -7,6 +7,8 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
   const [forma, setForma] = useState(argument.forma || "descriptif");
   const [validity, setValidity] = useState(argument.validity ?? 0.5);
   const [relevance, setRelevance] = useState(argument.relevance ?? 0.5);
+  const [value, setValue] = useState(argument.value ?? 0.5);
+  const [natura, setNatura] = useState(argument.natura || "validity");
 
   // Fonction pour soumettre le formulaire
   const handleSubmit = (e) => {
@@ -18,6 +20,8 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
       forma: forma,
       validity: validity,
       relevance: relevance,
+      natura: natura,
+      value: value,
     });
   };
 
@@ -31,7 +35,6 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
           autoFocus
         />
       </label>
-
       <label>
         Type (Causa):
         <select value={causa} onChange={(e) => setCausa(e.target.value)}>
@@ -39,7 +42,6 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
           <option value="contra">Contre</option>
         </select>
       </label>
-
       <label>
         Forme (Forma):
         <select value={forma} onChange={(e) => setForma(e.target.value)}>
@@ -50,31 +52,31 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
           </option>
         </select>
       </label>
-
+      {argument.children.length === 0 ? (
+        <label>
+          Valeur (0-1):
+          <input
+            type="number"
+            min="0"
+            max="1"
+            step="0.1"
+            value={value}
+            onChange={(e) => setValue(parseFloat(e.target.value))}
+          />
+        </label>
+      ) : (
+        <div>
+          <p>Validité: {argument.validity?.toFixed(1)} (calculée)</p>
+          <p>Pertinence: {argument.relevance?.toFixed(1)} (calculée)</p>
+        </div>
+      )}
       <label>
-        Validité (0-1):
-        <input
-          type="number"
-          min="0"
-          max="1"
-          step="0.1"
-          value={validity}
-          onChange={(e) => setValidity(parseFloat(e.target.value))}
-        />
+        Nature de l'argument :
+        <select value={natura} onChange={(e) => setNatura(e.target.value)}>
+          <option value="validity">Validité</option>
+          <option value="relevance">Pertinence</option>
+        </select>
       </label>
-
-      <label>
-        Pertinence (0-1):
-        <input
-          type="number"
-          min="0"
-          max="1"
-          step="0.1"
-          value={relevance}
-          onChange={(e) => setRelevance(parseFloat(e.target.value))}
-        />
-      </label>
-
       <div className="form-actions">
         <button type="submit">Sauvegarder</button>
         <button type="button" onClick={onCancel}>
