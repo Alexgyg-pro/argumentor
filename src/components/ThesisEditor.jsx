@@ -1,7 +1,12 @@
 // ThesisEditor.jsx
 import { useState, useEffect } from "react";
 
-export function ThesisEditor({ thesis, onThesisChange }) {
+export function ThesisEditor({
+  thesis,
+  onThesisChange,
+  onCancel,
+  isNewThesis,
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [localThesis, setLocalThesis] = useState(thesis);
 
@@ -19,11 +24,9 @@ export function ThesisEditor({ thesis, onThesisChange }) {
 
   // Annule les modifications et revient au mode affichage
   const handleCancel = () => {
-    console.log("🔄 handleCancel appelé");
-    console.log("isNewThesis:", isNewThesis);
-    console.log("thesis.text:", thesis.text);
-    setLocalThesis(thesis); // Reset les modifications locales
-    setIsEditing(false);
+    console.log("🔄 handleCancel (ThesisEditor) appelé");
+    setLocalThesis(thesis);
+    onCancel(); // ← Appeler la fonction parente
   };
 
   // Met à jour la copie locale quand on édite un champ

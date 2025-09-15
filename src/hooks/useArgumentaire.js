@@ -20,6 +20,8 @@ export function useArgumentaire() {
   // Nouveau state pour mémoriser les codes
   const [argumentCodes, setArgumentCodes] = useState({});
 
+  const [isNewThesis, setIsNewThesis] = useState(false);
+
   // Référence pour l'input fichier caché
   const fileInputRef = useRef(null);
 
@@ -114,6 +116,7 @@ export function useArgumentaire() {
   // GESTIONNAIRES D'ÉVÉNEMENTS
 
   const handleNew = () => {
+    console.log("🔄 handleNew appelé");
     setThesis({
       text: "",
       forma: "descriptif",
@@ -126,6 +129,8 @@ export function useArgumentaire() {
     });
     setIsDirty(false);
     setCurrentMode("editing");
+    setIsNewThesis(true);
+    console.log("isNewThesis défini à: true");
   };
 
   const handleImportInit = () => {
@@ -478,5 +483,8 @@ export function useArgumentaire() {
     handleMoveArgument,
     getArgumentCode,
     calculateGlobalScore,
+    isNewThesis,
+    setIsNewThesis,
+    setCurrentMode,
   };
 }

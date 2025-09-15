@@ -23,7 +23,23 @@ export function EditingScreen({
   argumentTree, // <-- Ajoute cette ligne (crucial !)
   getArgumentCode,
   calculateGlobalScore,
+  isNewThesis,
+  setIsNewThesis,
+  setCurrentMode,
 }) {
+  const handleCancelThesis = () => {
+    console.log("🔄 handleCancelThesis appelé");
+    console.log("isNewThesis:", isNewThesis);
+    if (isNewThesis) {
+      console.log("📤 Retour à l'écran de choix");
+      setIsNewThesis(false);
+      setCurrentMode("choice");
+    } else {
+      console.log("📝 Annulation simple");
+      // Rien à faire - ThesisEditor gère ça
+    }
+  };
+
   return (
     <div className="editing-screen">
       <div className="global-score">
@@ -39,7 +55,12 @@ export function EditingScreen({
         {isDirty && <button onClick={handleExport}>💾 Exporter</button>}
       </div>
 
-      <ThesisEditor thesis={thesis} onThesisChange={handleThesisChange} />
+      <ThesisEditor
+        thesis={thesis}
+        onThesisChange={handleThesisChange}
+        onCancel={handleCancelThesis}
+        isNewThesis={isNewThesis}
+      />
 
       <button onClick={handleAddArgument} disabled={thesis.text.trim() === ""}>
         Ajouter un argument
