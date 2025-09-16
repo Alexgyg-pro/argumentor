@@ -13,7 +13,9 @@ export function ArgumentItem({
   thesis = {},
   depth = 0,
 }) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(
+    !argument.text || argument.text === "Nouvel argument"
+  );
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
   // State pour gérer la modale de déplacement
@@ -44,8 +46,13 @@ export function ArgumentItem({
   };
 
   const handleCancel = () => {
-    setEditingId(null);
-    setIsEditing(false);
+    if (argument.isTemporary) {
+      // SUPPRIMER les arguments temporaires annulés
+      onDeleteArgument(argument.id);
+    } else {
+      // Reset sans supprimer pour les existants
+      setIsEditing(false);
+    }
   };
 
   const handleMoveClick = () => {

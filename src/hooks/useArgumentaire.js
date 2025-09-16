@@ -187,9 +187,10 @@ export function useArgumentaire() {
       relevance: 0.5,
       parentId: "root",
       children: [],
+      isTemporary: true, // ← MARQUEUR TEMPORAIRE
     };
     addChildToNode("root", newArgument);
-    setIsDirty(true);
+    // setIsDirty(true);
   };
 
   const handleAddChildArgument = (parentId) => {
@@ -207,6 +208,7 @@ export function useArgumentaire() {
       relevance: 0.5,
       parentId: parentId,
       children: [],
+      isTemporary: true, // ← MARQUEUR TEMPORAIRE
     };
 
     addChildToNode(parentId, newArgument);
@@ -242,7 +244,10 @@ export function useArgumentaire() {
       const nodeToEdit = findNodeById(newTree, id);
       if (nodeToEdit) {
         Object.assign(nodeToEdit, newProperties);
-        calculateArgumentValues(newTree); // ← Recalculer après edit
+        // SI le texte n'est plus vide, supprimer le marqueur temporaire
+        if (newProperties.text && newProperties.text.trim() !== "") {
+          delete nodeToEdit.isTemporary;
+        }
       }
       return newTree;
     });
@@ -250,12 +255,25 @@ export function useArgumentaire() {
   };
 
   const onDeleteArgument = (id) => {
+    console.log("🗑️ onDeleteArgument appelé pour:", id);
     const nodeToDelete = findNodeById(argumentTree, id);
+    console.log("Node trouvé:", nodeToDelete);
 
+    // SUPPRESSION SILENCIEUSE des temporaires
+    if (nodeToDelete && nodeToDelete.isTemporary) {
+      console.log("🔁 Suppression silencieuse du temporaire");
+      setArgumentTree((prevTree) => {
+        const newTree = deleteNodeRecursively(prevTree, id);
+        console.log("Nouvel arbre après suppression:", newTree);
+        return newTree;
+      });
+      setIsDirty(true);
+      return;
+    }
+
+    // CONFIRMATION seulement pour les non-temporaires
     if (nodeToDelete && nodeToDelete.children.length > 0) {
-      alert(
-        "Impossible de supprimer un argument qui a des sous-arguments. Veuillez d'abord supprimer ou déplacer ses sous-arguments."
-      );
+      alert("Impossible de supprimer un argument qui a des sous-arguments...");
       return;
     }
 
