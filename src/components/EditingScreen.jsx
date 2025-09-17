@@ -1,6 +1,7 @@
 import { ThesisEditor } from "./ThesisEditor";
 import { ArgumentList } from "./ArgumentList";
 import { ExportButton } from "./ExportButton";
+import { calculateGlobalScore as calcGlobalScore } from "../utils/calculations";
 
 export function EditingScreen({
   // proposition,
@@ -26,7 +27,11 @@ export function EditingScreen({
   isNewThesis,
   setIsNewThesis,
   setCurrentMode,
+  needsRecalculation, // ← AJOUTER
+  recalculateScores, // ← AJOUTER
 }) {
+  const score = calcGlobalScore(argumentTree, thesis.forma);
+
   const handleCancelThesis = () => {
     console.log("🔄 handleCancelThesis appelé");
     console.log("isNewThesis:", isNewThesis);
@@ -43,8 +48,11 @@ export function EditingScreen({
   return (
     <div className="editing-screen">
       <div className="global-score">
-        <h3>Score global: {calculateGlobalScore().toFixed(2)}</h3>
+        <h3>Score global: {score.toFixed(2)}</h3>
       </div>
+      {needsRecalculation && (
+        <button onClick={recalculateScores}>🔄 Recalculer les scores</button>
+      )}
       <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
         <button onClick={() => handleNavigateAway(handleNew)}>
           ➕ Nouveau
@@ -65,6 +73,10 @@ export function EditingScreen({
       <button onClick={handleAddArgument} disabled={thesis.text.trim() === ""}>
         Ajouter un argument
       </button>
+
+      {needsRecalculation && (
+        <button onClick={recalculateScores}>🔄 Recalculer les scores</button>
+      )}
 
       <ArgumentList
         argumentList={argumentList}
