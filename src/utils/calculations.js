@@ -13,8 +13,12 @@ export const calculateGlobalScore = (argumentTree, thesisForma) => {
     }
 
     let nodeScore = (node.validity ?? 0.5) * (node.relevance ?? 0.5);
-    if (node.causa === "contra") {
-      nodeScore = -nodeScore; // ← Score négatif pour les arguments contra
+    if (node.causa === "pro") {
+      nodeScore = +Math.abs(nodeScore); // Positif
+    } else if (node.causa === "contra") {
+      nodeScore = -Math.abs(nodeScore); // Négatif
+    } else {
+      nodeScore = 0; // Neutre = aucun impact
     }
     if (!node.children || node.children.length === 0) return nodeScore;
 
@@ -28,4 +32,30 @@ export const calculateGlobalScore = (argumentTree, thesisForma) => {
   };
 
   return calculate(argumentTree, thesisForma);
+};
+
+export const recalculateAllCodes = (argumentTree, findParentById) => {
+  const newCodes = {};
+
+  const calculateCodeForNode = (node, parentCode = "") => {
+    if (node.id === "root") return;
+
+    const parent = findParentById(argumentTree, node.id);
+    const siblings = parent?.children || [];
+    const index = siblings.findIndex((sibling) => sibling.id === node.id);
+    const segment = `${node.causa === "pro" ? "P" : "C"}${index + 1}`;
+    const code = parentCode + segment;
+
+    newCodes[node.id] = code;
+    node.children.forEach((child) =>
+      calculateCodeForNode(child, code.toLowerCase())
+    );
+  };
+
+  argumentTree.children.forEach((child) => calculateCodeForNode(child, ""));
+  return newCodes;
+};
+
+export const getArgumentCode = (argumentCodes, targetNodeId) => {
+  return argumentCodes[targetNodeId] || "";
 };

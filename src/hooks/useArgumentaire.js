@@ -5,12 +5,42 @@ import {
   deleteNodeRecursively,
   addChildToNode,
 } from "../utils/argumentOperations";
-import { calculateGlobalScore } from "../utils/calculations";
+import {
+  calculateGlobalScore,
+  //recalculateAllCodes,
+  getArgumentCode as getCode,
+} from "../utils/calculations";
 import {
   normalizeArguments,
   exportArgumentaire,
   handleImport,
 } from "../utils/importExport";
+
+export const recalculateAllCodes = (argumentTree, findParentById) => {
+  const newCodes = {};
+
+  const calculateCodeForNode = (node, parentCode = "") => {
+    if (node.id === "root") return;
+
+    const parent = findParentById(argumentTree, node.id);
+    const siblings = parent?.children || [];
+    const index = siblings.findIndex((sibling) => sibling.id === node.id);
+    const segment = `${node.causa === "pro" ? "P" : "C"}${index + 1}`;
+    const code = parentCode + segment;
+
+    newCodes[node.id] = code;
+    node.children.forEach((child) =>
+      calculateCodeForNode(child, code.toLowerCase())
+    );
+  };
+
+  argumentTree.children.forEach((child) => calculateCodeForNode(child, ""));
+  return newCodes;
+};
+
+export const getArgumentCode = (argumentCodes, targetNodeId) => {
+  return argumentCodes[targetNodeId] || "";
+};
 
 export function useArgumentaire() {
   // ÉTATS
@@ -212,6 +242,11 @@ export function useArgumentaire() {
     return nodeList;
   };
 
+  useEffect(() => {
+    const newCodes = recalculateAllCodes(argumentTree, findParentById);
+    setArgumentCodes(newCodes);
+  }, [argumentTree]);
+
   // EXPOSITION
   return {
     argumentList,
@@ -240,6 +275,7 @@ export function useArgumentaire() {
     needsRecalculation, // ← BIEN EXPOSER
     recalculateScores, // ← BIEN EXPOSER
     getAllNodesExceptSubtree,
+    getArgumentCode: (targetNodeId) => getCode(argumentCodes, targetNodeId),
   };
 }
 
@@ -247,7 +283,7 @@ export function useArgumentaire() {
 const createArgument = (parentId, forma) => ({
   id: `temp-${Date.now()}`,
   text: "",
-  causa: "pro",
+  causa: "neutralis",
   forma: forma || "descriptif",
   natura: "validity",
   value: 0.5,

@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { ThesisEditor } from "./ThesisEditor";
 import { ArgumentList } from "./ArgumentList";
 import { ExportButton } from "./ExportButton";
@@ -30,6 +31,14 @@ export function EditingScreen({
   needsRecalculation, // ← AJOUTER
   recalculateScores, // ← AJOUTER
 }) {
+  // const hasNeutralArguments = useCallback(() => {
+  //   const checkNeutral = (node) => {
+  //     if (node.causa === "neutralis") return true;
+  //     return node.children?.some(checkNeutral) || false;
+  //   };
+  //   return argumentTree.children?.some(checkNeutral) || false;
+  // }, [argumentTree]);
+
   const score = calcGlobalScore(argumentTree, thesis.forma);
 
   const handleCancelThesis = () => {
@@ -45,10 +54,26 @@ export function EditingScreen({
     }
   };
 
+  // Ajouter cette fonction
+  const hasNeutralArguments = useCallback(() => {
+    const checkNeutral = (node) => {
+      if (node.causa === "neutralis") return true;
+      return node.children?.some(checkNeutral) || false;
+    };
+    return argumentTree.children?.some(checkNeutral) || false;
+  }, [argumentTree]);
+
+  // Ajouter l'alerte
+
   return (
     <div className="editing-screen">
       <div className="global-score">
         <h3>Score global: {score.toFixed(2)}</h3>
+        {hasNeutralArguments() && (
+          <div style={{ color: "red", padding: "10px", background: "#ffe6e6" }}>
+            ⚠️ Attention : arguments neutres !
+          </div>
+        )}
       </div>
 
       <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>

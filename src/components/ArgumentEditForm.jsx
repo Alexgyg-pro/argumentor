@@ -38,8 +38,9 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
       <label>
         Type (Causa):
         <select value={causa} onChange={(e) => setCausa(e.target.value)}>
-          <option value="pro">Pour</option>
-          <option value="contra">Contre</option>
+          <option value="neutralis">⏺️ Neutre</option>
+          <option value="pro">✅ Pour</option>
+          <option value="contra">❌ Contre</option>
         </select>
       </label>
       <label>
