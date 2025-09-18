@@ -50,9 +50,7 @@ export function EditingScreen({
       <div className="global-score">
         <h3>Score global: {score.toFixed(2)}</h3>
       </div>
-      {needsRecalculation && (
-        <button onClick={recalculateScores}>🔄 Recalculer les scores</button>
-      )}
+
       <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
         <button onClick={() => handleNavigateAway(handleNew)}>
           ➕ Nouveau

@@ -65,6 +65,7 @@ export function useArgumentaire() {
   };
 
   const handleAddArgument = () => {
+    console.log("📈 Setting needsRecalculation to TRUE");
     const newArgument = createArgument("root", thesis.forma);
     setArgumentTree((prevTree) =>
       addChildToNode(prevTree, "root", newArgument)
@@ -173,12 +174,12 @@ export function useArgumentaire() {
     setNeedsRecalculation(false);
   };
 
-  useEffect(() => {
-    if (needsRecalculation) {
-      calculateGlobalScore(argumentTree, thesis.forma);
-      setNeedsRecalculation(false);
-    }
-  }, [needsRecalculation]);
+  // useEffect(() => {
+  //   if (needsRecalculation) {
+  //     calculateGlobalScore(argumentTree, thesis.forma);
+  //     setNeedsRecalculation(false);
+  //   }
+  // }, [needsRecalculation]);
 
   const getAllNodesExceptSubtree = (
     currentNode,

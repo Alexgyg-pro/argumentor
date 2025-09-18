@@ -12,7 +12,10 @@ export const calculateGlobalScore = (argumentTree, thesisForma) => {
       );
     }
 
-    const nodeScore = (node.validity ?? 0.5) * (node.relevance ?? 0.5);
+    let nodeScore = (node.validity ?? 0.5) * (node.relevance ?? 0.5);
+    if (node.causa === "contra") {
+      nodeScore = -nodeScore; // ← Score négatif pour les arguments contra
+    }
     if (!node.children || node.children.length === 0) return nodeScore;
 
     const childScores = node.children.map((child) => calculate(child, forma));
