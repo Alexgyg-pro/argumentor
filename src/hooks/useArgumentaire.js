@@ -242,10 +242,18 @@ export function useArgumentaire() {
     return nodeList;
   };
 
+  // useEffect(() => {
+  //   console.log("🔄 recalculateAllCodes triggered");
+  //   const newCodes = recalculateAllCodes(argumentTree, findParentById);
+  //   setArgumentCodes(newCodes);
+  // }, [argumentTree]);
+
   useEffect(() => {
+    console.log("🧪 TEST: Forcing code calculation");
     const newCodes = recalculateAllCodes(argumentTree, findParentById);
+    console.log("🧪 Codes calculés:", newCodes);
     setArgumentCodes(newCodes);
-  }, [argumentTree]);
+  }, [argumentTree]); // ← seulement au mount
 
   // EXPOSITION
   return {

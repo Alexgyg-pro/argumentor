@@ -10,6 +10,7 @@ export const findNodeById = (node, targetId) => {
 
 export const findParentById = (node, targetId, parent = null) => {
   if (node.id === targetId) return parent;
+  if (!node.children) return null;
   for (const child of node.children) {
     const found = findParentById(child, targetId, node);
     if (found) return found;
