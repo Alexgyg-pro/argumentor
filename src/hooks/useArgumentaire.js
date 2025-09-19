@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   findNodeById,
   findParentById,
@@ -7,7 +7,6 @@ import {
 } from "../utils/argumentOperations";
 import {
   calculateGlobalScore,
-  //recalculateAllCodes,
   getArgumentCode as getCode,
 } from "../utils/calculations";
 import {
@@ -21,11 +20,26 @@ export const recalculateAllCodes = (argumentTree, findParentById) => {
 
   const calculateCodeForNode = (node, parentCode = "") => {
     if (node.id === "root") return;
-
+    console.log("🔍 DEBUG NODE:", {
+      id: node.id,
+      causa: node.causa,
+      text: node.text,
+    });
     const parent = findParentById(argumentTree, node.id);
     const siblings = parent?.children || [];
-    const index = siblings.findIndex((sibling) => sibling.id === node.id);
-    const segment = `${node.causa === "pro" ? "P" : "C"}${index + 1}`;
+
+    // FILTRER les frères du même type seulement
+    const sameTypeSiblings = siblings.filter(
+      (sibling) => sibling.causa === node.causa
+    );
+    const index = sameTypeSiblings.findIndex(
+      (sibling) => sibling.id === node.id
+    );
+
+    const segment = `${
+      node.causa === "pro" ? "P" : node.causa === "contra" ? "C" : "N"
+    }${index + 1}`;
+
     const code = parentCode + segment;
 
     newCodes[node.id] = code;
@@ -60,7 +74,6 @@ export function useArgumentaire() {
   });
   const [argumentCodes, setArgumentCodes] = useState({});
   const [isNewThesis, setIsNewThesis] = useState(false);
-  const [needsRecalculation, setNeedsRecalculation] = useState(false);
   const fileInputRef = useRef(null);
 
   // DÉRIVÉS
@@ -95,12 +108,22 @@ export function useArgumentaire() {
   };
 
   const handleAddArgument = () => {
-    console.log("📈 Setting needsRecalculation to TRUE");
+    console.log("📈 Adding argument");
     const newArgument = createArgument("root", thesis.forma);
-    setArgumentTree((prevTree) =>
-      addChildToNode(prevTree, "root", newArgument)
-    );
-    setNeedsRecalculation(true);
+
+    setArgumentTree((prevTree) => {
+      const newTree = addChildToNode(prevTree, "root", newArgument);
+
+      // RECALCUL IMMÉDIAT
+      console.log("🧪 Recalculating codes after add");
+      const newCodes = recalculateAllCodes(newTree, (node, targetId) =>
+        findParentById(node, targetId)
+      );
+      setArgumentCodes(newCodes);
+
+      return newTree;
+    });
+
     setIsDirty(true);
   };
 
@@ -115,10 +138,17 @@ export function useArgumentaire() {
     setArgumentTree((prevTree) => {
       const newTree = addChildToNode(prevTree, parentId, newArgument);
       console.log("Nouvel arbre:", newTree);
+
+      // RECALCUL IMMÉDIAT
+      console.log("🧪 Recalculating codes after add child");
+      const newCodes = recalculateAllCodes(newTree, (node, targetId) =>
+        findParentById(node, targetId)
+      );
+      setArgumentCodes(newCodes);
+
       return newTree;
     });
 
-    setNeedsRecalculation(true);
     setIsDirty(true);
   };
 
@@ -127,9 +157,17 @@ export function useArgumentaire() {
       const newTree = JSON.parse(JSON.stringify(prevTree));
       const nodeToEdit = findNodeById(newTree, id);
       if (nodeToEdit) Object.assign(nodeToEdit, newProperties);
+
+      // RECALCUL IMMÉDIAT
+      console.log("🧪 Recalculating codes after edit");
+      const newCodes = recalculateAllCodes(newTree, (node, targetId) =>
+        findParentById(node, targetId)
+      );
+      setArgumentCodes(newCodes);
+
       return newTree;
     });
-    setNeedsRecalculation(true);
+
     setIsDirty(true);
   };
 
@@ -174,7 +212,6 @@ export function useArgumentaire() {
     });
     setIsDirty(false);
     setCurrentMode("editing");
-    setNeedsRecalculation(true);
   };
 
   const handleMoveArgument = (argumentId, newParentId) => {
@@ -192,7 +229,6 @@ export function useArgumentaire() {
         nodeToMove.parentId = newParentId;
       }
 
-      setNeedsRecalculation(true);
       return newTree;
     });
     setIsDirty(true);
@@ -201,15 +237,7 @@ export function useArgumentaire() {
   // CALCULS
   const recalculateScores = () => {
     calculateGlobalScore(argumentTree, thesis.forma);
-    setNeedsRecalculation(false);
   };
-
-  // useEffect(() => {
-  //   if (needsRecalculation) {
-  //     calculateGlobalScore(argumentTree, thesis.forma);
-  //     setNeedsRecalculation(false);
-  //   }
-  // }, [needsRecalculation]);
 
   const getAllNodesExceptSubtree = (
     currentNode,
@@ -242,18 +270,14 @@ export function useArgumentaire() {
     return nodeList;
   };
 
-  // useEffect(() => {
-  //   console.log("🔄 recalculateAllCodes triggered");
-  //   const newCodes = recalculateAllCodes(argumentTree, findParentById);
-  //   setArgumentCodes(newCodes);
-  // }, [argumentTree]);
-
   useEffect(() => {
     console.log("🧪 TEST: Forcing code calculation");
-    const newCodes = recalculateAllCodes(argumentTree, findParentById);
+    const newCodes = recalculateAllCodes(argumentTree, (node, targetId) =>
+      findParentById(node, targetId)
+    );
     console.log("🧪 Codes calculés:", newCodes);
     setArgumentCodes(newCodes);
-  }, [argumentTree]); // ← seulement au mount
+  }, [argumentTree]);
 
   // EXPOSITION
   return {
@@ -279,9 +303,6 @@ export function useArgumentaire() {
     setIsNewThesis,
     setCurrentMode,
     recalculateScores,
-    needsRecalculation,
-    needsRecalculation, // ← BIEN EXPOSER
-    recalculateScores, // ← BIEN EXPOSER
     getAllNodesExceptSubtree,
     getArgumentCode: (targetNodeId) => getCode(argumentCodes, targetNodeId),
   };

@@ -27,6 +27,11 @@ export const deleteNodeRecursively = (node, targetId) => {
 };
 
 export const addChildToNode = (tree, parentId, newChild) => {
+  console.log("🔍 ADD CHILD DEBUG:", {
+    newChildId: newChild.id,
+    newChildCausa: newChild.causa,
+    newChildText: newChild.text,
+  });
   const newTree = JSON.parse(JSON.stringify(tree));
   const parent = findNodeById(newTree, parentId);
   if (parent) {

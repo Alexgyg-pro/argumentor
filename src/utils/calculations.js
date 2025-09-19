@@ -34,112 +34,56 @@ export const calculateGlobalScore = (argumentTree, thesisForma) => {
   return calculate(argumentTree, thesisForma);
 };
 
-// export const recalculateAllCodes = (argumentTree, findParentById) => {
-//   console.log("🌳 ArgumentTree:", argumentTree); // ← Structure de l'arbre
-//   const newCodes = {};
-
-//   const calculateCodeForNode = (node, parentCode = "") => {
-//     console.log("🔍 Processing node:", node.id); // ← Si ça s'affiche
-//     if (node.id === "root") return;
-
-//     const parent = findParentById(argumentTree, node.id);
-//     console.log("🔍 Parent for", node.id, ":", parent);
-//     const allSiblings = parent?.children || [];
-
-//     console.log("🐛 Node:", node.id, "causa:", node.causa);
-//     console.log("🐛 Parent:", parent?.id);
-//     console.log(
-//       "🐛 All siblings:",
-//       allSiblings.map((s) => ({ id: s.id, causa: s.causa }))
-//     );
-
-//     const siblingsSameType = allSiblings.filter((s) => s.causa === node.causa);
-//     console.log(
-//       "🐛 Siblings same type:",
-//       siblingsSameType.map((s) => s.id)
-//     );
-
-//     const index = siblingsSameType.findIndex(
-//       (sibling) => sibling.id === node.id
-//     );
-//     console.log("🐛 Index in same type:", index);
-
-//     const position = index + 1;
-//     const segment =
-//       node.causa === "neutralis"
-//         ? `N${position}`
-//         : node.causa === "pro"
-//         ? `P${position}`
-//         : `C${position}`;
-
-//     console.log("🐛 Segment:", segment);
-
-//     const code = parentCode + segment;
-//     newCodes[node.id] = code;
-//     console.log("🐛 Final code:", code);
-
-//     if (node.children) {
-//       node.children.forEach((child) =>
-//         calculateCodeForNode(child, code.toLowerCase())
-//       );
-//     }
-
-//     // node.children.forEach((child) =>
-//     //   calculateCodeForNode(child, code.toLowerCase())
-//     // );
-//   };
-
-//   if (argumentTree.children) {
-//     console.log("👶 Children count:", argumentTree.children.length);
-//     argumentTree.children.forEach((child) => {
-//       console.log("🧒 Starting with child:", child.id);
-//       calculateCodeForNode(child, "");
-//     });
-//   } else {
-//     console.log("❌ No children in argumentTree");
-//   }
-//   return newCodes;
-// };
-
-export const recalculateAllCodes = (argumentTree, findParentById) => {
+export const recalculateAllCodes = (argumentTree) => {
   const newCodes = {};
 
-  const calculateCodeForNode = (node, parentCode = "") => {
-    if (node.id === "root") return;
+  const traverse = (node, parentCode = "") => {
+    if (node.id !== "root") {
+      // Trouver les frères du même parent
+      const parent = findParentDirect(argumentTree, node.id);
+      if (parent) {
+        const sameTypeSiblings = parent.children.filter(
+          (sibling) => sibling.causa === node.causa
+        );
+        const index = sameTypeSiblings.findIndex(
+          (sibling) => sibling.id === node.id
+        );
 
-    const parent = findParentById(argumentTree, node.id);
-    const allSiblings = parent?.children || [];
+        const typeLetter =
+          node.causa === "pro" ? "P" : node.causa === "contra" ? "C" : "N";
 
-    // NOUVELLE LOGIQUE DE COMPTAGE :
-    let sameTypeCount = 0;
-    for (let i = 0; i < allSiblings.length; i++) {
-      if (allSiblings[i].id === node.id) break;
-      if (allSiblings[i].causa === node.causa) sameTypeCount++;
+        const code = parentCode + `${typeLetter}${index + 1}`;
+        newCodes[node.id] = code;
+        parentCode = code.toLowerCase();
+      }
     }
-    const position = sameTypeCount + 1;
 
-    const segment =
-      node.causa === "neutralis"
-        ? `N${position}`
-        : node.causa === "pro"
-        ? `P${position}`
-        : `C${position}`;
-
-    const code = parentCode + segment;
-    newCodes[node.id] = code;
-
-    if (node.children) {
-      node.children.forEach((child) =>
-        calculateCodeForNode(child, code.toLowerCase())
-      );
-    }
+    node.children.forEach((child) => traverse(child, parentCode));
   };
 
-  if (argumentTree.children) {
-    argumentTree.children.forEach((child) => calculateCodeForNode(child, ""));
+  traverse(argumentTree);
+  return newCodes;
+};
+
+// Helper function pour trouver le parent directement
+const findParentDirect = (root, targetId) => {
+  const stack = [{ node: root, parent: null }];
+
+  while (stack.length > 0) {
+    const { node, parent } = stack.pop();
+
+    if (node.id === targetId) {
+      return parent;
+    }
+
+    if (node.children) {
+      for (const child of node.children) {
+        stack.push({ node: child, parent: node });
+      }
+    }
   }
 
-  return newCodes;
+  return null;
 };
 
 export const getArgumentCode = (argumentCodes, targetNodeId) => {
