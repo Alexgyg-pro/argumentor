@@ -222,11 +222,21 @@ export function useArgumentaire() {
       const newParent = findNodeById(newTree, newParentId);
 
       if (nodeToMove && currentParent && newParent) {
+        // 1. RETIRER de l'ancien parent
         currentParent.children = currentParent.children.filter(
           (child) => child.id !== argumentId
         );
+
+        // 2. AJOUTER au nouveau parent D'ABORD
         newParent.children.push(nodeToMove);
         nodeToMove.parentId = newParentId;
+
+        // 3. METTRE EN NEUTRE APRÈS l'ajout
+        const setNeutralRecursively = (node) => {
+          node.causa = "neutralis";
+          node.children.forEach(setNeutralRecursively);
+        };
+        setNeutralRecursively(nodeToMove);
       }
 
       return newTree;
