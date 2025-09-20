@@ -20,9 +20,11 @@ export const findParentById = (node, targetId, parent = null) => {
 
 export const deleteNodeRecursively = (node, targetId) => {
   if (node.id === targetId) return null;
+
   const newChildren = node.children
     .map((child) => deleteNodeRecursively(child, targetId))
     .filter((child) => child !== null);
+
   return { ...node, children: newChildren };
 };
 

@@ -172,15 +172,42 @@ export function useArgumentaire() {
   };
 
   const onDeleteArgument = (id) => {
+    console.log("🗑️ DELETE called for:", id);
+
     const nodeToDelete = findNodeById(argumentTree, id);
-    if (nodeToDelete?.isTemporary) {
+    console.log("Node details:", {
+      id: nodeToDelete?.id,
+      isTemporary: nodeToDelete?.isTemporary,
+      text: nodeToDelete?.text,
+      textTrimmed: nodeToDelete?.text?.trim(),
+      isEmpty: !nodeToDelete?.text?.trim(),
+      hasChildren: nodeToDelete?.children?.length > 0,
+    });
+
+    // Vérifier si l'argument a des enfants
+    if (nodeToDelete?.children && nodeToDelete.children.length > 0) {
+      console.log("❌ Has children, blocking deletion");
+      alert(
+        "Impossible de supprimer cet argument : il contient des sous-arguments. Veuillez d'abord les déplacer ou les supprimer."
+      );
+      return;
+    }
+
+    // SUPPRIMER sans confirmation SEULEMENT si l'argument est VIDE
+    if (!nodeToDelete?.text.trim()) {
+      console.log("🔥 Deleting empty argument without confirmation");
       setArgumentTree((prevTree) => deleteNodeRecursively(prevTree, id));
       setIsDirty(true);
       return;
     }
+
+    console.log("⚠️ Asking for confirmation for non-empty argument");
     if (window.confirm("Supprimer cet argument ?")) {
+      console.log("✅ Confirmed, deleting...");
       setArgumentTree((prevTree) => deleteNodeRecursively(prevTree, id));
       setIsDirty(true);
+    } else {
+      console.log("❌ Deletion cancelled");
     }
   };
 

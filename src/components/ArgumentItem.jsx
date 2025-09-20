@@ -46,7 +46,7 @@ export function ArgumentItem({
   };
 
   const handleCancel = () => {
-    if (argument.isTemporary) {
+    if (argument.isTemporary && !argument.text.trim()) {
       // SUPPRIMER les arguments temporaires annulés
       onDeleteArgument(argument.id);
     } else {
