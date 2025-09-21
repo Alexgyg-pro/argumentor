@@ -344,10 +344,10 @@ export function useArgumentaire() {
     getArgumentCode: (targetNodeId) => getCode(argumentCodes, targetNodeId),
   };
 }
-
+let argumentCounter = 1; // ← Garder le compteur global
 // Helper local
 const createArgument = (parentId, forma) => ({
-  id: `temp-${Date.now()}`,
+  id: `arg${String(argumentCounter++).padStart(5, "0")}`, // ← arg00001, arg00002
   text: "",
   causa: "neutralis",
   forma: forma || "descriptif",

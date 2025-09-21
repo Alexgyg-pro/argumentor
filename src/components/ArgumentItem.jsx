@@ -37,6 +37,16 @@ export function ArgumentItem({
       thesis?.text || ""
     );
     setPotentialParents(parents);
+
+    const sortedParents = potentialParents.sort((a, b) => {
+      if (a.id === "root") return -1; // La thèse toujours en premier
+      if (b.id === "root") return 1;
+
+      const codeA = getArgumentCode(a.id) || "";
+      const codeB = getArgumentCode(b.id) || "";
+
+      return codeA.localeCompare(codeB);
+    });
   }, [argumentTree, argument.id, thesis, getAllNodesExceptSubtree]);
 
   const handleSave = (newProperties) => {
@@ -147,11 +157,19 @@ export function ArgumentItem({
                   value={selectedNewParentId}
                   onChange={(e) => setSelectedNewParentId(e.target.value)}
                 >
-                  {potentialParents.map((parent) => (
-                    <option key={parent.id} value={parent.id}>
-                      {parent.text}
-                    </option>
-                  ))}
+                  {potentialParents
+                    .sort((a, b) => {
+                      if (a.id === "root") return -1;
+                      if (b.id === "root") return 1;
+                      return a.id.localeCompare(b.id); // ← Tri alphabétique naturel
+                    })
+                    .map((parent) => (
+                      <option key={parent.id} value={parent.id}>
+                        {parent.id === "root"
+                          ? `#RACINE - ${thesis.text || "Thèse principale"}`
+                          : `#${parent.id.replace("arg", "")} - ${parent.text}`}
+                      </option>
+                    ))}
                 </select>
                 <div style={{ marginTop: "1rem" }}>
                   <button onClick={confirmMove}>Déplacer</button>
