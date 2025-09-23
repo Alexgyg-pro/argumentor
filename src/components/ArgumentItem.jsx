@@ -108,7 +108,8 @@ export function ArgumentItem({
           <button onClick={handleMoveClick}>↔️ Déplacer</button>
           <br />
           <small>
-            Causa: {argument.causa} | Forma: {argument.forma}
+            ID: #{argument.id.replace("arg", "")} | Causa: {argument.causa} |
+            Forma: {argument.forma}
             {argument.validity !== undefined &&
               ` | Validité: ${argument.validity.toFixed(1)}`}
             {argument.relevance !== undefined &&
