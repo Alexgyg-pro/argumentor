@@ -349,6 +349,7 @@ let argumentCounter = 1; // ← Garder le compteur global
 const createArgument = (parentId, forma) => ({
   id: `arg${String(argumentCounter++).padStart(5, "0")}`, // ← arg00001, arg00002
   text: "",
+  textComment: "",
   causa: "neutralis",
   forma: forma || "descriptif",
   natura: "validity",

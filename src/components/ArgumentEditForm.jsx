@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 export function ArgumentEditForm({ argument, onSave, onCancel }) {
   const [text, setText] = useState(argument.text);
+  const [textComment, setTextComment] = useState(argument.textComment || "");
   const [causa, setCausa] = useState(argument.causa);
   const [forma, setForma] = useState(argument.forma || "descriptif");
   const [validity, setValidity] = useState(argument.validity ?? 0.5);
@@ -16,6 +17,7 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
     // On rassemble toutes les propriétés modifiées dans un objet
     onSave({
       text: text,
+      textComment: textComment,
       causa: causa,
       forma: forma,
       validity: validity,
@@ -33,6 +35,15 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
           value={text}
           onChange={(e) => setText(e.target.value)}
           autoFocus
+        />
+      </label>
+      <label>
+        Commentaire de texte :
+        <textarea
+          value={textComment}
+          onChange={(e) => setTextComment(e.target.value)}
+          placeholder="Développez votre pensée, sources, précisions..."
+          rows={4}
         />
       </label>
       <label>

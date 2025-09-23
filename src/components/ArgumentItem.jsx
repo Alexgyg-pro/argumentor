@@ -21,7 +21,7 @@ export function ArgumentItem({
   // State pour gérer la modale de déplacement
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
   const [selectedNewParentId, setSelectedNewParentId] = useState("");
-
+  const [isExplanationModalOpen, setIsExplanationModalOpen] = useState(false);
   const [potentialParents, setPotentialParents] = useState([]);
 
   // const handleDoubleClick = () => {
@@ -100,7 +100,14 @@ export function ArgumentItem({
             {!isEditing &&
               getArgumentCode &&
               `[${getArgumentCode(argument.id)}] `}
-            {argument.text}
+            <div
+              onClick={() => setIsExplanationModalOpen(true)}
+              style={{ cursor: "pointer" }}
+            >
+              <strong>
+                [{getArgumentCode(argument.id)}] {argument.text}
+              </strong>
+            </div>{" "}
           </strong>
           <button onClick={() => setIsEditing(true)}>✏️</button>
           <button onClick={() => onDeleteArgument(argument.id)}>🗑️</button>
@@ -139,6 +146,24 @@ export function ArgumentItem({
             />
           ))}
         </ul>
+      )}
+
+      {isExplanationModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Explication détaillée</h3>
+            <p>
+              <strong>Énoncé :</strong> {argument.text}
+            </p>
+            <p>
+              <strong>Explication :</strong>{" "}
+              {argument.textComment || "Aucune explication fournie."}
+            </p>
+            <button onClick={() => setIsExplanationModalOpen(false)}>
+              Fermer
+            </button>
+          </div>
+        </div>
       )}
 
       {isMoveModalOpen && (
