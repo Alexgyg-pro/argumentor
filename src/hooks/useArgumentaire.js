@@ -74,10 +74,32 @@ export function useArgumentaire() {
   });
   const [argumentCodes, setArgumentCodes] = useState({});
   const [isNewThesis, setIsNewThesis] = useState(false);
+  const [references, setReferences] = useState([]);
   const fileInputRef = useRef(null);
 
   // DÉRIVÉS
   const argumentList = argumentTree.children || [];
+
+  // FONCTIONS DE GESTION DES RÉFÉRENCES
+  const addReference = (reference) => {
+    const newReference = {
+      id: `ref${String(references.length + 1).padStart(5, "0")}`,
+      title: reference.title,
+      content: reference.content || "",
+    };
+    setReferences((prev) => [...prev, newReference]);
+    return newReference.id;
+  };
+
+  const updateReference = (id, updatedReference) => {
+    setReferences((prev) =>
+      prev.map((ref) => (ref.id === id ? { ...ref, ...updatedReference } : ref))
+    );
+  };
+
+  const deleteReference = (id) => {
+    setReferences((prev) => prev.filter((ref) => ref.id !== id));
+  };
 
   // GESTIONNAIRES D'ÉVÉNEMENTS
   const handleNew = () => {
@@ -156,7 +178,13 @@ export function useArgumentaire() {
     setArgumentTree((prevTree) => {
       const newTree = JSON.parse(JSON.stringify(prevTree));
       const nodeToEdit = findNodeById(newTree, id);
-      if (nodeToEdit) Object.assign(nodeToEdit, newProperties);
+      if (nodeToEdit) {
+        // Gérer spécifiquement les références si présentes
+        if (newProperties.references !== undefined) {
+          nodeToEdit.references = newProperties.references;
+        }
+        Object.assign(nodeToEdit, newProperties);
+      }
 
       // RECALCUL IMMÉDIAT
       console.log("🧪 Recalculating codes after edit");
@@ -342,6 +370,10 @@ export function useArgumentaire() {
     recalculateScores,
     getAllNodesExceptSubtree,
     getArgumentCode: (targetNodeId) => getCode(argumentCodes, targetNodeId),
+    references, // ← exposé
+    addReference,
+    updateReference,
+    deleteReference,
   };
 }
 let argumentCounter = 1; // ← Garder le compteur global
@@ -350,6 +382,7 @@ const createArgument = (parentId, forma) => ({
   id: `arg${String(argumentCounter++).padStart(5, "0")}`, // ← arg00001, arg00002
   text: "",
   textComment: "",
+  references: [],
   causa: "neutralis",
   forma: forma || "descriptif",
   natura: "validity",

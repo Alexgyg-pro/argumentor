@@ -12,6 +12,7 @@ export function ArgumentList({
   argumentTree,
   getArgumentCode,
   thesis,
+  references,
 }) {
   return (
     <div className="argument-list">
@@ -32,6 +33,7 @@ export function ArgumentList({
               argumentTree={argumentTree}
               getArgumentCode={getArgumentCode}
               thesis={thesis || {}}
+              references={references}
               depth={0}
             />
           ))}

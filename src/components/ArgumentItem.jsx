@@ -11,6 +11,7 @@ export function ArgumentItem({
   argumentTree, // On a besoin de l'arbre pour lister les parents
   getArgumentCode,
   thesis = {},
+  references,
   depth = 0,
 }) {
   const [isEditing, setIsEditing] = useState(
@@ -22,6 +23,8 @@ export function ArgumentItem({
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
   const [selectedNewParentId, setSelectedNewParentId] = useState("");
   const [isExplanationModalOpen, setIsExplanationModalOpen] = useState(false);
+  const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false); // ← NOUVEAU
+  const [selectedReference, setSelectedReference] = useState(null); // ← NOUVEAU
   const [potentialParents, setPotentialParents] = useState([]);
 
   // const handleDoubleClick = () => {
@@ -86,6 +89,12 @@ export function ArgumentItem({
   // Récupère la liste des parents possibles
   // const potentialParents = getAllNodesExceptSubtree(argumentTree, argument.id);
 
+  // FONCTION POUR OUVRIRE UNE RÉFÉRENCE
+  const openReferenceModal = (reference) => {
+    setSelectedReference(reference);
+    setIsReferenceModalOpen(true);
+  };
+
   return (
     <li style={{ marginLeft: `${depth * 20}px` }}>
       {isEditing ? (
@@ -93,6 +102,7 @@ export function ArgumentItem({
           argument={argument}
           onSave={handleSave}
           onCancel={handleCancel}
+          references={references}
         />
       ) : (
         <div>
@@ -159,7 +169,43 @@ export function ArgumentItem({
               <strong>Explication :</strong>{" "}
               {argument.textComment || "Aucune explication fournie."}
             </p>
+
+            {/* NOUVEAU : AFFICHAGE DES RÉFÉRENCES */}
+            {argument.references && argument.references.length > 0 && (
+              <div className="argument-references">
+                <strong>Références citées :</strong>
+                {argument.references.map((refId) => {
+                  const ref = references.find((r) => r.id === refId);
+                  return ref ? (
+                    <div key={ref.id} className="reference-link">
+                      <button
+                        onClick={() => openReferenceModal(ref)}
+                        className="reference-button"
+                      >
+                        📚 {ref.title}
+                      </button>
+                    </div>
+                  ) : null;
+                })}
+              </div>
+            )}
+
             <button onClick={() => setIsExplanationModalOpen(false)}>
+              Fermer
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* NOUVELLE MODALE DE RÉFÉRENCE */}
+      {isReferenceModalOpen && selectedReference && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Référence : {selectedReference.title}</h3>
+            <div className="reference-content">
+              {selectedReference.content || "Aucun contenu détaillé."}
+            </div>
+            <button onClick={() => setIsReferenceModalOpen(false)}>
               Fermer
             </button>
           </div>

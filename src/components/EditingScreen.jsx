@@ -1,8 +1,9 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { ThesisEditor } from "./ThesisEditor";
 import { ArgumentList } from "./ArgumentList";
 import { ExportButton } from "./ExportButton";
 import { calculateGlobalScore as calcGlobalScore } from "../utils/calculations";
+import { ReferencesManager } from "./ReferencesManager";
 
 export function EditingScreen({
   // proposition,
@@ -30,6 +31,10 @@ export function EditingScreen({
   setCurrentMode,
   needsRecalculation, // ← AJOUTER
   recalculateScores, // ← AJOUTER
+  references,
+  addReference,
+  updateReference,
+  deleteReference,
 }) {
   // const hasNeutralArguments = useCallback(() => {
   //   const checkNeutral = (node) => {
@@ -38,7 +43,7 @@ export function EditingScreen({
   //   };
   //   return argumentTree.children?.some(checkNeutral) || false;
   // }, [argumentTree]);
-
+  const [activeTab, setActiveTab] = useState("arguments");
   const score = calcGlobalScore(argumentTree, thesis.forma);
 
   const handleCancelThesis = () => {
@@ -67,51 +72,58 @@ export function EditingScreen({
 
   return (
     <div className="editing-screen">
-      <div className="global-score">
-        <h3>Score global: {score.toFixed(2)}</h3>
-        {hasNeutralArguments() && (
-          <div style={{ color: "red", padding: "10px", background: "#ffe6e6" }}>
-            ⚠️ Attention : arguments neutres !
-          </div>
-        )}
-      </div>
-
-      <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
-        <button onClick={() => handleNavigateAway(handleNew)}>
-          ➕ Nouveau
-        </button>
-        <button onClick={() => handleNavigateAway(handleImportInit)}>
-          📂 Ouvrir
-        </button>
-        {isDirty && <button onClick={handleExport}>💾 Exporter</button>}
-      </div>
-
       <ThesisEditor
         thesis={thesis}
-        onThesisChange={handleThesisChange}
+        onThesisChange={handleThesisChange} // ← CHANGER ICI
         onCancel={handleCancelThesis}
         isNewThesis={isNewThesis}
       />
 
-      <button onClick={handleAddArgument} disabled={thesis.text.trim() === ""}>
-        Ajouter un argument
-      </button>
+      {/* BARRE D'ONGLETS */}
+      <div className="tabs">
+        <button
+          className={activeTab === "arguments" ? "active" : ""}
+          onClick={() => setActiveTab("arguments")}
+        >
+          Arguments ({argumentList.length})
+        </button>
+        <button
+          className={activeTab === "references" ? "active" : ""}
+          onClick={() => setActiveTab("references")}
+        >
+          Références ({references.length})
+        </button>
+      </div>
 
-      {needsRecalculation && (
-        <button onClick={recalculateScores}>🔄 Recalculer les scores</button>
+      {/* CONTENU DES ONGLETS */}
+      {activeTab === "arguments" && (
+        <div>
+          <button onClick={handleAddArgument}>+ Ajouter un argument</button>
+          <ArgumentList
+            argumentList={argumentList}
+            onEditArgument={onEditArgument}
+            onDeleteArgument={onDeleteArgument}
+            onAddChildArgument={handleAddChildArgument}
+            getAllNodesExceptSubtree={getAllNodesExceptSubtree}
+            handleMoveArgument={handleMoveArgument}
+            argumentTree={argumentTree}
+            getArgumentCode={getArgumentCode}
+            thesis={thesis}
+            references={references}
+          />
+        </div>
       )}
 
-      <ArgumentList
-        argumentList={argumentList}
-        onEditArgument={onEditArgument}
-        onDeleteArgument={onDeleteArgument}
-        onAddChildArgument={handleAddChildArgument}
-        getAllNodesExceptSubtree={getAllNodesExceptSubtree}
-        handleMoveArgument={handleMoveArgument}
-        argumentTree={argumentTree}
-        getArgumentCode={getArgumentCode}
-        thesis={thesis || {}}
-      />
+      {activeTab === "references" && (
+        <ReferencesManager
+          references={references}
+          onAddReference={addReference}
+          onUpdateReference={updateReference}
+          onDeleteReference={deleteReference}
+        />
+      )}
+
+      <ExportButton onExport={handleExport} />
     </div>
   );
 }

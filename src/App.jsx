@@ -1,3 +1,4 @@
+import "./assets/styles.css";
 import { useArgumentaire } from "./hooks/useArgumentaire";
 import { ChoiceScreen } from "./components/ChoiceScreen";
 import { EditingScreen } from "./components/EditingScreen";

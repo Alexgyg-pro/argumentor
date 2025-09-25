@@ -1,0 +1,26 @@
+.listboxes-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.listbox-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.references-listbox,
+.selected-listbox {
+  width: 200px;
+  min-height: 120px;
+}
+
+.transfer-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.transfer-buttons button {
+  padding: 5px 10px;
+}

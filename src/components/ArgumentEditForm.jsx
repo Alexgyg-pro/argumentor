@@ -1,7 +1,12 @@
 // ArgumentEditForm.jsx
 import { useState, useEffect } from "react";
 
-export function ArgumentEditForm({ argument, onSave, onCancel }) {
+export function ArgumentEditForm({
+  argument,
+  onSave,
+  onCancel,
+  references = [],
+}) {
   const [text, setText] = useState(argument.text);
   const [textComment, setTextComment] = useState(argument.textComment || "");
   const [causa, setCausa] = useState(argument.causa);
@@ -10,6 +15,9 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
   const [relevance, setRelevance] = useState(argument.relevance ?? 0.5);
   const [value, setValue] = useState((argument.value ?? 0.5).toFixed(2));
   const [natura, setNatura] = useState(argument.natura || "validity");
+  const [selectedReferenceIds, setSelectedReferenceIds] = useState(
+    argument.references || []
+  );
 
   // Fonction pour soumettre le formulaire
   const handleSubmit = (e) => {
@@ -24,7 +32,17 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
       relevance: relevance,
       natura: natura,
       value: parseFloat(value),
+      references: selectedReferenceIds,
     });
+  };
+
+  const handleReferenceToggle = (referenceId) => {
+    setSelectedReferenceIds(
+      (prev) =>
+        prev.includes(referenceId)
+          ? prev.filter((id) => id !== referenceId) // Désélectionner
+          : [...prev, referenceId] // Sélectionner
+    );
   };
 
   return (
@@ -46,6 +64,80 @@ export function ArgumentEditForm({ argument, onSave, onCancel }) {
           rows={4}
         />
       </label>
+      {references && references.length > 0 && (
+        <div className="references-selection">
+          <label>
+            <strong>📚 Références :</strong>
+          </label>
+
+          <div className="listboxes-container">
+            {/* RÉFÉRENCES DISPONIBLES */}
+            <div className="listbox-section">
+              <label>Références disponibles :</label>
+              <select multiple size="6" className="references-listbox">
+                {references
+                  .filter((ref) => !selectedReferenceIds.includes(ref.id))
+                  .map((ref) => (
+                    <option key={ref.id} value={ref.id}>
+                      {ref.title}
+                    </option>
+                  ))}
+              </select>
+            </div>
+
+            {/* BOUTONS DE TRANSFERT */}
+            <div className="transfer-buttons">
+              <button
+                type="button"
+                onClick={() => {
+                  const select = document.querySelector(".references-listbox");
+                  const selectedId = select.value;
+                  if (selectedId) {
+                    setSelectedReferenceIds((prev) => [...prev, selectedId]);
+                  }
+                }}
+              >
+                ➡
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const select = document.querySelector(".selected-listbox");
+                  const selectedId = select.value;
+                  if (selectedId) {
+                    setSelectedReferenceIds((prev) =>
+                      prev.filter((id) => id !== selectedId)
+                    );
+                  }
+                }}
+              >
+                ⬅
+              </button>
+            </div>
+
+            {/* RÉFÉRENCES SÉLECTIONNÉES */}
+            <div className="listbox-section">
+              <label>Références de cet argument :</label>
+              <select multiple size="6" className="selected-listbox">
+                {selectedReferenceIds.map((refId) => {
+                  const ref = references.find((r) => r.id === refId);
+                  return ref ? (
+                    <option key={ref.id} value={ref.id}>
+                      {ref.title}
+                    </option>
+                  ) : null;
+                })}
+              </select>
+            </div>
+          </div>
+
+          <div className="selection-info">
+            <small>
+              {selectedReferenceIds.length} référence(s) sélectionnée(s)
+            </small>
+          </div>
+        </div>
+      )}
       <label>
         Type (Causa):
         <select value={causa} onChange={(e) => setCausa(e.target.value)}>
