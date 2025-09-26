@@ -12,11 +12,15 @@ export const normalizeArguments = (args = []) => {
   }));
 };
 
-export const exportArgumentaire = (thesis, argumentTree) => {
+export const exportArgumentaire = (thesis, argumentTree, references) => {
   return {
-    thesis,
-    arguments: argumentTree.children,
-    version: "1.1",
+    thesis: {
+      text: thesis.text,
+      forma: thesis.forma,
+    },
+    arguments: argumentTree.children || [],
+    references: references || [], // ← NOUVEAU
+    version: "1.2", // ← Augmenter la version
   };
 };
 

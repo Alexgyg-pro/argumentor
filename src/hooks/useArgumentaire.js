@@ -240,7 +240,7 @@ export function useArgumentaire() {
   };
 
   const handleExport = () => {
-    const data = exportArgumentaire(thesis, argumentTree);
+    const data = exportArgumentaire(thesis, argumentTree, references);
     const blob = new Blob([JSON.stringify(data, null, 2)], {
       type: "application/json",
     });

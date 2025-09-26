@@ -1,7 +1,8 @@
 // ExportButton.jsx
-export function ExportButton({ handleExport, thesis }) {
+export function ExportButton({ onExport, thesis }) {
+  console.log("🔼 ExportButton cliqué");
   return (
-    <button onClick={handleExport} disabled={!thesis?.text}>
+    <button onClick={onExport} disabled={!thesis?.text}>
       💾 Exporter en JSON
     </button>
   );

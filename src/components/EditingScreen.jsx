@@ -123,7 +123,7 @@ export function EditingScreen({
         />
       )}
 
-      <ExportButton onExport={handleExport} />
+      <ExportButton onExport={handleExport} thesis={thesis} />
     </div>
   );
 }
