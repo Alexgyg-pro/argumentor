@@ -1,14 +1,14 @@
-import { useState } from "react";
+// src/components/EditingScreen.jsx
+import { useState, useEffect } from "react";
 import { ThesisDisplay } from "./thesis/ThesisDisplay";
 import { ThesisEditor } from "./thesis/ThesisEditor";
-// import { Header } from "./layout/Header";
-// import { Menu } from "./layout/Menu";
 import { ArgumentCard } from "./argument/ArgumentCard";
 import { ExportButton } from "./ExportButton";
 import { ReferencesManager } from "./ReferencesManager";
 
 export function EditingScreen({
   thesis,
+  isNewThesis = false,
   argumentList,
   handleThesisChange,
   handleAddArgument,
@@ -26,11 +26,15 @@ export function EditingScreen({
   const [activeTab, setActiveTab] = useState("arguments");
   const [isEditingThesis, setIsEditingThesis] = useState(false);
 
+  // Ouvre automatiquement l'éditeur si nouvel argumentaire
+  useEffect(() => {
+    if (isNewThesis) {
+      setIsEditingThesis(true);
+    }
+  }, [isNewThesis]);
+
   return (
     <div className="min-h-screen bg-beige flex flex-col">
-      <Header />
-      <Menu />
-
       <main className="flex-1 flex justify-center items-start p-5">
         <div className="bg-white min-w-65p p-5 rounded-lg shadow-md">
           {/* Affichage/Édition de la thèse */}

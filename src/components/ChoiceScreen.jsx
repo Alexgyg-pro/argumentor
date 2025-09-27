@@ -1,3 +1,4 @@
+// ChoiceScreen.jsx
 import styles from "./ChoiceScreen.module.css"; // ← IMPORT MANQUANT
 
 export function ChoiceScreen({ handleNew, handleImportInit }) {

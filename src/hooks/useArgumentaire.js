@@ -16,6 +16,7 @@ import {
 } from "../utils/importExport";
 
 export const recalculateAllCodes = (argumentTree, findParentById) => {
+  const [isNewThesis, setIsNewThesis] = useState(false);
   const newCodes = {};
 
   const calculateCodeForNode = (node, parentCode = "") => {
@@ -48,7 +49,10 @@ export const recalculateAllCodes = (argumentTree, findParentById) => {
     );
   };
 
-  argumentTree.children.forEach((child) => calculateCodeForNode(child, ""));
+  if (argumentTree.children) {
+    argumentTree.children.forEach((child) => calculateCodeForNode(child, ""));
+  }
+
   return newCodes;
 };
 
@@ -335,14 +339,14 @@ export function useArgumentaire() {
     return nodeList;
   };
 
-  useEffect(() => {
-    console.log("🧪 TEST: Forcing code calculation");
-    const newCodes = recalculateAllCodes(argumentTree, (node, targetId) =>
-      findParentById(node, targetId)
-    );
-    console.log("🧪 Codes calculés:", newCodes);
-    setArgumentCodes(newCodes);
-  }, [argumentTree]);
+  // useEffect(() => {
+  //   console.log("🧪 TEST: Forcing code calculation");
+  //   const newCodes = recalculateAllCodes(argumentTree, (node, targetId) =>
+  //     findParentById(node, targetId)
+  //   );
+  //   console.log("🧪 Codes calculés:", newCodes);
+  //   setArgumentCodes(newCodes);
+  // }, [argumentTree]);
 
   // EXPOSITION
   return {
