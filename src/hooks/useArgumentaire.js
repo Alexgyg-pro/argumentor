@@ -107,13 +107,13 @@ export function useArgumentaire() {
   };
 
   // GESTIONNAIRES D'ÉVÉNEMENTS
-  const handleNew = () => {
-    setThesis({ text: "", forma: "descriptif" });
-    setArgumentTree({ id: "root", text: "", causa: null, children: [] });
-    setIsDirty(false);
-    setCurrentMode("editing");
-    setIsNewThesis(true);
-  };
+  // const handleNew = () => {
+  //   setThesis({ text: "", forma: "descriptif" });
+  //   setArgumentTree({ id: "root", text: "", causa: null, children: [] });
+  //   setIsDirty(false);
+  //   setCurrentMode("editing");
+  //   setIsNewThesis(true);
+  // };
 
   // Remplacer la gestion fichier actuelle par le hook
   const { fileInputRef, handleImportInit, handleFileChange } = useFileImport(
@@ -368,7 +368,7 @@ export function useArgumentaire() {
     thesis,
     argumentTree,
     fileInputRef,
-    handleNew,
+    // handleNew,
     handleImportInit,
     handleFileChange,
     handleNavigateAway,
