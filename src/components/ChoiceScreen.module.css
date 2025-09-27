@@ -1,0 +1,54 @@
+.choiceScreen {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.container {
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center; /* ← CENTRAGE */
+  align-items: center;
+  margin: 2rem 0;
+  flex-wrap: wrap; /* ← RESPONSIVE */
+}
+
+.primaryButton,
+.secondaryButton {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px; /* ← LARGEUR ÉGALE */
+  text-align: center;
+  flex: 1; /* ← MÊME TAILLE */
+  max-width: 250px; /* ← LIMITE MAX */
+}
+
+.primaryButton {
+  background: #3498db;
+  color: white;
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+
+.secondaryButton {
+  background: #2ecc71; /* ← VERT PLUTÔT QUE GRIS */
+  color: white;
+  box-shadow: 0 2px 4px rgba(46, 204, 113, 0.3);
+}
+
+.primaryButton:hover,
+.secondaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

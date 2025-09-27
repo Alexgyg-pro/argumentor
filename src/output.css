@@ -1,0 +1,10 @@
+/*! tailwindcss v3.4.0 | MIT License | https://tailwindcss.com*/
+*,
+::before,
+::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  /* ... Tout le CSS Tailwind ... */
+}
+
+/* Trop long à écrire manuellement - utilisons plutôt Vite */

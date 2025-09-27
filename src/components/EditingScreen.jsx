@@ -1,129 +1,119 @@
-import { useCallback, useState } from "react";
-import { ThesisEditor } from "./ThesisEditor";
-import { ArgumentList } from "./ArgumentList";
+import { useState } from "react";
+import { ThesisDisplay } from "./thesis/ThesisDisplay";
+import { ThesisEditor } from "./thesis/ThesisEditor";
+// import { Header } from "./layout/Header";
+// import { Menu } from "./layout/Menu";
+import { ArgumentCard } from "./argument/ArgumentCard";
 import { ExportButton } from "./ExportButton";
-import { calculateGlobalScore as calcGlobalScore } from "../utils/calculations";
 import { ReferencesManager } from "./ReferencesManager";
 
 export function EditingScreen({
-  // proposition,
   thesis,
   argumentList,
-  isDirty,
-  setArgumentTree,
-  handleNavigateAway,
-  handleNew,
-  handleImportInit,
-  handleExport,
-  // handlePropositionChange,
   handleThesisChange,
   handleAddArgument,
   onEditArgument,
   onDeleteArgument,
   handleAddChildArgument,
-  getAllNodesExceptSubtree, // <-- Ajoute cette ligne
-  handleMoveArgument, // <-- Ajoute cette ligne
-  argumentTree, // <-- Ajoute cette ligne (crucial !)
+  handleMoveArgument,
   getArgumentCode,
-  calculateGlobalScore,
-  isNewThesis,
-  setIsNewThesis,
-  setCurrentMode,
-  needsRecalculation, // ← AJOUTER
-  recalculateScores, // ← AJOUTER
+  handleExport,
   references,
   addReference,
   updateReference,
   deleteReference,
 }) {
-  // const hasNeutralArguments = useCallback(() => {
-  //   const checkNeutral = (node) => {
-  //     if (node.causa === "neutralis") return true;
-  //     return node.children?.some(checkNeutral) || false;
-  //   };
-  //   return argumentTree.children?.some(checkNeutral) || false;
-  // }, [argumentTree]);
   const [activeTab, setActiveTab] = useState("arguments");
-  const score = calcGlobalScore(argumentTree, thesis.forma);
-
-  const handleCancelThesis = () => {
-    console.log("🔄 handleCancelThesis appelé");
-    console.log("isNewThesis:", isNewThesis);
-    if (isNewThesis) {
-      console.log("📤 Retour à l'écran de choix");
-      setIsNewThesis(false);
-      setCurrentMode("choice");
-    } else {
-      console.log("📝 Annulation simple");
-      // Rien à faire - ThesisEditor gère ça
-    }
-  };
-
-  // Ajouter cette fonction
-  const hasNeutralArguments = useCallback(() => {
-    const checkNeutral = (node) => {
-      if (node.causa === "neutralis") return true;
-      return node.children?.some(checkNeutral) || false;
-    };
-    return argumentTree.children?.some(checkNeutral) || false;
-  }, [argumentTree]);
-
-  // Ajouter l'alerte
+  const [isEditingThesis, setIsEditingThesis] = useState(false);
 
   return (
-    <div className="editing-screen">
-      <ThesisEditor
-        thesis={thesis}
-        onThesisChange={handleThesisChange} // ← CHANGER ICI
-        onCancel={handleCancelThesis}
-        isNewThesis={isNewThesis}
-      />
+    <div className="min-h-screen bg-beige flex flex-col">
+      <Header />
+      <Menu />
 
-      {/* BARRE D'ONGLETS */}
-      <div className="tabs">
-        <button
-          className={activeTab === "arguments" ? "active" : ""}
-          onClick={() => setActiveTab("arguments")}
-        >
-          Arguments ({argumentList.length})
-        </button>
-        <button
-          className={activeTab === "references" ? "active" : ""}
-          onClick={() => setActiveTab("references")}
-        >
-          Références ({references.length})
-        </button>
-      </div>
+      <main className="flex-1 flex justify-center items-start p-5">
+        <div className="bg-white min-w-65p p-5 rounded-lg shadow-md">
+          {/* Affichage/Édition de la thèse */}
+          {isEditingThesis ? (
+            <ThesisEditor
+              thesis={thesis}
+              onSave={(newThesis) => {
+                handleThesisChange(newThesis);
+                setIsEditingThesis(false);
+              }}
+              onCancel={() => setIsEditingThesis(false)}
+            />
+          ) : (
+            <ThesisDisplay
+              thesis={thesis}
+              onEdit={() => setIsEditingThesis(true)}
+            />
+          )}
 
-      {/* CONTENU DES ONGLETS */}
-      {activeTab === "arguments" && (
-        <div>
-          <button onClick={handleAddArgument}>+ Ajouter un argument</button>
-          <ArgumentList
-            argumentList={argumentList}
-            onEditArgument={onEditArgument}
-            onDeleteArgument={onDeleteArgument}
-            onAddChildArgument={handleAddChildArgument}
-            getAllNodesExceptSubtree={getAllNodesExceptSubtree}
-            handleMoveArgument={handleMoveArgument}
-            argumentTree={argumentTree}
-            getArgumentCode={getArgumentCode}
-            thesis={thesis}
-            references={references}
-          />
+          {/* Onglets Arguments/Références */}
+          <div className="tabs flex border-b mb-4">
+            <button
+              className={`px-4 py-2 ${
+                activeTab === "arguments"
+                  ? "border-b-2 border-blue-500 font-bold"
+                  : ""
+              }`}
+              onClick={() => setActiveTab("arguments")}
+            >
+              Arguments ({argumentList.length})
+            </button>
+            <button
+              className={`px-4 py-2 ${
+                activeTab === "references"
+                  ? "border-b-2 border-blue-500 font-bold"
+                  : ""
+              }`}
+              onClick={() => setActiveTab("references")}
+            >
+              Références ({references.length})
+            </button>
+          </div>
+
+          {/* Contenu des onglets */}
+          {activeTab === "arguments" && (
+            <div>
+              <button
+                onClick={handleAddArgument}
+                className="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+              >
+                + Ajouter un argument
+              </button>
+
+              <ul>
+                {argumentList.map((argument) => (
+                  <ArgumentCard
+                    key={argument.id}
+                    argument={argument}
+                    getArgumentCode={getArgumentCode}
+                    onEdit={onEditArgument}
+                    onDelete={onDeleteArgument}
+                    onAddChild={handleAddChildArgument}
+                    onMove={handleMoveArgument}
+                  />
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {activeTab === "references" && (
+            <ReferencesManager
+              references={references}
+              onAddReference={addReference}
+              onUpdateReference={updateReference}
+              onDeleteReference={deleteReference}
+            />
+          )}
+
+          <div className="mt-6">
+            <ExportButton onExport={handleExport} thesis={thesis} />
+          </div>
         </div>
-      )}
-
-      {activeTab === "references" && (
-        <ReferencesManager
-          references={references}
-          onAddReference={addReference}
-          onUpdateReference={updateReference}
-          onDeleteReference={deleteReference}
-        />
-      )}
-
-      <ExportButton onExport={handleExport} thesis={thesis} />
+      </main>
     </div>
   );
 }
