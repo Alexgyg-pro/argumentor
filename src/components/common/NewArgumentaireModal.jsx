@@ -26,7 +26,9 @@ export function NewArgumentaireModal({ isOpen, onSave, onCancel }) {
 
         <ThesisEditor
           thesis={localThesis}
-          onThesisChange={setLocalThesis}
+          onThesisChange={(updatedThesis) => {
+            setLocalThesis(updatedThesis);
+          }}
           onCancel={onCancel}
           isNewThesis={true}
         />

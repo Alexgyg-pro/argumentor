@@ -5,59 +5,69 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(105, 105, 105, 0.8); /* dimgrey transparent */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  font-family: Arial, sans-serif;
 }
 
 .modalContent {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  min-width: 500px;
-  max-width: 90vw;
-  max-height: 90vh;
-  overflow-y: auto;
+  background-color: white;
+  min-width: 65%;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px grey;
+  border: 1px solid black;
 }
 
 .modalTitle {
-  margin-top: 0;
-  color: #333;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 1rem;
+  margin: 0 0 20px 0;
+  color: dimgrey;
+  font-size: 1.5rem;
+  border-bottom: 2px solid dimgrey;
+  padding-bottom: 10px;
 }
 
 .modalActions {
   display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid #eee;
+  justify-content: right;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #ccc;
 }
 
 .primaryButton {
-  background-color: #4caf50;
+  background-color: dimgrey;
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 8px 16px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.primaryButton:hover {
+  background-color: #5a5a5a;
 }
 
 .primaryButton:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .secondaryButton {
-  background-color: #f44336;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
+  background-color: #f0f0f0;
+  color: dimgrey;
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   cursor: pointer;
+}
+
+.secondaryButton:hover {
+  background-color: #e0e0e0;
 }

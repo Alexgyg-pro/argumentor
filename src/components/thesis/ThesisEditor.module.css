@@ -1,0 +1,86 @@
+/* src/components/thesis/ThesisEditor.module.css */
+.thesisEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.thesisEditor label {
+  font-weight: bold;
+  color: dimgrey;
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+}
+
+.thesisEditor textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 100px;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+.thesisEditor textarea:focus {
+  outline: none;
+  border-color: dimgrey;
+  box-shadow: 0 0 0 2px rgba(105, 105, 105, 0.2);
+}
+
+.thesisEditor select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.thesisEditor select:focus {
+  outline: none;
+  border-color: dimgrey;
+}
+
+.thesisEditorActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.primaryButton {
+  background-color: dimgrey;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.primaryButton:hover {
+  background-color: #5a5a5a;
+}
+
+.secondaryButton {
+  background-color: #f8f8f8;
+  color: dimgrey;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background-color: #e8e8e8;
+}
