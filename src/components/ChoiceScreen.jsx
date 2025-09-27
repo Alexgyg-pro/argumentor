@@ -1,14 +1,30 @@
-// ChoiceScreen.jsx
-import styles from "./ChoiceScreen.module.css"; // ← IMPORT MANQUANT
+// src/components/ChoiceScreen.jsx
+import styles from "./ChoiceScreen.module.css";
 
-export function ChoiceScreen({ handleNew, handleImportInit }) {
+// Version simplifiée sans hook custom
+export function ChoiceScreen({ handleNew, handleImport, fileInputRef }) {
+  const handleImportInit = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && handleImport) {
+      handleImport(file);
+    }
+  };
+
   return (
     <div className={styles.choiceScreen}>
-      {" "}
-      {/* ← UTILISER styles. */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+      />
+
       <div className={styles.container}>
         <h1 className={styles.title}>Bienvenue dans Argumentor</h1>
-
         <div className={styles.actions}>
           <button onClick={handleNew} className={styles.primaryButton}>
             📝 Nouveau
@@ -16,7 +32,6 @@ export function ChoiceScreen({ handleNew, handleImportInit }) {
           <button onClick={handleImportInit} className={styles.secondaryButton}>
             📂 Importer
           </button>
-          {/* ... */}
         </div>
       </div>
     </div>

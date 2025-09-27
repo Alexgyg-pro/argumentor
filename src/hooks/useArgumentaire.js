@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useFileImport } from "./useFileImport";
 import {
   findNodeById,
   findParentById,
@@ -79,7 +80,7 @@ export function useArgumentaire() {
   const [argumentCodes, setArgumentCodes] = useState({});
   const [isNewThesis, setIsNewThesis] = useState(false);
   const [references, setReferences] = useState([]);
-  const fileInputRef = useRef(null);
+  // const fileInputRef = useRef(null);
 
   // DÉRIVÉS
   const argumentList = argumentTree.children || [];
@@ -114,12 +115,23 @@ export function useArgumentaire() {
     setIsNewThesis(true);
   };
 
+  // Remplacer la gestion fichier actuelle par le hook
+  const { fileInputRef, handleImportInit, handleFileChange } = useFileImport(
+    (file) => {
+      handleImport(file, (jsonData) => {
+        handleNavigateAway(() => handleImportSuccess(jsonData));
+      });
+    }
+  );
+
+  /*
   const handleImportInit = () => fileInputRef.current?.click();
 
   const handleFileChange = (e) =>
     handleImport(e.target.files[0], (jsonData) => {
       handleNavigateAway(() => handleImportSuccess(jsonData));
     });
+*/
 
   const handleNavigateAway = (action) => {
     if (!isDirty) return action();
@@ -396,4 +408,8 @@ const createArgument = (parentId, forma) => ({
   parentId,
   children: [],
   isTemporary: true,
+  fileInputRef,
+  handleImportInit: handleImportInit, // Maintenant du hook
+  handleImport: handleFileChange, // La logique métier
+  handleNavigateAway, // Pour les confirmations
 });
