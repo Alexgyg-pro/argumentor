@@ -17,16 +17,12 @@ import {
 } from "../utils/importExport";
 
 export const recalculateAllCodes = (argumentTree, findParentById) => {
-  const [isNewThesis, setIsNewThesis] = useState(false);
+  // const [isNewThesis, setIsNewThesis] = useState(false);
   const newCodes = {};
 
   const calculateCodeForNode = (node, parentCode = "") => {
     if (node.id === "root") return;
-    console.log("🔍 DEBUG NODE:", {
-      id: node.id,
-      causa: node.causa,
-      text: node.text,
-    });
+
     const parent = findParentById(argumentTree, node.id);
     const siblings = parent?.children || [];
 
@@ -146,14 +142,12 @@ export function useArgumentaire() {
   };
 
   const handleAddArgument = () => {
-    console.log("📈 Adding argument");
     const newArgument = createArgument("root", thesis.forma);
 
     setArgumentTree((prevTree) => {
       const newTree = addChildToNode(prevTree, "root", newArgument);
 
       // RECALCUL IMMÉDIAT
-      console.log("🧪 Recalculating codes after add");
       const newCodes = recalculateAllCodes(newTree, (node, targetId) =>
         findParentById(node, targetId)
       );
@@ -166,7 +160,6 @@ export function useArgumentaire() {
   };
 
   const handleAddChildArgument = (parentId) => {
-    console.log("➕ handleAddChildArgument pour parent:", parentId);
     const parentNode = findNodeById(argumentTree, parentId);
     console.log("Parent trouvé:", parentNode);
 
@@ -390,6 +383,8 @@ export function useArgumentaire() {
     addReference,
     updateReference,
     deleteReference,
+    getAllNodesExceptSubtree,
+    argumentTree,
   };
 }
 let argumentCounter = 1; // ← Garder le compteur global
@@ -408,8 +403,8 @@ const createArgument = (parentId, forma) => ({
   parentId,
   children: [],
   isTemporary: true,
-  fileInputRef,
-  handleImportInit: handleImportInit, // Maintenant du hook
-  handleImport: handleFileChange, // La logique métier
-  handleNavigateAway, // Pour les confirmations
+  // fileInputRef, // <- ligne 411
+  // handleImportInit: handleImportInit, // Maintenant du hook
+  // handleImport: handleFileChange, // La logique métier
+  // handleNavigateAway, // Pour les confirmations
 });

@@ -59,7 +59,10 @@ function App() {
               fileInputRef={argumentaire.fileInputRef}
             />
           ) : (
-            <EditingScreen {...argumentaire} />
+            <EditingScreen
+              {...argumentaire}
+              getAllNodesExceptSubtree={argumentaire.getAllNodesExceptSubtree} // ← S'assurer que c'est passé
+            />
           )}
         </div>
       </main>

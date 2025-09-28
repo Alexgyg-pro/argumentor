@@ -23,6 +23,8 @@ export function EditingScreen({
   addReference,
   updateReference,
   deleteReference,
+  getAllNodesExceptSubtree,
+  argumentTree,
 }) {
   const [activeTab, setActiveTab] = useState("arguments");
   const [isEditingThesis, setIsEditingThesis] = useState(false);
