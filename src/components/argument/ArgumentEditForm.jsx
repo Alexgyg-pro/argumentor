@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import styles from "./ArgumentEditForm.module.css";
+import { ReferenceSelector } from "../reference/ReferenceSelector";
 
 export function ArgumentEditForm({ argument, onSave, onCancel, references }) {
   const [localArgument, setLocalArgument] = useState(argument);
-  const [selectedReferences, setSelectedReferences] = useState(
-    argument.references || []
-  );
+  // const [selectedReferences, setSelectedReferences] = useState(
+  //   argument.references || []
+  // );
 
   useEffect(() => {
     setLocalArgument(argument);
-    setSelectedReferences(argument.references || []);
+    // setSelectedReferences(argument.references || []);
   }, [argument]);
 
   const handleFieldChange = (field, value) => {
@@ -18,10 +19,7 @@ export function ArgumentEditForm({ argument, onSave, onCancel, references }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({
-      ...localArgument,
-      references: selectedReferences,
-    });
+    onSave({ ...localArgument });
   };
 
   const toggleReference = (refId) => {
@@ -102,20 +100,17 @@ export function ArgumentEditForm({ argument, onSave, onCancel, references }) {
       {/* Références */}
       {references && references.length > 0 && (
         <div className={styles.formGroup}>
-          <label className={styles.label}>Références associées</label>
-          <div className={styles.referencesList}>
-            {references.map((ref) => (
-              <label key={ref.id} className={styles.referenceItem}>
-                <input
-                  type="checkbox"
-                  checked={selectedReferences.includes(ref.id)}
-                  onChange={() => toggleReference(ref.id)}
-                  className={styles.checkbox}
-                />
-                <span className={styles.referenceTitle}>📚 {ref.title}</span>
-              </label>
-            ))}
-          </div>
+          <label>Références :</label>
+          <ReferenceSelector
+            references={references}
+            selectedReferences={localArgument.references || []}
+            onChange={(selectedRefs) =>
+              setLocalArgument((prev) => ({
+                ...prev,
+                references: selectedRefs,
+              }))
+            }
+          />
         </div>
       )}
 

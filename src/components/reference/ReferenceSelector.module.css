@@ -1,0 +1,61 @@
+.referenceSelector {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin: 1rem 0;
+}
+
+.selectorSection {
+  flex: 1;
+}
+
+.selectorSection h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  color: dimgrey;
+}
+
+.listBox {
+  width: 100%;
+  height: 200px; /* ← HAUTEUR FIXE */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0.25rem;
+  background-color: white;
+  min-height: 200px; /* ← HAUTEUR MINIMUM */
+}
+
+.listBox option {
+  padding: 0.5rem;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.listBox option:hover {
+  background-color: #f0f0f0;
+}
+
+.listBox option:checked {
+  background-color: #e0e0e0;
+}
+
+.controlButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.controlButtons button {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.controlButtons button:hover {
+  background-color: #f0f0f0;
+}

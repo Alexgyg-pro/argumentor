@@ -4,7 +4,7 @@ import { ThesisDisplay } from "./thesis/ThesisDisplay";
 import { ThesisEditor } from "./thesis/ThesisEditor";
 import { ArgumentCard } from "./argument/ArgumentCard";
 import { ExportButton } from "./ExportButton";
-import { ReferencesManager } from "./ReferencesManager";
+import { ReferencesManager } from "../components/reference/ReferencesManager";
 import styles from "./EditingScreen.module.css";
 
 export function EditingScreen({

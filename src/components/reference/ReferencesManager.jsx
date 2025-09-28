@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./EditingScreen.module.css";
+import styles from "../EditingScreen.module.css";
 
 export function ReferencesManager({
   references,
@@ -44,23 +44,32 @@ export function ReferencesManager({
     setIsModalOpen(false);
   };
 
+  const handleNewReference = () => {
+    setEditingReference(null);
+    setTitle("");
+    setContent("");
+    setIsModalOpen(true);
+  };
+
   return (
-    <div className="references-manager">
-      <div className="references-header">
+    <div className={styles.referencesManager}>
+      {/* En-tête */}
+      <div className={styles.referencesHeader}>
         <h3>Références ({references.length})</h3>
         <button
-          onClick={onAddReference} // ou la fonction appropriée
+          onClick={handleNewReference}
           className={styles.addReferenceButton}
         >
           📚 Nouvelle référence
         </button>
       </div>
 
-      <div className="references-list">
+      {/* Liste des références */}
+      <div className={styles.referencesList}>
         {references.map((ref) => (
-          <div key={ref.id} className="reference-item">
-            <div className="reference-title">{ref.title}</div>
-            <div className="reference-actions">
+          <div key={ref.id} className={styles.referenceItem}>
+            <div className={styles.referenceTitle}>{ref.title}</div>
+            <div className={styles.referenceActions}>
               <button onClick={() => handleEdit(ref)}>✏️</button>
               <button onClick={() => onDeleteReference(ref.id)}>🗑️</button>
             </div>
@@ -68,12 +77,16 @@ export function ReferencesManager({
         ))}
       </div>
 
-      {/* MODALE D'ÉDITION */}
+      {/* MODALE STYLÉE */}
       {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>{editingReference ? "Modifier" : "Nouvelle"} référence</h3>
-            <form onSubmit={handleSubmit}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h3 className={styles.modalTitle}>
+              {editingReference
+                ? "Modifier la référence"
+                : "Nouvelle référence"}
+            </h3>
+            <form onSubmit={handleSubmit} className={styles.referenceForm}>
               <label>
                 Titre :
                 <input
@@ -94,7 +107,7 @@ export function ReferencesManager({
                   required
                 />
               </label>
-              <div className="form-actions">
+              <div className={styles.formActions}>
                 <button type="submit">
                   {editingReference ? "Modifier" : "Ajouter"}
                 </button>
