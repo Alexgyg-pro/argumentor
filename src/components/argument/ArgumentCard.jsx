@@ -60,22 +60,36 @@ export function ArgumentCard({
     setIsMoveModalOpen(false);
   };
 
+  const cancelMove = () => {
+    setIsMoveModalOpen(false);
+  };
+
   const openReferenceModal = (reference) => {
     setSelectedReference(reference);
     setIsReferenceModalOpen(true);
   };
 
-  // MODE ÉDITION
-  if (isEditing) {
-    return (
-      <ArgumentEditForm
-        argument={argument}
-        onSave={handleSave}
-        onCancel={handleCancel}
-        references={references}
-      />
+  useEffect(() => {
+    const parents = getAllNodesExceptSubtree(
+      argumentTree,
+      argument.id,
+      [],
+      thesis?.text || ""
     );
-  }
+    setPotentialParents(parents);
+  }, [argumentTree, argument.id, thesis, getAllNodesExceptSubtree]);
+
+  // MODE ÉDITION
+  // if (isEditing) {
+  //   return (
+  //     <ArgumentEditForm
+  //       argument={argument}
+  //       onSave={handleSave}
+  //       onCancel={handleCancel}
+  //       references={references}
+  //     />
+  //   );
+  // }
 
   // MODE AFFICHAGE - AVEC LE STYLE DE LA MAQUETTE
   return (
@@ -139,6 +153,93 @@ export function ArgumentCard({
           </button>
         </div>
       </div>
+
+      {/* ⭐ AJOUTER : Rendu des enfants */}
+      {argument.children && argument.children.length > 0 && (
+        <ul className={styles.childrenList}>
+          {argument.children.map((child) => (
+            <ArgumentCard
+              key={child.id}
+              argument={child}
+              onEditArgument={onEditArgument}
+              onDeleteArgument={onDeleteArgument}
+              onAddChildArgument={onAddChildArgument}
+              handleMoveArgument={handleMoveArgument}
+              getAllNodesExceptSubtree={getAllNodesExceptSubtree}
+              argumentTree={argumentTree}
+              getArgumentCode={getArgumentCode}
+              thesis={thesis}
+              references={references}
+              depth={depth + 1} // ← Important : incrémenter la profondeur
+            />
+          ))}
+        </ul>
+      )}
+
+      {/* MODALE D'ÉDITION */}
+      {isEditing && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h2 className={styles.modalTitle}>
+              {argument.isTemporary || !argument.text
+                ? "Nouvel argument"
+                : `Modifier l'argument [${getArgumentCode?.(argument.id)}]`}
+            </h2>
+
+            <ArgumentEditForm
+              argument={argument}
+              onSave={(newProperties) => {
+                onEditArgument(argument.id, newProperties);
+                setIsEditing(false);
+              }}
+              onCancel={() => setIsEditing(false)}
+              references={references}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* MODALE DE DÉPLACEMENT */}
+      {isMoveModalOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h3>Déplacer "{argument.text}"</h3>
+
+            {potentialParents.length === 0 ? (
+              <p>
+                Impossible de déplacer cet argument. Aucun autre parent
+                disponible.
+              </p>
+            ) : (
+              <>
+                <p>Choisir le nouveau parent :</p>
+                <select
+                  value={selectedNewParentId}
+                  onChange={(e) => setSelectedNewParentId(e.target.value)}
+                >
+                  {potentialParents
+                    .sort((a, b) => {
+                      if (a.id === "root") return -1;
+                      if (b.id === "root") return 1;
+                      return a.id.localeCompare(b.id);
+                    })
+                    .map((parent) => (
+                      <option key={parent.id} value={parent.id}>
+                        {parent.id === "root"
+                          ? `#RACINE - ${thesis.text || "Thèse principale"}`
+                          : `#${parent.id.replace("arg", "")} - ${parent.text}`}
+                      </option>
+                    ))}
+                </select>
+                <div className={styles.modalActions}>
+                  <button onClick={confirmMove}>Déplacer</button>
+                  <button onClick={cancelMove}>Annuler</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Modales (garder le code existant d'ArgumentItem) */}
       {isExplanationModalOpen && (

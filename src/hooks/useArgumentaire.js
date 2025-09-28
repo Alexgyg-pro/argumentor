@@ -291,17 +291,24 @@ export function useArgumentaire() {
           (child) => child.id !== argumentId
         );
 
-        // 2. AJOUTER au nouveau parent D'ABORD
+        // 2. AJOUTER au nouveau parent
         newParent.children.push(nodeToMove);
         nodeToMove.parentId = newParentId;
 
-        // 3. METTRE EN NEUTRE APRÈS l'ajout
+        // 3. METTRE EN NEUTRE
         const setNeutralRecursively = (node) => {
           node.causa = "neutralis";
           node.children.forEach(setNeutralRecursively);
         };
         setNeutralRecursively(nodeToMove);
       }
+
+      // ⭐ IMPORTANT : RECALCULER LES CODES APRÈS DÉPLACEMENT
+      console.log("🧪 Recalculating codes after move");
+      const newCodes = recalculateAllCodes(newTree, (node, targetId) =>
+        findParentById(node, targetId)
+      );
+      setArgumentCodes(newCodes);
 
       return newTree;
     });

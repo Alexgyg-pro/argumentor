@@ -1,0 +1,121 @@
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-weight: bold;
+  color: dimgrey;
+  font-size: 1rem;
+}
+
+.textInput,
+.textarea,
+.select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  background: white;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+.textInput:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: dimgrey;
+  box-shadow: 0 0 0 2px rgba(105, 105, 105, 0.2);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.referencesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 10px;
+  background: #f9f9f9;
+}
+
+.referenceItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.referenceItem:hover {
+  background-color: #e9e9e9;
+}
+
+.checkbox {
+  cursor: pointer;
+}
+
+.referenceTitle {
+  font-size: 0.9rem;
+}
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.saveButton {
+  background-color: dimgrey;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.saveButton:hover {
+  background-color: #5a5a5a;
+}
+
+.cancelButton {
+  background-color: #f0f0f0;
+  color: dimgrey;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.cancelButton:hover {
+  background-color: #e0e0e0;
+}
