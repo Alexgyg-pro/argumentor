@@ -13,13 +13,6 @@ export function ChoiceScreen({ handleNew, handleFileChange, fileInputRef }) {
     fileInputRef.current?.click();
   };
 
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file && handleImport) {
-  //     handleImport(file);
-  //   }
-  // };
-
   return (
     <div className={styles.choiceScreen}>
       <input
