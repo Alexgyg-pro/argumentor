@@ -29,7 +29,7 @@ export function EditingScreen({
   // Ouvre automatiquement l'éditeur si nouvel argumentaire
   useEffect(() => {
     if (isNewThesis) {
-      setIsEditingThesis(true);
+      setIsEditingThesis(false);
     }
   }, [isNewThesis]);
 

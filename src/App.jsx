@@ -1,4 +1,5 @@
 // App.jsx
+import { useEffect } from "react";
 import { useState } from "react";
 import "./App.module.css";
 import { useArgumentaire } from "./hooks/useArgumentaire";
@@ -15,7 +16,14 @@ function App() {
   const argumentaire = useArgumentaire();
   const [showNewModal, setShowNewModal] = useState(false);
 
+  // 🔥 NOUVEAU : Réagir aux changements de thèse
+  useEffect(() => {
+    console.log("🔥 useEffect - thesis updated:", argumentaire.thesis);
+    console.log("🔥 useEffect - currentMode:", argumentaire.currentMode);
+  }, [argumentaire.thesis, argumentaire.currentMode]);
+
   const handleNewWithModal = () => {
+    console.log("🆕 Bouton Nouveau cliqué");
     setShowNewModal(true);
   };
 
@@ -24,18 +32,15 @@ function App() {
 
     // 1. Mettre à jour la thèse
     argumentaire.handleThesisChange(newThesis);
-    console.log("📝 Thèse après handleThesisChange:", argumentaire.thesis);
 
-    // 2. Passer en mode édition (pas choice!)
-    argumentaire.setCurrentMode("editing");
-    console.log("🎯 Mode après setCurrentMode:", argumentaire.currentMode);
-    argumentaire.setIsNewThesis(true);
-
-    // 3. Fermer la modale
-    setShowNewModal(false);
-
-    console.log("🎯 Current mode:", argumentaire.currentMode);
-    console.log("📝 Thesis text:", argumentaire.thesis.text);
+    // 2. Passer en mode édition APRÈS la mise à jour
+    // On va utiliser le timeout pour l'instant, mais idéalement avec useEffect
+    setTimeout(() => {
+      console.log("⏰ Timeout - Mise à jour du mode");
+      argumentaire.setCurrentMode("editing");
+      argumentaire.setIsNewThesis(true);
+      setShowNewModal(false);
+    }, 100);
   };
 
   const handleModalCancel = () => {
@@ -71,4 +76,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
