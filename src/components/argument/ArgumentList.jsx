@@ -1,5 +1,6 @@
 // En haut de ArgumentList.jsx, AJOUTE cet import
-import { ArgumentItem } from "./ArgumentItem";
+// import { ArgumentItem } from "./ArgumentItem";
+import { ArgumentCard } from "./ArgumentCard";
 
 // Composant principal
 export function ArgumentList({
@@ -22,7 +23,7 @@ export function ArgumentList({
       ) : (
         <ul>
           {argumentList.map((arg) => (
-            <ArgumentItem
+            <ArgumentCard
               key={arg.id}
               argument={arg}
               onEditArgument={onEditArgument}

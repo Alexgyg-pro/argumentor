@@ -13,8 +13,6 @@ import { findNodeById } from "./argumentOperations";
 // };
 
 export const normalizeArguments = (args = []) => {
-  console.log("🔄 NORMALIZATION - Input:", args);
-
   const normalized = args.map((arg) => ({
     ...arg,
     id: String(arg.id),
@@ -25,7 +23,6 @@ export const normalizeArguments = (args = []) => {
     children: arg.children || [],
   }));
 
-  console.log("🔄 NORMALIZATION - Output:", normalized);
   return normalized;
 };
 

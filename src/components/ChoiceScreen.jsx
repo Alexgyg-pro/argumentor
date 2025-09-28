@@ -3,12 +3,6 @@ import styles from "./ChoiceScreen.module.css";
 
 // Version simplifiée sans hook custom
 export function ChoiceScreen({ handleNew, handleFileChange, fileInputRef }) {
-  console.log("🔍 ChoiceScreen props:", {
-    handleNew: typeof handleNew,
-    handleFileChange: typeof handleFileChange,
-    fileInputRef: !!fileInputRef,
-  });
-
   const handleImportInit = () => {
     fileInputRef.current?.click();
   };

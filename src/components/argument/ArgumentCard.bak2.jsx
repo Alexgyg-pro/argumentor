@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ArgumentEditForm } from "./ArgumentEditForm";
 import styles from "./ArgumentCard.module.css";
 
-export function ArgumentItem({
+export function ArgumentCard({
   argument,
   onEditArgument,
   onDeleteArgument,
@@ -15,7 +15,6 @@ export function ArgumentItem({
   references,
   depth = 0,
 }) {
-  // TOUT LE STATE ET LES HANDLERS D'ARGUMENTCARD ACTUEL
   const [isEditing, setIsEditing] = useState(
     !argument.text || argument.text === "Nouvel argument"
   );
@@ -36,7 +35,6 @@ export function ArgumentItem({
     setPotentialParents(parents);
   }, [argumentTree, argument.id, thesis, getAllNodesExceptSubtree]);
 
-  // Tous les handlers restent ici...
   const handleSave = (newProperties) => {
     onEditArgument(argument.id, newProperties);
     setIsEditing(false);
@@ -66,9 +64,39 @@ export function ArgumentItem({
     setIsMoveModalOpen(false);
   };
 
-  // MODE AFFICHAGE
+  const openReferenceModal = (reference) => {
+    setSelectedReference(reference);
+    setIsReferenceModalOpen(true);
+  };
+
+  useEffect(() => {
+    const parents = getAllNodesExceptSubtree(
+      argumentTree,
+      argument.id,
+      [],
+      thesis?.text || ""
+    );
+    setPotentialParents(parents);
+  }, [argumentTree, argument.id, thesis, getAllNodesExceptSubtree]);
+
+  // MODE ÉDITION
+  // if (isEditing) {
+  //   return (
+  //     <ArgumentEditForm
+  //       argument={argument}
+  //       onSave={handleSave}
+  //       onCancel={handleCancel}
+  //       references={references}
+  //     />
+  //   );
+  // }
+
+  // MODE AFFICHAGE - AVEC LE STYLE DE LA MAQUETTE
   return (
-    <li className={styles.argumentCard}>
+    <li
+      className={styles.argumentCard}
+      // style={{ marginLeft: `${depth * 20}px` }}
+    >
       {/* En-tête */}
       <div className={styles.argheader}>
         <div className={styles.code} title="Code de l'argument">
@@ -86,7 +114,11 @@ export function ArgumentItem({
       </div>
 
       {/* Énoncé */}
-      <p className={styles.enonce}>
+      <p
+        className={styles.enonce}
+        onClick={() => setIsExplanationModalOpen(true)}
+        style={{ cursor: "pointer" }}
+      >
         #{argument.id.replace("arg", "")} - {argument.text}
       </p>
 
@@ -122,6 +154,50 @@ export function ArgumentItem({
         </div>
       </div>
 
+      {/* ⭐ AJOUTER : Rendu des enfants */}
+      {/* {argument.children && argument.children.length > 0 && (
+        <ul className={styles.childrenList}>
+          {argument.children.map((child) => (
+            <ArgumentCard
+              key={child.id}
+              argument={child}
+              onEditArgument={onEditArgument}
+              onDeleteArgument={onDeleteArgument}
+              onAddChildArgument={onAddChildArgument}
+              handleMoveArgument={handleMoveArgument}
+              getAllNodesExceptSubtree={getAllNodesExceptSubtree}
+              argumentTree={argumentTree}
+              getArgumentCode={getArgumentCode}
+              thesis={thesis}
+              references={references}
+              depth={depth + 1}
+            />
+          ))}
+        </ul>
+      )} */}
+
+      {/* Rendu des enfants */}
+      {argument.children && argument.children.length > 0 && (
+        <div className={styles.childrenContainer}>
+          {argument.children.map((child) => (
+            <ArgumentCard
+              key={child.id}
+              argument={child}
+              onEditArgument={onEditArgument}
+              onDeleteArgument={onDeleteArgument}
+              onAddChildArgument={onAddChildArgument}
+              handleMoveArgument={handleMoveArgument}
+              getAllNodesExceptSubtree={getAllNodesExceptSubtree}
+              argumentTree={argumentTree}
+              getArgumentCode={getArgumentCode}
+              thesis={thesis}
+              references={references}
+              depth={depth + 1}
+            />
+          ))}
+        </div>
+      )}
+
       {/* MODALE D'ÉDITION */}
       {isEditing && (
         <div className={styles.modalOverlay}>
@@ -131,10 +207,14 @@ export function ArgumentItem({
                 ? "Nouvel argument"
                 : `Modifier l'argument [${getArgumentCode?.(argument.id)}]`}
             </h2>
+
             <ArgumentEditForm
               argument={argument}
-              onSave={handleSave}
-              onCancel={handleCancel}
+              onSave={(newProperties) => {
+                onEditArgument(argument.id, newProperties);
+                setIsEditing(false);
+              }}
+              onCancel={() => setIsEditing(false)}
               references={references}
             />
           </div>
@@ -146,6 +226,7 @@ export function ArgumentItem({
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <h3>Déplacer "{argument.text}"</h3>
+
             {potentialParents.length === 0 ? (
               <p>
                 Impossible de déplacer cet argument. Aucun autre parent
@@ -182,7 +263,12 @@ export function ArgumentItem({
         </div>
       )}
 
-      {/* Autres modales... */}
+      {/* Modales (garder le code existant d'ArgumentItem) */}
+      {isExplanationModalOpen && (
+        <div className="modal">{/* ... code modale explication ... */}</div>
+      )}
+
+      {/* ... autres modales ... */}
     </li>
   );
 }

@@ -14,10 +14,6 @@ function App() {
   const argumentaire = useArgumentaire();
   const [showNewModal, setShowNewModal] = useState(false);
   const [pendingThesis, setPendingThesis] = useState(null);
-  console.log(
-    "🔍 App - handleFileChange:",
-    typeof argumentaire.handleFileChange
-  );
 
   // 🔥 PROPRE : Appliquer la thèse quand le mode passe à "editing"
   useEffect(() => {

@@ -15,7 +15,6 @@ export function useFileImport(onFileSelected) {
   const handleFileChange = useCallback(
     (event) => {
       const file = event.target.files[0];
-      console.log("📄 useFileImport: Fichier sélectionné:", file?.name);
 
       if (file && onFileSelected) {
         onFileSelected(file);
