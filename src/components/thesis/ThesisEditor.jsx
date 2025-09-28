@@ -24,9 +24,8 @@ export function ThesisEditor({
 
   // Annule les modifications et revient au mode affichage
   const handleCancel = () => {
-    console.log("🔄 handleCancel (ThesisEditor) appelé");
     setLocalThesis(thesis);
-    onCancel(); // ← Appeler la fonction parente
+    onCancel();
   };
 
   // Met à jour la copie locale quand on édite un champ
