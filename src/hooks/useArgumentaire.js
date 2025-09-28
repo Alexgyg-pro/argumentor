@@ -263,7 +263,11 @@ export function useArgumentaire() {
   };
 
   const handleImportSuccess = (jsonData) => {
+    console.log("📥 IMPORT - Données reçues:", jsonData);
+
     const normalizedArguments = normalizeArguments(jsonData.arguments || []);
+    console.log("📥 IMPORT - Arguments normalisés:", normalizedArguments);
+
     setThesis({
       text: jsonData.thesis?.text || "",
       forma: jsonData.thesis?.forma || "descriptif",
@@ -274,6 +278,7 @@ export function useArgumentaire() {
       causa: null,
       children: normalizedArguments,
     });
+    console.log("📥 IMPORT - Arbre mis à jour, passage en mode editing");
     setIsDirty(false);
     setCurrentMode("editing");
   };

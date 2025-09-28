@@ -14,6 +14,10 @@ function App() {
   const argumentaire = useArgumentaire();
   const [showNewModal, setShowNewModal] = useState(false);
   const [pendingThesis, setPendingThesis] = useState(null);
+  console.log(
+    "🔍 App - handleFileChange:",
+    typeof argumentaire.handleFileChange
+  );
 
   // 🔥 PROPRE : Appliquer la thèse quand le mode passe à "editing"
   useEffect(() => {
@@ -55,7 +59,7 @@ function App() {
           {argumentaire.currentMode === "choice" ? (
             <ChoiceScreen
               handleNew={handleNewWithModal}
-              handleImport={argumentaire.handleImport}
+              handleFileChange={argumentaire.handleFileChange} // ← handleFileChange au lieu de handleImport
               fileInputRef={argumentaire.fileInputRef}
             />
           ) : (
