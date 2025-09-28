@@ -5,6 +5,7 @@ import { ThesisEditor } from "./thesis/ThesisEditor";
 import { ArgumentCard } from "./argument/ArgumentCard";
 import { ExportButton } from "./ExportButton";
 import { ReferencesManager } from "./ReferencesManager";
+import styles from "./EditingScreen.module.css";
 
 export function EditingScreen({
   thesis,
@@ -34,11 +35,11 @@ export function EditingScreen({
   }, [isNewThesis]);
 
   return (
-    <div className="min-h-screen bg-beige flex flex-col">
+    <div className={styles.editingContainer}>
       <main className="flex-1 flex justify-center items-start p-5">
         <div className="bg-white min-w-65p p-5 rounded-lg shadow-md">
           {/* Affichage/Édition de la thèse */}
-          {isEditingThesis ? (
+          {/* {isEditingThesis ? (
             <ThesisEditor
               thesis={thesis}
               onSave={(newThesis) => {
@@ -52,25 +53,36 @@ export function EditingScreen({
               thesis={thesis}
               onEdit={() => setIsEditingThesis(true)}
             />
-          )}
+          )} */}
+
+          <div className={styles.thesisCard}>
+            <div className={styles.thesisHeader}>
+              <h2 className={styles.thesisTitle}>{thesis.text}</h2>
+              <span className={styles.thesisType}>{thesis.forma}</span>
+            </div>
+            <div className={styles.thesisActions}>
+              <button
+                onClick={() => setIsEditingThesis(true)}
+                className={styles.editButton}
+              >
+                ✏️ Modifier la thèse
+              </button>
+            </div>
+          </div>
 
           {/* Onglets Arguments/Références */}
-          <div className="tabs flex border-b mb-4">
+          <div className={styles.tabs}>
             <button
-              className={`px-4 py-2 ${
-                activeTab === "arguments"
-                  ? "border-b-2 border-blue-500 font-bold"
-                  : ""
+              className={`${styles.tab} ${
+                activeTab === "arguments" ? styles.activeTab : ""
               }`}
               onClick={() => setActiveTab("arguments")}
             >
               Arguments ({argumentList.length})
             </button>
             <button
-              className={`px-4 py-2 ${
-                activeTab === "references"
-                  ? "border-b-2 border-blue-500 font-bold"
-                  : ""
+              className={`${styles.tab} ${
+                activeTab === "references" ? styles.activeTab : ""
               }`}
               onClick={() => setActiveTab("references")}
             >
@@ -80,10 +92,10 @@ export function EditingScreen({
 
           {/* Contenu des onglets */}
           {activeTab === "arguments" && (
-            <div>
+            <div className={styles.argumentsSection}>
               <button
                 onClick={handleAddArgument}
-                className="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                className={styles.addArgumentButton}
               >
                 + Ajouter un argument
               </button>
@@ -94,10 +106,17 @@ export function EditingScreen({
                     key={argument.id}
                     argument={argument}
                     getArgumentCode={getArgumentCode}
-                    onEdit={onEditArgument}
-                    onDelete={onDeleteArgument}
-                    onAddChild={handleAddChildArgument}
-                    onMove={handleMoveArgument}
+                    // CORRECTION DES PROPS :
+                    onEditArgument={onEditArgument} // ← "onEdit" → "onEditArgument"
+                    onDeleteArgument={onDeleteArgument} // ← "onDelete" → "onDeleteArgument"
+                    onAddChildArgument={handleAddChildArgument} // ← "onAddChild" → "onAddChildArgument"
+                    handleMoveArgument={handleMoveArgument} // ← "onMove" → "handleMoveArgument"
+                    // AJOUT DES PROPS MANQUANTES :
+                    getAllNodesExceptSubtree={getAllNodesExceptSubtree}
+                    argumentTree={argumentTree}
+                    thesis={thesis}
+                    references={references}
+                    depth={0} // ou la profondeur appropriée
                   />
                 ))}
               </ul>

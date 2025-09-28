@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./EditingScreen.module.css";
 
 export function ReferencesManager({
   references,
@@ -47,8 +48,11 @@ export function ReferencesManager({
     <div className="references-manager">
       <div className="references-header">
         <h3>Références ({references.length})</h3>
-        <button onClick={() => setIsModalOpen(true)}>
-          + Nouvelle référence
+        <button
+          onClick={onAddReference} // ou la fonction appropriée
+          className={styles.addReferenceButton}
+        >
+          📚 Nouvelle référence
         </button>
       </div>
 

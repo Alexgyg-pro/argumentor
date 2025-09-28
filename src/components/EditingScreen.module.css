@@ -1,0 +1,121 @@
+.thesisCard {
+  border: 1px solid black;
+  border-radius: 15px;
+  box-shadow: 5px 5px 5px grey;
+  padding: 15px;
+  margin-bottom: 20px;
+  background: white;
+}
+
+.thesisHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.thesisTitle {
+  margin: 0;
+  color: dimgrey;
+  font-size: 1.4rem;
+}
+
+.thesisType {
+  font-style: italic;
+  color: #666;
+  font-weight: bold;
+}
+
+.thesisActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.editButton {
+  background: dimgrey;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.editingContainer {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.activeTab {
+  border-bottom-color: dimgrey;
+  font-weight: bold;
+  color: dimgrey;
+}
+
+.addArgumentButton {
+  background-color: dimgrey;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.addArgumentButton:hover {
+  background-color: #5a5a5a;
+}
+
+.argumentsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Styles cohérents avec le thème */
+.exportButton {
+  background-color: #4caf50; /* Vert pour export/sauvegarde */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  margin: 10px 0;
+}
+
+.exportButton:hover {
+  background-color: #45a049;
+}
+
+.addReferenceButton {
+  background-color: #2196f3; /* Bleu pour références */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 15px;
+}
+
+.addReferenceButton:hover {
+  background-color: #1976d2;
+}
