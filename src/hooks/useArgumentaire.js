@@ -160,18 +160,20 @@ export function useArgumentaire() {
   };
 
   const handleAddChildArgument = (parentId) => {
+    console.log("🎯 ADD CHILD - Parent ID:", parentId);
+    console.log("🌳 Current argumentTree:", argumentTree);
+
     const parentNode = findNodeById(argumentTree, parentId);
-    console.log("Parent trouvé:", parentNode);
+    console.log("🔍 Parent node found:", parentNode);
 
     const newArgument = createArgument(parentId, parentNode.forma);
-    console.log("Nouvel argument créé:", newArgument);
+    console.log("👶 New argument created:", newArgument);
 
     setArgumentTree((prevTree) => {
+      console.log("🔄 Setting new tree...");
       const newTree = addChildToNode(prevTree, parentId, newArgument);
-      console.log("Nouvel arbre:", newTree);
+      console.log("🌳 New tree:", newTree);
 
-      // RECALCUL IMMÉDIAT
-      console.log("🧪 Recalculating codes after add child");
       const newCodes = recalculateAllCodes(newTree, (node, targetId) =>
         findParentById(node, targetId)
       );
@@ -209,17 +211,7 @@ export function useArgumentaire() {
   };
 
   const onDeleteArgument = (id) => {
-    console.log("🗑️ DELETE called for:", id);
-
     const nodeToDelete = findNodeById(argumentTree, id);
-    console.log("Node details:", {
-      id: nodeToDelete?.id,
-      isTemporary: nodeToDelete?.isTemporary,
-      text: nodeToDelete?.text,
-      textTrimmed: nodeToDelete?.text?.trim(),
-      isEmpty: !nodeToDelete?.text?.trim(),
-      hasChildren: nodeToDelete?.children?.length > 0,
-    });
 
     // Vérifier si l'argument a des enfants
     if (nodeToDelete?.children && nodeToDelete.children.length > 0) {
@@ -265,16 +257,23 @@ export function useArgumentaire() {
   const handleImportSuccess = (jsonData) => {
     const normalizedArguments = normalizeArguments(jsonData.arguments || []);
 
+    // ⭐ RÉINITIALISER LE COMPTEUR
+    argumentCounter = jsonData.arguments ? jsonData.arguments.length + 1 : 1;
+
     setThesis({
       text: jsonData.thesis?.text || "",
       forma: jsonData.thesis?.forma || "descriptif",
     });
+
     setArgumentTree({
       id: "root",
       text: jsonData.thesis?.text || "",
       causa: null,
       children: normalizedArguments,
     });
+
+    setReferences(jsonData.references || []);
+
     setIsDirty(false);
     setCurrentMode("editing");
   };
