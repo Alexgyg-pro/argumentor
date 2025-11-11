@@ -24,7 +24,6 @@ export function ThesisInput({ onThesisChange }) {
         placeholder="Entrez votre thesis principale..."
         className="thesis-field"
       />
-      <button disabled={thesis.trim() === ""}>Ajouter un argument</button>
     </div>
   );
 }
