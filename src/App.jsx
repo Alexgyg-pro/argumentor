@@ -60,6 +60,32 @@ function App() {
     setIsDirty(false);
   };
 
+  const handleExport = () => {
+    console.log("Exporting data...");
+
+    // 1. Créer l'objet de données complet (pour plus tard)
+    const data = {
+      thesis: thesis,
+      arguments: argumentList, // On ajoute déjà la structure pour les arguments
+      version: "1.0",
+    };
+
+    // 2. Logique d'export (existe déjà dans ExportButton, on la centralise ici)
+    const jsonString = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "argumentaire.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    // 3. APRÈS avoir exporté, on reset le flag "sale"
+    setIsDirty(false);
+  };
+
   return (
     <div className="app">
       <h1>Argumentor</h1>
@@ -69,7 +95,7 @@ function App() {
         Ajouter un argument
       </button>
       <ArgumentList argumentList={argumentList} />
-      <ExportButton thesis={thesis} />
+      <ExportButton handleExport={handleExport} thesis={thesis} />
       <div className="controls">
         <button
           onClick={() => {
