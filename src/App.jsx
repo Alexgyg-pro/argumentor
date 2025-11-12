@@ -17,36 +17,70 @@ import "./App.css";
 
 function App() {
   const [thesis, setThesis] = useState("");
-  const [argumentList, setArguments] = useState([]);
+  const [argumentList, setArgumentList] = useState([]);
   const [isDirty, setIsDirty] = useState(false);
+
+  const handleNewArgumentaire = () => {
+    setThesis("");
+    setArgumentList([]);
+    setIsDirty(false);
+  };
 
   const handleAddArgument = () => {
     const newArgument = {
       id: Date.now(), // Solution simple pour un ID unique
       claim: "Argument exemple " + (argumentList.length + 1),
     };
-    setArguments([...argumentList, newArgument]);
+    setArgumentList([...argumentList, newArgument]);
   };
 
   const handleImport = (jsonData) => {
     if (jsonData.thesis) {
       setThesis(jsonData.thesis); // Pre-remplit le champ
     }
+    setIsDirty(false);
     // Les arguments à venir : setArgumentList ici
+  };
+
+  const confirmNavigation = (actionCallback) => {
+    if (!isDirty) {
+      actionCallback(); // Exécute l'action directement si rien n'est modifié
+      return;
+    }
+
+    if (
+      window.confirm(
+        "Vous avez des modifications non sauvegardées. Voulez-vous sauvegarder avant de continuer ?"
+      )
+    ) {
+      actionCallback();
+    } else {
+      setIsDirty(false);
+    }
+    setIsDirty(false);
   };
 
   return (
     <div className="app">
       <h1>Argumentor</h1>
-      <ThesisInput onThesisChange={setThesis} />
+      <ThesisInput onThesisChange={setThesis} value={thesis} />
       <p>Thèse actuelle : {thesis}</p>
       <button onClick={handleAddArgument} disabled={thesis.trim() === ""}>
         Ajouter un argument
       </button>
       <ArgumentList argumentList={argumentList} />
-      <div>
-        <ExportButton thesis={thesis} />
-        <ImportButton onImport={handleImport} />
+      <ExportButton thesis={thesis} />
+      <div className="controls">
+        <button
+          onClick={() => {
+            confirmNavigation(handleNewArgumentaire);
+          }}
+        >
+          ➕ Nouveau
+        </button>
+        <ImportButton
+          onImport={(data) => confirmNavigation(() => handleImport(data))}
+        />
       </div>
       <PlusIcon size={18} />
       <DownloadIcon size={18} /> <UploadIcon size={18} />

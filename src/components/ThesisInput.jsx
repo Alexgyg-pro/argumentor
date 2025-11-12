@@ -1,7 +1,7 @@
 // src/components/ ThesisInput.jsx
 import { useState } from "react";
 
-export function ThesisInput({ onThesisChange }) {
+export function ThesisInput({ onThesisChange, value }) {
   const [thesis, setThesis] = useState("");
 
   const handleChange = (event) => {
@@ -19,7 +19,7 @@ export function ThesisInput({ onThesisChange }) {
       <input
         type="text"
         id="thesis"
-        value={thesis}
+        value={value}
         onChange={handleChange}
         placeholder="Entrez votre thesis principale..."
         className="thesis-field"
