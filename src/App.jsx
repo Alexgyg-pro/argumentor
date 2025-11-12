@@ -2,6 +2,15 @@
 import { useState } from "react";
 import { ThesisInput } from "./components/ThesisInput";
 import { ArgumentList } from "./components/ArgumentList";
+import {
+  PlusIcon,
+  DownloadIcon,
+  UploadIcon,
+  EditIcon,
+  TrashIcon,
+  PdfIcon,
+  NewIcon,
+} from "./components/common/Icons";
 import "./App.css";
 
 function App() {
@@ -25,6 +34,10 @@ function App() {
         Ajouter un argument
       </button>
       <ArgumentList argumentList={argumentList} />
+      <PlusIcon size={18} /> <PlusIcon size={18} /> <DownloadIcon size={18} />{" "}
+      <UploadIcon size={18} /> <PlusIcon size={18} />
+      <EditIcon size={18} /> <TrashIcon size={18} /> <PdfIcon size={18} />{" "}
+      <NewIcon size={18} />
     </div>
   );
 }
