@@ -18,7 +18,7 @@ export function DisplayScreen({
   }
 
   const [selectedParent, setSelectedParent] = useState("root");
-
+  console.log("🔄 DisplayScreen rendu - argumentTree:", argumentTree);
   return (
     <div className="display-screen">
       <h1>Mon Argumentaire</h1>
@@ -33,9 +33,11 @@ export function DisplayScreen({
 
       {/* Les arguments ! */}
       <button
-        onClick={() =>
-          onAddArgument(selectedParent, { text: "Nouvel argument" })
-        }
+        onClick={() => {
+          console.log("🖱️ CLIC DÉTECTÉ"); // ← Ce log apparaît-il ?
+          console.log("onAddArgument existe?", typeof onAddArgument); // ← Fonction définie ?          console.log("🖱️ Bouton cliqué - parentId:", selectedParent);
+          onAddArgument(selectedParent, { claim: "Nouvel argument" });
+        }}
       >
         Ajouter un argument
       </button>

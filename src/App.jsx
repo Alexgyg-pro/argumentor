@@ -31,11 +31,13 @@ function App() {
         />
       ) : (
         <DisplayScreen
+          onNewArgumentaire={argumentaire.handleNewArgumentaire}
           thesis={argumentaire.thesis}
           onThesisChange={argumentaire.handleThesisChange}
           argumentTree={argumentaire.argumentTree}
           onAddArgument={argumentaire.handleAddArgument}
           onExport={argumentaire.handleExport}
+          onImportInit={argumentaire.handleImportInit}
         />
       )}
 

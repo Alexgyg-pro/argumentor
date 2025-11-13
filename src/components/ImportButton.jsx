@@ -2,7 +2,9 @@
 
 import { useRef } from "react";
 
-export function ImportButton({ onImport }) {
+export function ImportButton({ onImportInit }) {
+  console.log(onImportInit);
+
   const fileInputRef = useRef(null);
 
   const handleFileSelect = (event) => {

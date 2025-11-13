@@ -1,7 +1,5 @@
 // src/hooks/useArgumentaire.js
 import { useState, useRef } from "react";
-import { ThesisInput } from "../components/ThesisInput";
-import { useEffect } from "react";
 
 export function useArgumentaire() {
   const [thesis, setThesis] = useState("");
@@ -12,11 +10,10 @@ export function useArgumentaire() {
   // Pour l'arbre des arguments
   const [argumentTree, setArgumentTree] = useState(null);
 
-  // useEffect(() => {
-  //   console.log("🔄 argumentTree a changé:", argumentTree);
-  // }, [argumentTree]);
-
   // MODIFICATION DE L'ENSEMBLE DE L'ARGUMENTAIRE
+  /**
+   * Initialise un nouvel argumentaire vide
+   */
   const handleNewArgumentaire = () => {
     setThesis("");
     setArgumentTree({
@@ -28,16 +25,28 @@ export function useArgumentaire() {
     setIsDirty(false);
   };
 
+  /**
+   * Met à jour la thèse principale
+   * @param {string} newValue
+   */
   const handleThesisChange = (newValue) => {
     setThesis(newValue);
     setIsDirty(true);
   };
 
   // IMPORT/EXPORT - Tout intégré ici
+  /**
+   * Initialise le processus d'import en déclenchant la sélection de fichier
+   */
   const handleImportInit = () => {
     fileInputRef.current?.click();
   };
 
+  /**
+   * Gère la sélection d'un fichier pour l'import
+   * @param {*} event
+   * @returns
+   */
   const handleFileSelect = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -69,6 +78,9 @@ export function useArgumentaire() {
     reader.readAsText(file);
   };
 
+  /**
+   * Exporte l'argumentaire actuel en fichier JSON
+   */
   const handleExport = () => {
     const data = {
       thesis,
@@ -89,11 +101,13 @@ export function useArgumentaire() {
     URL.revokeObjectURL(url);
   };
 
-  // GESTION DES ARGUMENTS (version basique)
+  // GESTION DES ARGUMENTS
+  /**
+   * Ajoute un nouvel argument à l'arbre des arguments
+   * @param {string} parentId - ID de l'argument parent
+   * @param {object} argumentData - Données de l'argument à ajouter
+   */
   const handleAddArgument = (parentId, argumentData) => {
-    // Implémentation simplifiée - on verra ça après
-    console.log("Ajouter argument:", parentId, argumentData);
-    console.log("argumentTree", argumentTree);
     const newArgument = {
       id: Date.now(), // Solution simple pour un ID unique
       claim: "Argument exemple " + (argumentTree.children.length + 1),

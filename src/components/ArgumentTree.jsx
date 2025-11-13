@@ -1,7 +1,6 @@
 // src/components/ArgumentTree.jsx
 export function ArgumentTree({ tree }) {
-  console.log("tree", tree);
-
+  console.log("🌳 ArgumentTree rendu - tree:", tree);
   return (
     <div className="argument-tree">
       <h2>Vos arguments</h2>
