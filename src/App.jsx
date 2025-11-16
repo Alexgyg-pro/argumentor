@@ -22,25 +22,25 @@ import "./App.css";
 function App() {
   const argumentaire = useArgumentaire();
 
-  const confirmNavigation = (actionCallback) => {
-    if (!isDirty) {
-      actionCallback(); // Exécute l'action directement si rien n'est modifié
-      return;
-    }
+  // const confirmNavigation = (actionCallback) => {
+  //   if (!isDirty) {
+  //     actionCallback(); // Exécute l'action directement si rien n'est modifié
+  //     return;
+  //   }
 
-    if (
-      window.confirm(
-        "Vous avez des modifications non sauvegardées. Voulez-vous sauvegarder avant de continuer ?"
-      )
-    ) {
-      // Ici, tu pourrais déclencher un export automatique puis faire l'action
-      handleExport(); // Tu devras créer cette fonction qui exporte et reset isDirty
-      actionCallback();
-    } else {
-      actionCallback(); // Ou exécute l'action sans sauvegarder
-    }
-    setIsDirty(false); // Reset l'état après l'action
-  };
+  //   if (
+  //     window.confirm(
+  //       "Vous avez des modifications non sauvegardées. Voulez-vous sauvegarder avant de continuer ?"
+  //     )
+  //   ) {
+  //     // Ici, tu pourrais déclencher un export automatique puis faire l'action
+  //     handleExport(); // Tu devras créer cette fonction qui exporte et reset isDirty
+  //     actionCallback();
+  //   } else {
+  //     actionCallback(); // Ou exécute l'action sans sauvegarder
+  //   }
+  //   setIsDirty(false); // Reset l'état après l'action
+  // };
 
   return (
     <div className="app">
@@ -56,6 +56,7 @@ function App() {
           onThesisChange={argumentaire.handleThesisChange}
           argumentTree={argumentaire.argumentTree}
           onAddArgument={argumentaire.handleAddArgument}
+          onDeleteArgument={argumentaire.handleDeleteArgument}
           onExport={argumentaire.handleExport}
           onImportInit={argumentaire.handleImportInit}
         />

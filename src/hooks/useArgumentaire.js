@@ -123,6 +123,53 @@ export function useArgumentaire() {
     setIsDirty(true);
   };
 
+  /**
+   * Supprime un argument après confirmation
+   * @param {string} argumentId - ID de l'argument à supprimer
+   */
+  const handleDeleteArgument = (argumentId) => {
+    // Vérifier si l'argument a des enfants
+    const argument = findArgumentById(argumentTree, argumentId);
+    if (argument && argument.children && argument.children.length > 0) {
+      alert(
+        "Impossible de supprimer cet argument car il contient des sous-arguments."
+      );
+      return;
+    }
+
+    // Demander confirmation
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cet argument ?")) {
+      return;
+    }
+
+    // Supprimer l'argument
+    const deleteFromTree = (node) => {
+      if (node.children) {
+        return {
+          ...node,
+          children: node.children.filter((child) => child.id !== argumentId),
+        };
+      }
+      return node;
+    };
+
+    setArgumentTree(deleteFromTree(argumentTree));
+    setIsDirty(true);
+  };
+
+  // FONCTIONS UTILITAIRES
+  // Fonction utilitaire pour trouver un argument par ID
+  const findArgumentById = (node, id) => {
+    if (node.id === id) return node;
+    if (node.children) {
+      for (let child of node.children) {
+        const found = findArgumentById(child, id);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
   return {
     // État
     thesis,
@@ -143,5 +190,6 @@ export function useArgumentaire() {
 
     // Arguments
     handleAddArgument,
+    handleDeleteArgument,
   };
 }

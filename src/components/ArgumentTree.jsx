@@ -1,6 +1,6 @@
 // src/components/ArgumentTree.jsx
-export function ArgumentTree({ tree }) {
-  console.log("🌳 ArgumentTree rendu - tree:", tree);
+import { TrashIcon, PlusIcon } from "./common/Icons";
+export function ArgumentTree({ tree, onDeleteArgument }) {
   return (
     <div className="argument-tree">
       <h2>Vos arguments</h2>
@@ -9,7 +9,14 @@ export function ArgumentTree({ tree }) {
       ) : (
         <ul>
           {tree.children.map((arg) => (
-            <li key={arg.id}>{arg.claim}</li>
+            <li key={arg.id} className="argument-item">
+              <span>• {arg.claim}</span>
+              <div className="argument-actions">
+                <button onClick={() => onDeleteArgument(arg.id)}>
+                  <TrashIcon size={14} />
+                </button>
+              </div>
+            </li>
           ))}
         </ul>
       )}

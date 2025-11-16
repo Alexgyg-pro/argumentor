@@ -1,24 +1,24 @@
 // src/components/screens/DisplayScreen.jsx
 import { ThesisInput } from "../ThesisInput";
-//import { ArgumentList } from "../ArgumentList";
 import { ArgumentTree } from "../ArgumentTree";
 import { useState } from "react";
 
 export function DisplayScreen({
+  onNewArgumentaire,
   thesis,
   onThesisChange,
-  argumentTree, // ← Maintenant ça a du sens !
-  onAddArgument,
+  argumentTree,
   onExport,
-  onNewArgumentaire,
   onImportInit,
+  onAddArgument,
+  onDeleteArgument,
 }) {
   if (!argumentTree) {
     return <div>Chargement de l'arbre...</div>;
   }
 
   const [selectedParent, setSelectedParent] = useState("root");
-  console.log("🔄 DisplayScreen rendu - argumentTree:", argumentTree);
+
   return (
     <div className="display-screen">
       <h1>Mon Argumentaire</h1>
@@ -34,8 +34,6 @@ export function DisplayScreen({
       {/* Les arguments ! */}
       <button
         onClick={() => {
-          console.log("🖱️ CLIC DÉTECTÉ"); // ← Ce log apparaît-il ?
-          console.log("onAddArgument existe?", typeof onAddArgument); // ← Fonction définie ?          console.log("🖱️ Bouton cliqué - parentId:", selectedParent);
           onAddArgument(selectedParent, { claim: "Nouvel argument" });
         }}
       >
@@ -45,6 +43,7 @@ export function DisplayScreen({
         tree={argumentTree}
         onSelectParent={setSelectedParent}
         onAddArgument={onAddArgument}
+        onDeleteArgument={onDeleteArgument}
       />
 
       <button onClick={onExport}>Exporter</button>
