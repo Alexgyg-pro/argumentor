@@ -1,5 +1,6 @@
 // src/hooks/useArgumentaire.js
 import { useState, useRef } from "react";
+import { confirmIfDirty } from "../utils/confirm";
 
 export function useArgumentaire() {
   const [thesis, setThesis] = useState("");
@@ -15,6 +16,7 @@ export function useArgumentaire() {
    * Initialise un nouvel argumentaire vide
    */
   const handleNewArgumentaire = () => {
+    if (!confirmIfDirty(isDirty)) return;
     setThesis("");
     setArgumentTree({
       id: "root",
@@ -39,6 +41,7 @@ export function useArgumentaire() {
    * Initialise le processus d'import en déclenchant la sélection de fichier
    */
   const handleImportInit = () => {
+    if (!confirmIfDirty(isDirty)) return;
     fileInputRef.current?.click();
   };
 
