@@ -4,6 +4,8 @@ import { confirmIfDirty } from "../utils/confirm";
 
 export function useArgumentaire() {
   const [thesis, setThesis] = useState("");
+  const [contexte, setContexte] = useState("");
+  const [forma, setForma] = useState("Descriptif");
   const [currentMode, setCurrentMode] = useState("start");
   const [isDirty, setIsDirty] = useState(false);
   const fileInputRef = useRef(null);
@@ -15,12 +17,13 @@ export function useArgumentaire() {
   /**
    * Initialise un nouvel argumentaire vide
    */
-  const handleNewArgumentaire = () => {
-    if (!confirmIfDirty(isDirty)) return;
-    setThesis("");
+  const handleNewArgumentaire = (formData = {}) => {
+    setThesis(formData.thesis || "");
+    setContexte(formData.contexte || "");
+    setForma(formData.forma || "Descriptif");
     setArgumentTree({
       id: "root",
-      claim: "",
+      claim: formData.thesis || "",
       children: [],
     });
     setCurrentMode("display");
@@ -28,7 +31,17 @@ export function useArgumentaire() {
   };
 
   /**
-   * Met à jour la thèse principale
+   * Met à jour l'argumentaire complet
+   */
+  const handleUpdateArgumentaire = (formData) => {
+    setThesis(formData.thesis);
+    setContexte(formData.contexte);
+    setForma(formData.forma);
+    setIsDirty(true);
+  };
+
+  /**
+   * Met à jour la thèse principale (à supprimer, puisqu'il y a handleUpdateArgumentaire ?)
    * @param {string} newValue
    */
   const handleThesisChange = (newValue) => {
@@ -173,6 +186,8 @@ export function useArgumentaire() {
   return {
     // État
     thesis,
+    contexte,
+    forma,
     currentMode,
     setCurrentMode,
     isDirty,
@@ -180,6 +195,7 @@ export function useArgumentaire() {
 
     // Actions principales
     handleNewArgumentaire,
+    handleUpdateArgumentaire,
     handleThesisChange,
 
     // Import/Export

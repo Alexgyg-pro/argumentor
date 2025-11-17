@@ -1,7 +1,7 @@
 // src/App.jsx
 import { useState } from "react";
 import { useArgumentaire } from "./hooks/useArgumentaire";
-import { ThesisInput } from "./components/ThesisInput";
+//import { ThesisInput } from "./components/ThesisInput";
 //import { ArgumentList } from "./components/ArgumentList";
 import { ExportButton } from "./components/ExportButton";
 import { ImportButton } from "./components/ImportButton";
@@ -53,7 +53,10 @@ function App() {
         <DisplayScreen
           onNewArgumentaire={argumentaire.handleNewArgumentaire}
           thesis={argumentaire.thesis}
-          onThesisChange={argumentaire.handleThesisChange}
+          contexte={argumentaire.contexte}
+          forma={argumentaire.forma}
+          onUpdateArgumentaire={argumentaire.handleUpdateArgumentaire}
+          //onThesisChange={argumentaire.handleThesisChange}
           argumentTree={argumentaire.argumentTree}
           onAddArgument={argumentaire.handleAddArgument}
           onDeleteArgument={argumentaire.handleDeleteArgument}
