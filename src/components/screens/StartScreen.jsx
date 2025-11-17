@@ -1,6 +1,7 @@
 // src/components/screens/StartScreen.jsx
 import { useState } from "react";
 import { ArgumentaireForm } from "../forms/ArgumentaireForm";
+import { HiddenFileInput } from "../common/HiddenFileInput";
 
 export function StartScreen({ onNewArgumentaire, onImportInit }) {
   const [showForm, setShowForm] = useState(false);
@@ -34,6 +35,12 @@ export function StartScreen({ onNewArgumentaire, onImportInit }) {
           onCancel={handleFormCancel}
         />
       )}
+
+      {/* Input file caché pour l'import */}
+      <HiddenFileInput
+        fileInputRef={fileInputRef}
+        onFileSelect={onFileSelect}
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 import { ArgumentTree } from "../ArgumentTree";
 import { ArgumentaireForm } from "../forms/ArgumentaireForm";
 import { ArgumentForm } from "../forms/ArgumentForm";
+import { HiddenFileInput } from "../common/HiddenFileInput";
 import { useState } from "react";
 
 export function DisplayScreen({
@@ -119,6 +120,12 @@ export function DisplayScreen({
           onCancel={handleEditCancel}
         />
       )}
+
+      {/* Input file caché pour l'import */}
+      <HiddenFileInput
+        fileInputRef={fileInputRef}
+        onFileSelect={onFileSelect}
+      />
     </div>
   );
 }

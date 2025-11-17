@@ -67,13 +67,13 @@ function App() {
       )}
 
       {/* Input file caché pour l'import */}
-      <input
+      {/* <input
         type="file"
         ref={argumentaire.fileInputRef}
         onChange={argumentaire.handleFileSelect}
         accept=".json"
         style={{ display: "none" }}
-      />
+      /> */}
     </div>
   );
 }
