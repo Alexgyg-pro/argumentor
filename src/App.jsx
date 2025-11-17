@@ -63,6 +63,8 @@ function App() {
           onDeleteArgument={argumentaire.handleDeleteArgument}
           onExport={argumentaire.handleExport}
           onImportInit={argumentaire.handleImportInit}
+          fileInputRef={argumentaire.fileInputRef}
+          onFileSelect={argumentaire.handleFileSelect}
         />
       )}
 

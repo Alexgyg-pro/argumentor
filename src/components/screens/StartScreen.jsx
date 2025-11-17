@@ -3,7 +3,12 @@ import { useState } from "react";
 import { ArgumentaireForm } from "../forms/ArgumentaireForm";
 import { HiddenFileInput } from "../common/HiddenFileInput";
 
-export function StartScreen({ onNewArgumentaire, onImportInit }) {
+export function StartScreen({
+  onNewArgumentaire,
+  onImportInit,
+  fileInputRef,
+  onFileSelect,
+}) {
   const [showForm, setShowForm] = useState(false);
 
   const handleNewClick = () => {

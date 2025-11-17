@@ -17,6 +17,8 @@ export function DisplayScreen({
   onAddArgument,
   onEditArgument,
   onDeleteArgument,
+  fileInputRef,
+  onFileSelect,
 }) {
   const [showEditForm, setShowEditForm] = useState(false);
   const [showArgumentForm, setShowArgumentForm] = useState(false);
