@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 export function ArgumentaireForm({ initialData = {}, onSave, onCancel }) {
   const [formData, setFormData] = useState({
     thesis: "",
-    contexte: "",
+    context: "",
     forma: "Descriptif",
   });
 
@@ -13,7 +13,7 @@ export function ArgumentaireForm({ initialData = {}, onSave, onCancel }) {
     if (initialData) {
       setFormData({
         thesis: initialData.thesis || "",
-        contexte: initialData.contexte || "",
+        context: initialData.context || "",
         forma: initialData.forma || "Descriptif",
       });
     }
@@ -39,12 +39,12 @@ export function ArgumentaireForm({ initialData = {}, onSave, onCancel }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="contexte">Contexte :</label>
+        <label htmlFor="context">Contexte :</label>
         <textarea
-          id="contexte"
-          value={formData.contexte}
+          id="context"
+          value={formData.context}
           onChange={(e) =>
-            setFormData({ ...formData, contexte: e.target.value })
+            setFormData({ ...formData, context: e.target.value })
           }
           placeholder="Contexte de l'argumentaire..."
           rows="4"

@@ -4,7 +4,7 @@ import { confirmIfDirty } from "../utils/confirm";
 
 export function useArgumentaire() {
   const [thesis, setThesis] = useState("");
-  const [contexte, setContexte] = useState("");
+  const [context, setContext] = useState("");
   const [forma, setForma] = useState("Descriptif");
   const [currentMode, setCurrentMode] = useState("start");
   const [isDirty, setIsDirty] = useState(false);
@@ -19,7 +19,7 @@ export function useArgumentaire() {
    */
   const handleNewArgumentaire = (formData = {}) => {
     setThesis(formData.thesis || "");
-    setContexte(formData.contexte || "");
+    setContext(formData.context || "");
     setForma(formData.forma || "Descriptif");
     setArgumentTree({
       id: "root",
@@ -35,7 +35,7 @@ export function useArgumentaire() {
    */
   const handleUpdateArgumentaire = (formData) => {
     setThesis(formData.thesis);
-    setContexte(formData.contexte);
+    setContext(formData.context);
     setForma(formData.forma);
     setIsDirty(true);
   };
@@ -100,6 +100,8 @@ export function useArgumentaire() {
   const handleExport = () => {
     const data = {
       thesis,
+      context,
+      forma,
       tree: argumentTree,
       version: "1.0",
       exportedAt: new Date().toISOString(),
@@ -251,7 +253,7 @@ export function useArgumentaire() {
   return {
     // État
     thesis,
-    contexte,
+    context,
     forma,
     currentMode,
     setCurrentMode,

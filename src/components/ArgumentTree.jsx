@@ -1,7 +1,76 @@
 // src/components/ArgumentTree.jsx
 import { TrashIcon, EditIcon, PlusIcon } from "./common/Icons";
 
-export function ArgumentTree({ tree, onDeleteArgument, onEditArgument }) {
+// Composant récursif pour un argument
+function ArgumentNode({
+  argument,
+  depth = 0,
+  onDeleteArgument,
+  onEditArgument,
+  onAddSubArgument,
+}) {
+  const hasChildren = argument.children && argument.children.length > 0;
+
+  return (
+    <div className="argument-node" style={{ marginLeft: `${depth * 20}px` }}>
+      <div className="argument-content">
+        <span className="argument-claim">• {argument.claim}</span>
+        <div className="argument-details">
+          <small>
+            {argument.causa} | {argument.forma} | {argument.natura} | Validité:{" "}
+            {argument.validity} | Pertinence: {argument.relevance}
+          </small>
+          {argument.claimComment && (
+            <p className="argument-comment">{argument.claimComment}</p>
+          )}
+        </div>
+        <div className="argument-actions">
+          <button
+            onClick={() => onAddSubArgument(argument.id)}
+            title="Ajouter un sous-argument"
+          >
+            <PlusIcon size={12} />
+          </button>
+          <button
+            onClick={() => onEditArgument(argument)}
+            title="Modifier l'argument"
+          >
+            <EditIcon size={12} />
+          </button>
+          <button
+            onClick={() => onDeleteArgument(argument.id)}
+            title="Supprimer l'argument"
+          >
+            <TrashIcon size={12} />
+          </button>
+        </div>
+      </div>
+
+      {/* Affichage récursif des enfants */}
+      {hasChildren && (
+        <div className="argument-children">
+          {argument.children.map((child) => (
+            <ArgumentNode
+              key={child.id}
+              argument={child}
+              depth={depth + 1}
+              onDeleteArgument={onDeleteArgument}
+              onEditArgument={onEditArgument}
+              onAddSubArgument={onAddSubArgument}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function ArgumentTree({
+  tree,
+  onDeleteArgument,
+  onEditArgument,
+  onAddSubArgument,
+}) {
   if (!tree || !tree.children || tree.children.length === 0) {
     return (
       <div className="argument-tree">
@@ -14,35 +83,17 @@ export function ArgumentTree({ tree, onDeleteArgument, onEditArgument }) {
   return (
     <div className="argument-tree">
       <h2>Vos arguments</h2>
-      <ul>
-        {tree.children.map((arg) => (
-          <li key={arg.id} className="argument-item">
-            <div className="argument-content">
-              <span className="argument-claim">• {arg.claim}</span>
-              <div className="argument-details">
-                <small>
-                  {arg.causa} | {arg.forma} | {arg.natura} | Validité:{" "}
-                  {arg.validity} | Pertinence: {arg.relevance}
-                </small>
-                {arg.claimComment && (
-                  <p className="argument-comment">{arg.claimComment}</p>
-                )}
-              </div>
-            </div>
-            <div className="argument-actions">
-              <button
-                onClick={() => onEditArgument(arg)}
-                title="Modifier l'argument"
-              >
-                <EditIcon size={14} />
-              </button>
-              <button onClick={() => onDeleteArgument(arg.id)}>
-                <TrashIcon size={14} />
-              </button>
-            </div>
-          </li>
+      <div className="arguments-list">
+        {tree.children.map((argument) => (
+          <ArgumentNode
+            key={argument.id}
+            argument={argument}
+            onDeleteArgument={onDeleteArgument}
+            onEditArgument={onEditArgument}
+            onAddSubArgument={onAddSubArgument}
+          />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

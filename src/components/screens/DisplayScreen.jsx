@@ -8,7 +8,7 @@ import { useState } from "react";
 export function DisplayScreen({
   onNewArgumentaire,
   thesis,
-  contexte,
+  context,
   forma,
   onUpdateArgumentaire,
   argumentTree,
@@ -69,6 +69,12 @@ export function DisplayScreen({
   };
   //const [selectedParent, setSelectedParent] = useState("root");
 
+  const handleAddSubArgumentClick = (parentId) => {
+    setSelectedParentId(parentId);
+    setEditingArgument(null); // Mode création
+    setShowArgumentForm(true);
+  };
+
   return (
     <div className="display-screen">
       <h1>Mon Argumentaire</h1>
@@ -79,7 +85,7 @@ export function DisplayScreen({
           <div className="argumentaire-info">
             <h2>Thèse : {thesis}</h2>
             <p>
-              <strong>Contexte :</strong> {contexte}
+              <strong>Contexte :</strong> {context}
             </p>
             <p>
               <strong>Forma :</strong> {forma}
@@ -96,12 +102,19 @@ export function DisplayScreen({
             tree={argumentTree}
             onEditArgument={handleEditArgumentClick}
             onDeleteArgument={onDeleteArgument}
+            onAddSubArgument={handleAddSubArgumentClick}
           />
 
           {/* Formulaire d'argument en bas */}
           {showArgumentForm && (
             <div className="argument-form-container">
-              <h3>Nouvel argument</h3>
+              <h3>
+                {editingArgument
+                  ? "Modifier l'argument"
+                  : selectedParentId === "root"
+                  ? "Nouvel argument principal"
+                  : "Nouveau sous-argument"}
+              </h3>
               <ArgumentForm
                 parentId={selectedParentId}
                 initialData={editingArgument || {}}
@@ -117,7 +130,7 @@ export function DisplayScreen({
         </>
       ) : (
         <ArgumentaireForm
-          initialData={{ thesis, contexte, forma }}
+          initialData={{ thesis, context, forma }}
           onSave={handleEditSave}
           onCancel={handleEditCancel}
         />
