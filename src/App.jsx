@@ -53,13 +53,13 @@ function App() {
         <DisplayScreen
           onNewArgumentaire={argumentaire.handleNewArgumentaire}
           thesis={argumentaire.thesis}
-          contexte={argumentaire.context}
+          context={argumentaire.context}
           forma={argumentaire.forma}
           onUpdateArgumentaire={argumentaire.handleUpdateArgumentaire}
           //onThesisChange={argumentaire.handleThesisChange}
           argumentTree={argumentaire.argumentTree}
           onAddArgument={argumentaire.handleAddArgument}
-          onAddSubArgument={argumentaire.handleAddArgument}
+          // onAddSubArgument={argumentaire.handleAddArgument}
           onEditArgument={argumentaire.handleEditArgument}
           onDeleteArgument={argumentaire.handleDeleteArgument}
           onExport={argumentaire.handleExport}

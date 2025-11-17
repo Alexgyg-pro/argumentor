@@ -126,8 +126,15 @@ export function useArgumentaire() {
    * @param {object} argumentData - Données de l'argument à ajouter
    */
   const handleAddArgument = (parentId, argumentData) => {
+    console.log(
+      "🔄 handleAddArgument appelé avec parentId:",
+      parentId,
+      "argumentData:",
+      argumentData
+    );
     const newArgument = {
       id: Date.now().toString(),
+      parentId: parentId,
       claim: argumentData.claim,
       claimComment: argumentData.claimComment || "",
       causa: argumentData.causa || "neutralis",
@@ -145,6 +152,7 @@ export function useArgumentaire() {
 
     // Fonction récursive pour ajouter l'argument au bon parent
     const addToTree = (node) => {
+      // Si c'est le parent qu'on cherche, on ajoute directement
       if (node.id === parentId) {
         return {
           ...node,
@@ -152,10 +160,33 @@ export function useArgumentaire() {
         };
       }
 
-      if (node.children) {
+      // Sinon, on cherche dans les enfants
+      if (node.children && node.children.length > 0) {
+        // Vérifier d'abord si le parent est dans les enfants directs
+        const directChildIndex = node.children.findIndex(
+          (child) => child.id === parentId
+        );
+        if (directChildIndex !== -1) {
+          // Parent trouvé dans les enfants directs - ajouter et s'arrêter
+          const updatedChildren = [...node.children];
+          updatedChildren[directChildIndex] = {
+            ...updatedChildren[directChildIndex],
+            children: [
+              ...(updatedChildren[directChildIndex].children || []),
+              newArgument,
+            ],
+          };
+          return {
+            ...node,
+            children: updatedChildren,
+          };
+        }
+
+        // Si pas trouvé dans les enfants directs, chercher récursivement
+        const updatedChildren = node.children.map((child) => addToTree(child));
         return {
           ...node,
-          children: node.children.map((child) => addToTree(child)),
+          children: updatedChildren,
         };
       }
 
@@ -201,6 +232,15 @@ export function useArgumentaire() {
 
     setArgumentTree(updateInTree(argumentTree));
     setIsDirty(true);
+  };
+
+  /**
+   * Déplace un argument vers un nouveau parent
+   */
+  const handleMoveArgument = (argumentId, newParentId) => {
+    // Validation : éviter les cycles (argument → ses propres descendants)
+    // Modification du parentId + restructuration de l'arbre
+    // + facile avec parentId explicite !
   };
 
   /**

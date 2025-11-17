@@ -7,7 +7,7 @@ function ArgumentNode({
   depth = 0,
   onDeleteArgument,
   onEditArgument,
-  onAddSubArgument,
+  onAddArgument,
 }) {
   const hasChildren = argument.children && argument.children.length > 0;
 
@@ -26,19 +26,32 @@ function ArgumentNode({
         </div>
         <div className="argument-actions">
           <button
-            onClick={() => onAddSubArgument(argument.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddArgument(argument.id);
+            }}
             title="Ajouter un sous-argument"
           >
             <PlusIcon size={12} />
           </button>
+          {console.log(
+            "Quand on clique sur +, parentId est",
+            argument.parentId
+          )}
           <button
-            onClick={() => onEditArgument(argument)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onEditArgument(argument);
+            }}
             title="Modifier l'argument"
           >
             <EditIcon size={12} />
           </button>
           <button
-            onClick={() => onDeleteArgument(argument.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDeleteArgument(argument.id);
+            }}
             title="Supprimer l'argument"
           >
             <TrashIcon size={12} />
@@ -54,9 +67,9 @@ function ArgumentNode({
               key={child.id}
               argument={child}
               depth={depth + 1}
-              onDeleteArgument={onDeleteArgument}
+              onAddArgument={onAddArgument}
               onEditArgument={onEditArgument}
-              onAddSubArgument={onAddSubArgument}
+              onDeleteArgument={onDeleteArgument}
             />
           ))}
         </div>
@@ -69,7 +82,7 @@ export function ArgumentTree({
   tree,
   onDeleteArgument,
   onEditArgument,
-  onAddSubArgument,
+  onAddArgument,
 }) {
   if (!tree || !tree.children || tree.children.length === 0) {
     return (
@@ -90,7 +103,7 @@ export function ArgumentTree({
             argument={argument}
             onDeleteArgument={onDeleteArgument}
             onEditArgument={onEditArgument}
-            onAddSubArgument={onAddSubArgument}
+            onAddArgument={onAddArgument}
           />
         ))}
       </div>

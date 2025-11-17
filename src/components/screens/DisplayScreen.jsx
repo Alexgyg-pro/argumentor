@@ -56,9 +56,9 @@ export function DisplayScreen({
     setShowArgumentForm(false);
   };
 
-  const handleAddArgumentClick = () => {
-    console.log("Add argument clicked");
-    setSelectedParentId("root");
+  const handleAddArgumentClick = (parentId = "root") => {
+    console.log("handleAddArgumentClick appelé avec parentId:", parentId);
+    setSelectedParentId(parentId);
     setEditingArgument(null);
     setShowArgumentForm(true);
   };
@@ -69,11 +69,11 @@ export function DisplayScreen({
   };
   //const [selectedParent, setSelectedParent] = useState("root");
 
-  const handleAddSubArgumentClick = (parentId) => {
-    setSelectedParentId(parentId);
-    setEditingArgument(null); // Mode création
-    setShowArgumentForm(true);
-  };
+  // const handleAddSubArgumentClick = (parentId) => {
+  //   setSelectedParentId(parentId);
+  //   setEditingArgument(null); // Mode création
+  //   setShowArgumentForm(true);
+  // };
 
   return (
     <div className="display-screen">
@@ -96,24 +96,22 @@ export function DisplayScreen({
           </div>
 
           {/* Les arguments */}
-          <button onClick={handleAddArgumentClick}>Ajouter un argument</button>
+          <button onClick={() => handleAddArgumentClick("root")}>
+            Ajouter un argument
+          </button>
 
           <ArgumentTree
             tree={argumentTree}
+            onAddArgument={handleAddArgumentClick}
             onEditArgument={handleEditArgumentClick}
             onDeleteArgument={onDeleteArgument}
-            onAddSubArgument={handleAddSubArgumentClick}
           />
 
-          {/* Formulaire d'argument en bas */}
+          {/* Formulaire unique */}
           {showArgumentForm && (
             <div className="argument-form-container">
               <h3>
-                {editingArgument
-                  ? "Modifier l'argument"
-                  : selectedParentId === "root"
-                  ? "Nouvel argument principal"
-                  : "Nouveau sous-argument"}
+                {editingArgument ? "Modifier l'argument" : "Nouvel argument"}
               </h3>
               <ArgumentForm
                 parentId={selectedParentId}
