@@ -59,6 +59,7 @@ function App() {
           //onThesisChange={argumentaire.handleThesisChange}
           argumentTree={argumentaire.argumentTree}
           onAddArgument={argumentaire.handleAddArgument}
+          onEditArgument={argumentaire.handleEditArgument}
           onDeleteArgument={argumentaire.handleDeleteArgument}
           onExport={argumentaire.handleExport}
           onImportInit={argumentaire.handleImportInit}

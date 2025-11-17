@@ -125,14 +125,79 @@ export function useArgumentaire() {
    */
   const handleAddArgument = (parentId, argumentData) => {
     const newArgument = {
-      id: Date.now(), // Solution simple pour un ID unique
-      claim: "Argument exemple " + (argumentTree.children.length + 1),
+      id: Date.now().toString(),
+      claim: argumentData.claim,
+      claimComment: argumentData.claimComment || "",
+      causa: argumentData.causa || "neutralis",
+      forma: argumentData.forma || "descriptif",
+      natura: argumentData.natura || "validity",
+      validity:
+        argumentData.validity !== undefined ? argumentData.validity : 0.5,
+      relevance:
+        argumentData.relevance !== undefined ? argumentData.relevance : 0.5,
+      value: argumentData.value !== undefined ? argumentData.value : 0.5,
+      weight: argumentData.weight !== undefined ? argumentData.weight : 0.5,
+      references: argumentData.references || [],
+      children: [],
     };
-    setArgumentTree({
-      ...argumentTree,
-      children: [...argumentTree.children, newArgument],
-    });
 
+    // Fonction récursive pour ajouter l'argument au bon parent
+    const addToTree = (node) => {
+      if (node.id === parentId) {
+        return {
+          ...node,
+          children: [...(node.children || []), newArgument],
+        };
+      }
+
+      if (node.children) {
+        return {
+          ...node,
+          children: node.children.map((child) => addToTree(child)),
+        };
+      }
+
+      return node;
+    };
+
+    setArgumentTree(addToTree(argumentTree));
+    setIsDirty(true);
+  };
+
+  /**
+   * Modifie un argument existant
+   * @param {string} argumentId - ID de l'argument à modifier
+   * @param {object} newData - Nouvelles données de l'argument
+   */
+  const handleEditArgument = (argumentId, newData) => {
+    const updateInTree = (node) => {
+      if (node.id === argumentId) {
+        return {
+          ...node,
+          claim: newData.claim,
+          claimComment: newData.claimComment,
+          causa: newData.causa,
+          forma: newData.forma,
+          natura: newData.natura,
+          validity: newData.validity,
+          relevance: newData.relevance,
+          value: newData.value,
+          weight: newData.weight,
+          references: newData.references,
+        };
+      }
+
+      if (node.children) {
+        return {
+          ...node,
+          children: node.children.map((child) => updateInTree(child)),
+        };
+      }
+
+      return node;
+    };
+
+    setArgumentTree(updateInTree(argumentTree));
     setIsDirty(true);
   };
 
@@ -206,6 +271,7 @@ export function useArgumentaire() {
 
     // Arguments
     handleAddArgument,
+    handleEditArgument,
     handleDeleteArgument,
   };
 }
