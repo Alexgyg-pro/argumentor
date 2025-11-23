@@ -1,10 +1,12 @@
 // src/App.jsx
+import "./App.module.css";
+import styles from "./App.module.css";
+import "./index.css";
 import { useState } from "react";
 import { useArgumentaire } from "./hooks/useArgumentaire";
-//import { ThesisInput } from "./components/ThesisInput";
-//import { ArgumentList } from "./components/ArgumentList";
-import { ExportButton } from "./components/ExportButton";
-import { ImportButton } from "./components/ImportButton";
+import { Header } from "./layout/Header";
+import { Menu } from "./layout/Menu";
+import { Footer } from "./layout/Footer";
 import { StartScreen } from "./components/screens/StartScreen";
 import { DisplayScreen } from "./components/screens/DisplayScreen";
 
@@ -22,61 +24,37 @@ import "./App.css";
 function App() {
   const argumentaire = useArgumentaire();
 
-  // const confirmNavigation = (actionCallback) => {
-  //   if (!isDirty) {
-  //     actionCallback(); // Exécute l'action directement si rien n'est modifié
-  //     return;
-  //   }
-
-  //   if (
-  //     window.confirm(
-  //       "Vous avez des modifications non sauvegardées. Voulez-vous sauvegarder avant de continuer ?"
-  //     )
-  //   ) {
-  //     // Ici, tu pourrais déclencher un export automatique puis faire l'action
-  //     handleExport(); // Tu devras créer cette fonction qui exporte et reset isDirty
-  //     actionCallback();
-  //   } else {
-  //     actionCallback(); // Ou exécute l'action sans sauvegarder
-  //   }
-  //   setIsDirty(false); // Reset l'état après l'action
-  // };
-
   return (
-    <div className="app">
-      {argumentaire.currentMode === "start" ? (
-        <StartScreen
-          onNewArgumentaire={argumentaire.handleNewArgumentaire}
-          onImportInit={argumentaire.handleImportInit}
-        />
-      ) : (
-        <DisplayScreen
-          onNewArgumentaire={argumentaire.handleNewArgumentaire}
-          thesis={argumentaire.thesis}
-          context={argumentaire.context}
-          forma={argumentaire.forma}
-          onUpdateArgumentaire={argumentaire.handleUpdateArgumentaire}
-          //onThesisChange={argumentaire.handleThesisChange}
-          argumentTree={argumentaire.argumentTree}
-          onAddArgument={argumentaire.handleAddArgument}
-          // onAddSubArgument={argumentaire.handleAddArgument}
-          onEditArgument={argumentaire.handleEditArgument}
-          onDeleteArgument={argumentaire.handleDeleteArgument}
-          onExport={argumentaire.handleExport}
-          onImportInit={argumentaire.handleImportInit}
-          fileInputRef={argumentaire.fileInputRef}
-          onFileSelect={argumentaire.handleFileSelect}
-        />
-      )}
-
-      {/* Input file caché pour l'import */}
-      {/* <input
-        type="file"
-        ref={argumentaire.fileInputRef}
-        onChange={argumentaire.handleFileSelect}
-        accept=".json"
-        style={{ display: "none" }}
-      /> */}
+    <div className={styles.app}>
+      <Header />
+      <Menu />
+      <main className={styles.main}>
+        <div className={styles.contentContainer}>
+          {argumentaire.currentMode === "start" ? (
+            <StartScreen
+              onNewArgumentaire={argumentaire.handleNewArgumentaire}
+              onImportInit={argumentaire.handleImportInit}
+            />
+          ) : (
+            <DisplayScreen
+              onNewArgumentaire={argumentaire.handleNewArgumentaire}
+              thesis={argumentaire.thesis}
+              context={argumentaire.context}
+              forma={argumentaire.forma}
+              onUpdateArgumentaire={argumentaire.handleUpdateArgumentaire}
+              argumentTree={argumentaire.argumentTree}
+              onAddArgument={argumentaire.handleAddArgument}
+              onEditArgument={argumentaire.handleEditArgument}
+              onDeleteArgument={argumentaire.handleDeleteArgument}
+              onExport={argumentaire.handleExport}
+              onImportInit={argumentaire.handleImportInit}
+              fileInputRef={argumentaire.fileInputRef}
+              onFileSelect={argumentaire.handleFileSelect}
+            />
+          )}
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }

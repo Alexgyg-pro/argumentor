@@ -1,0 +1,22 @@
+.header {
+  background-color: dimgray;
+  color: white;
+  padding: 10px;
+  margin: 0;
+  width: 100%;
+}
+
+/* .header {
+  background-color: dimgray !important;
+  color: white;
+  padding: 10px;
+  margin: 0 !important;
+  width: 100% !important;
+  border: 3px solid blue !important;
+} */
+
+.headerContent {
+  /* max-width: 1280px; */
+  margin: 0 auto;
+  text-align: left;
+}

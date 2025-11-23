@@ -1,0 +1,72 @@
+.menu {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.leftSection {
+  /* Rien de spécial, s'aligne à gauche naturellement */
+}
+
+/* .hommage {
+  font-family: "Palatino", "Times New Roman", serif;
+  font-variant: small-caps;  Majuscules élégantes 
+  color: #37474f;  Gris anthracite 
+  font-size: 1rem;
+  opacity: 0.9;
+} */
+
+.hommage {
+  font-family: "Georgia", serif; /* Police classique et lisible */
+  font-style: italic; /* Discrètement distingué */
+  color: #5d4037; /* Brun profond, sobre */
+  letter-spacing: 0.5px; /* Légère espacement pour l'élégance */
+  font-size: 0.9rem;
+}
+
+.rightSection {
+  display: flex;
+  gap: 2rem;
+}
+
+.menuItem {
+  color: #2c3e50;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  position: relative;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  color: #2980b9;
+}
+
+/* Sous-ligne animée au hover */
+.menuItem::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #2980b9;
+  transition: width 0.3s ease;
+}
+
+.menuItem:hover::after {
+  width: 100%;
+}
+
+/* Style actif (pour indiquer la page courante) */
+.menuItemActive {
+  color: #2980b9;
+}
+
+.menuItemActive::after {
+  width: 100%;
+}
