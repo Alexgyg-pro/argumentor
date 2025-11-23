@@ -4,9 +4,9 @@ import styles from "./App.module.css";
 import "./index.css";
 import { useState } from "react";
 import { useArgumentaire } from "./hooks/useArgumentaire";
-import { Header } from "./layout/Header";
-import { Menu } from "./layout/Menu";
-import { Footer } from "./layout/Footer";
+import { Header } from "./components/layout/Header";
+import { Menu } from "./components/layout/Menu";
+import { Footer } from "./components/layout/Footer";
 import { StartScreen } from "./components/screens/StartScreen";
 import { DisplayScreen } from "./components/screens/DisplayScreen";
 

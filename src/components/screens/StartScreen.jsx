@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ArgumentaireForm } from "../forms/ArgumentaireForm";
 import { HiddenFileInput } from "../common/HiddenFileInput";
+import styles from "./StartScreen.module.css";
 
 export function StartScreen({
   onNewArgumentaire,
@@ -25,27 +26,33 @@ export function StartScreen({
     setShowForm(false);
   };
   return (
-    <div className="start-screen">
-      <h1>Argumentor</h1>
+    <div className={styles.startscreen}>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Bienvenue dans Argumentor</h1>
 
-      {!showForm ? (
-        <>
-          <button onClick={handleNewClick}>Nouvel argumentaire</button>
-          <button onClick={onImportInit}>Ouvrir un argumentaire</button>
-        </>
-      ) : (
-        <ArgumentaireForm
-          initialData={{}}
-          onSave={handleFormSave}
-          onCancel={handleFormCancel}
+        {!showForm ? (
+          <div className={styles.actions}>
+            <button onClick={handleNewClick} className={styles.primaryButton}>
+              Nouveau
+            </button>
+            <button onClick={onImportInit} className={styles.secondaryButton}>
+              Importer
+            </button>
+          </div>
+        ) : (
+          <ArgumentaireForm
+            initialData={{}}
+            onSave={handleFormSave}
+            onCancel={handleFormCancel}
+          />
+        )}
+
+        {/* Input file caché pour l'import */}
+        <HiddenFileInput
+          fileInputRef={fileInputRef}
+          onFileSelect={onFileSelect}
         />
-      )}
-
-      {/* Input file caché pour l'import */}
-      <HiddenFileInput
-        fileInputRef={fileInputRef}
-        onFileSelect={onFileSelect}
-      />
+      </div>
     </div>
   );
 }
