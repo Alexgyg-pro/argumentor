@@ -28,23 +28,27 @@ export function StartScreen({
   return (
     <div className={styles.startscreen}>
       <div className={styles.container}>
-        <h1 className={styles.title}>Bienvenue dans Argumentor</h1>
-
         {!showForm ? (
-          <div className={styles.actions}>
-            <button onClick={handleNewClick} className={styles.primaryButton}>
-              Nouveau
-            </button>
-            <button onClick={onImportInit} className={styles.secondaryButton}>
-              Importer
-            </button>
-          </div>
+          <>
+            <h1 className={styles.title}>Bienvenue dans Argumentor</h1>
+            <div className={styles.actions}>
+              <button onClick={handleNewClick} className={styles.primaryButton}>
+                Nouveau
+              </button>
+              <button onClick={onImportInit} className={styles.secondaryButton}>
+                Importer
+              </button>
+            </div>
+          </>
         ) : (
-          <ArgumentaireForm
-            initialData={{}}
-            onSave={handleFormSave}
-            onCancel={handleFormCancel}
-          />
+          <>
+            <h3 className={styles.title}>Nouvel argumentaire</h3>
+            <ArgumentaireForm
+              initialData={{}}
+              onSave={handleFormSave}
+              onCancel={handleFormCancel}
+            />
+          </>
         )}
 
         {/* Input file caché pour l'import */}

@@ -1,5 +1,6 @@
 // src/components/forms/ArgumentaireForm.jsx
 import { useState, useEffect } from "react";
+import styles from "./Forms.module.css";
 
 export function ArgumentaireForm({ initialData = {}, onSave, onCancel }) {
   const [formData, setFormData] = useState({
@@ -25,20 +26,27 @@ export function ArgumentaireForm({ initialData = {}, onSave, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="argumentaire-form">
-      <div className="form-group">
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.formGroup}>
         <label htmlFor="thesis">Thèse principale :</label>
-        <input
+        <textarea
+          className={styles.textarea}
+          value={formData.thesis} //
+          onChange={(e) => setFormData({ ...formData, thesis: e.target.value })}
+          placeholder="Énoncez votre proposition principale..."
+          required
+        />
+        {/* <input
           id="thesis"
           type="text"
           value={formData.thesis}
           onChange={(e) => setFormData({ ...formData, thesis: e.target.value })}
           placeholder="Votre thèse principale..."
           required
-        />
+        /> */}
       </div>
 
-      <div className="form-group">
+      <div className={styles.formGroup}>
         <label htmlFor="context">Contexte :</label>
         <textarea
           id="context"
@@ -51,7 +59,7 @@ export function ArgumentaireForm({ initialData = {}, onSave, onCancel }) {
         />
       </div>
 
-      <div className="form-group">
+      <div className={styles.formGroup}>
         <label htmlFor="forma">Forma :</label>
         <select
           id="forma"
@@ -64,9 +72,15 @@ export function ArgumentaireForm({ initialData = {}, onSave, onCancel }) {
         </select>
       </div>
 
-      <div className="form-actions">
-        <button type="submit">Valider</button>
-        <button type="button" onClick={onCancel}>
+      <div className={styles.formActions}>
+        <button className={styles.primaryButton} type="submit">
+          Valider
+        </button>
+        <button
+          className={styles.secondaryButton}
+          type="button"
+          onClick={onCancel}
+        >
           Annuler
         </button>
       </div>
