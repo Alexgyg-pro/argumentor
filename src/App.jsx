@@ -37,6 +37,7 @@ function App() {
             />
           ) : (
             <DisplayScreen
+              argumentaire={argumentaire}
               onNewArgumentaire={argumentaire.handleNewArgumentaire}
               thesis={argumentaire.thesis}
               context={argumentaire.context}

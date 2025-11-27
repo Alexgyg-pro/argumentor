@@ -4,8 +4,10 @@ import { ArgumentaireForm } from "../forms/ArgumentaireForm";
 import { ArgumentForm } from "../forms/ArgumentForm";
 import { HiddenFileInput } from "../common/HiddenFileInput";
 import { useState } from "react";
+import styles from "./DisplayScreen.module.css";
 
 export function DisplayScreen({
+  argumentaire,
   onNewArgumentaire,
   thesis,
   context,
@@ -24,7 +26,9 @@ export function DisplayScreen({
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [selectedParentId, setSelectedParentId] = useState("root");
   const [editingArgument, setEditingArgument] = useState(null);
+  const [activeTab, setActiveTab] = useState("arguments");
 
+  // console.log("DisplayScreen argumentaire:", argumentaire); <- Vérifier avant de supprimer : soupçon de défaut de perfs.
   if (!argumentTree) {
     return <div>Chargement de l'arbre...</div>;
   }
@@ -76,69 +80,122 @@ export function DisplayScreen({
   // };
 
   return (
-    <div className="display-screen">
-      <h1>Mon Argumentaire</h1>
+    <div className={styles.displayScreen}>
+      <main>
+        <div>
+          <div className={styles.thesisCard}>
+            <div className={styles.thesisHeader}>
+              <h2 className={styles.thesisTitle}>{argumentaire.thesis}</h2>
+              <span className={styles.thesisForma}>{argumentaire.forma}</span>
+            </div>
 
-      {/* Affichage des données */}
-      {!showEditForm ? (
-        <>
-          <div className="argumentaire-info">
-            <h2>Thèse : {thesis}</h2>
-            <p>
-              <strong>Contexte :</strong> {context}
-            </p>
-            <p>
-              <strong>Forma :</strong> {forma}
-            </p>
-            <button onClick={() => setShowEditForm(true)}>
-              Modifier l'argumentaire
-            </button>
+            {/* ✅ AFFICHER LE CONTEXTE SI IL EXISTE */}
+            {argumentaire.context && argumentaire.context.trim() && (
+              <div className={styles.thesisContext}>
+                <h4>Contexte :</h4>
+                <p>{argumentaire.context}</p>
+              </div>
+            )}
+            <div className={styles.editButtonContainer}>
+              <button className={styles.editButton}>Modifier</button>
+            </div>
           </div>
 
-          {/* Les arguments */}
-          <button onClick={() => handleAddArgumentClick("root")}>
-            Ajouter un argument
-          </button>
-
-          <ArgumentTree
-            tree={argumentTree}
-            onAddArgument={handleAddArgumentClick}
-            onEditArgument={handleEditArgumentClick}
-            onDeleteArgument={onDeleteArgument}
-          />
-
-          {/* Formulaire unique */}
-          {showArgumentForm && (
-            <div className="argument-form-container">
-              <h3>
-                {editingArgument ? "Modifier l'argument" : "Nouvel argument"}
-              </h3>
-              <ArgumentForm
-                parentId={selectedParentId}
-                initialData={editingArgument || {}}
-                onSave={handleArgumentSave}
-                onCancel={handleArgumentCancel}
+          {/* Onglets Arguments/Références/Définitions */}
+          <div className={styles.tabsContainer}>
+            <div className={styles.tabs}>
+              <button
+                className={`${styles.tab} ${
+                  activeTab === "arguments" ? styles.activeTab : ""
+                }`}
+                onClick={() => setActiveTab("arguments")}
+              >
+                Arguments (0)
+              </button>
+              <button
+                className={`${styles.tab} ${
+                  activeTab === "references" ? styles.activeTab : ""
+                }`}
+                onClick={() => setActiveTab("references")}
+              >
+                Références (0)
+              </button>
+              <button
+                className={`${styles.tab} ${
+                  activeTab === "definitions" ? styles.activeTab : ""
+                }`}
+                onClick={() => setActiveTab("definitions")}
+              >
+                Définitions (0)
+              </button>
+            </div>
+          </div>
+          {/* Contenu des onglets */}
+          {activeTab === "arguments" && (
+            <div>
+              {" "}
+              <button onClick={() => handleAddArgumentClick("root")}>
+                Ajouter un argument
+              </button>
+              <ArgumentTree
+                tree={argumentTree}
+                onAddArgument={handleAddArgumentClick}
+                onEditArgument={handleEditArgumentClick}
+                onDeleteArgument={onDeleteArgument}
               />
             </div>
           )}
+          {activeTab === "references" && <div>Contenu Références</div>}
+          {activeTab === "definitions" && <div>Contenu Définitions</div>}
+        </div>
+        {/* Affichage des données */}
+        {!showEditForm ? (
+          <>
+            {/* Les arguments */}
+            <button onClick={() => handleAddArgumentClick("root")}>
+              Ajouter un argument
+            </button>
 
-          <button onClick={onExport}>Exporter</button>
-          <button onClick={onNewArgumentaire}>Nouvel argumentaire</button>
-          <button onClick={onImportInit}>Ouvrir un argumentaire</button>
-        </>
-      ) : (
-        <ArgumentaireForm
-          initialData={{ thesis, context, forma }}
-          onSave={handleEditSave}
-          onCancel={handleEditCancel}
+            <ArgumentTree
+              tree={argumentTree}
+              onAddArgument={handleAddArgumentClick}
+              onEditArgument={handleEditArgumentClick}
+              onDeleteArgument={onDeleteArgument}
+            />
+
+            {/* Formulaire unique */}
+            {showArgumentForm && (
+              <div className="argument-form-container">
+                <h3>
+                  {editingArgument ? "Modifier l'argument" : "Nouvel argument"}
+                </h3>
+                <ArgumentForm
+                  parentId={selectedParentId}
+                  initialData={editingArgument || {}}
+                  onSave={handleArgumentSave}
+                  onCancel={handleArgumentCancel}
+                />
+              </div>
+            )}
+
+            <button onClick={onExport}>Exporter</button>
+            <button onClick={onNewArgumentaire}>Nouvel argumentaire</button>
+            <button onClick={onImportInit}>Ouvrir un argumentaire</button>
+          </>
+        ) : (
+          <ArgumentaireForm
+            initialData={{ thesis, context, forma }}
+            onSave={handleEditSave}
+            onCancel={handleEditCancel}
+          />
+        )}
+
+        {/* Input file caché pour l'import */}
+        <HiddenFileInput
+          fileInputRef={fileInputRef}
+          onFileSelect={onFileSelect}
         />
-      )}
-
-      {/* Input file caché pour l'import */}
-      <HiddenFileInput
-        fileInputRef={fileInputRef}
-        onFileSelect={onFileSelect}
-      />
+      </main>
     </div>
   );
 }
