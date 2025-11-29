@@ -126,12 +126,6 @@ export function useArgumentaire() {
    * @param {object} argumentData - Données de l'argument à ajouter
    */
   const handleAddArgument = (parentId, argumentData) => {
-    console.log(
-      "🔄 handleAddArgument appelé avec parentId:",
-      parentId,
-      "argumentData:",
-      argumentData
-    );
     const newArgument = {
       id: Date.now().toString(),
       parentId: parentId,

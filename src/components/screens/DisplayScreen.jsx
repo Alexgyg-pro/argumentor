@@ -28,7 +28,7 @@ export function DisplayScreen({
   const [editingArgument, setEditingArgument] = useState(null);
   const [activeTab, setActiveTab] = useState("arguments");
 
-  // console.log("DisplayScreen argumentaire:", argumentaire); <- Vérifier avant de supprimer : soupçon de défaut de perfs.
+  console.log("ArgumentTree:", argumentTree.children.length);
   if (!argumentTree) {
     return <div>Chargement de l'arbre...</div>;
   }
@@ -133,10 +133,15 @@ export function DisplayScreen({
           {/* Contenu des onglets */}
           {activeTab === "arguments" && (
             <div>
-              {" "}
-              <button onClick={() => handleAddArgumentClick("root")}>
-                Ajouter un argument
-              </button>
+              <div className={styles.argumentsHeader}>
+                <h3>Arguments</h3>
+                <button
+                  onClick={() => handleAddArgumentClick("root")}
+                  className={styles.addArgumentButton}
+                >
+                  Ajouter un argument
+                </button>
+              </div>
               <ArgumentTree
                 tree={argumentTree}
                 onAddArgument={handleAddArgumentClick}
@@ -151,18 +156,6 @@ export function DisplayScreen({
         {/* Affichage des données */}
         {!showEditForm ? (
           <>
-            {/* Les arguments */}
-            <button onClick={() => handleAddArgumentClick("root")}>
-              Ajouter un argument
-            </button>
-
-            <ArgumentTree
-              tree={argumentTree}
-              onAddArgument={handleAddArgumentClick}
-              onEditArgument={handleEditArgumentClick}
-              onDeleteArgument={onDeleteArgument}
-            />
-
             {/* Formulaire unique */}
             {showArgumentForm && (
               <div className="argument-form-container">
@@ -178,9 +171,11 @@ export function DisplayScreen({
               </div>
             )}
 
+            {/* 
+            Ne pas jeté tant que StartScreen et les menus ne fonctionnent pas correctement.
             <button onClick={onExport}>Exporter</button>
             <button onClick={onNewArgumentaire}>Nouvel argumentaire</button>
-            <button onClick={onImportInit}>Ouvrir un argumentaire</button>
+            <button onClick={onImportInit}>Ouvrir un argumentaire</button> */}
           </>
         ) : (
           <ArgumentaireForm

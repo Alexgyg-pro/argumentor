@@ -1,5 +1,20 @@
 // src/components/ArgumentTree.jsx
-import { TrashIcon, EditIcon, PlusIcon } from "./common/Icons";
+import {
+  ReticleIcon,
+  ReticleIcon2,
+  TargetIcon,
+  LinkIcon,
+  RelevanceIcon,
+  ArrowUpDownIcon,
+  ArrowUpDownIcon2,
+  ChevronUpDownIcon,
+  ChevronUpDownIcon2,
+  TrashIcon,
+  EditIcon,
+  PlusIcon,
+} from "./common/Icons";
+// import { Icon } from "./common/Icon";
+import styles from "./ArgumentTree.module.css";
 
 // Composant récursif pour un argument
 function ArgumentNode({
@@ -12,53 +27,63 @@ function ArgumentNode({
   const hasChildren = argument.children && argument.children.length > 0;
 
   return (
-    <div className="argument-node" style={{ marginLeft: `${depth * 20}px` }}>
-      <div className="argument-content">
-        <span className="argument-claim">• {argument.claim}</span>
-        <div className="argument-details">
+    <>
+      <div
+        className={styles.argumentNode}
+        style={{ marginLeft: `${depth * 20}px` }}
+      >
+        <div className={styles.argumentHeader}>
+          <ReticleIcon2 />
+          <LinkIcon />
+          <RelevanceIcon />
+          p1C1N1
+          <ChevronUpDownIcon />
+        </div>
+        <div className={styles.argumentBody}>
+          <span className={styles.argumentId}>#0001</span> -{" "}
+          <span className={styles.argumentClaim}>{argument.claim}</span>
+        </div>
+        <div className={styles.argumentFooter}>
+          <p className={styles.natura}>{argument.natura}</p>
           <small>
             {argument.causa} | {argument.forma} | {argument.natura} | Validité:{" "}
             {argument.validity} | Pertinence: {argument.relevance}
           </small>
-          {argument.claimComment && (
+          {/* {argument.claimComment && (
             <p className="argument-comment">{argument.claimComment}</p>
-          )}
-        </div>
-        <div className="argument-actions">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onAddArgument(argument.id);
-            }}
-            title="Ajouter un sous-argument"
-          >
-            <PlusIcon size={12} />
-          </button>
-          {console.log(
-            "Quand on clique sur +, parentId est",
-            argument.parentId
-          )}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onEditArgument(argument);
-            }}
-            title="Modifier l'argument"
-          >
-            <EditIcon size={12} />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onDeleteArgument(argument.id);
-            }}
-            title="Supprimer l'argument"
-          >
-            <TrashIcon size={12} />
-          </button>
+          )} */}
+          <div className={styles.argumentActions}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onAddArgument(argument.id);
+              }}
+              title="Ajouter un sous-argument"
+            >
+              <PlusIcon size={12} />
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditArgument(argument);
+              }}
+              title="Modifier l'argument"
+            >
+              <EditIcon size={12} />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteArgument(argument.id);
+              }}
+              title="Supprimer l'argument"
+            >
+              <TrashIcon size={12} />
+            </button>
+          </div>
         </div>
       </div>
-
       {/* Affichage récursif des enfants */}
       {hasChildren && (
         <div className="argument-children">
@@ -74,7 +99,7 @@ function ArgumentNode({
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
 
@@ -87,7 +112,6 @@ export function ArgumentTree({
   if (!tree || !tree.children || tree.children.length === 0) {
     return (
       <div className="argument-tree">
-        <h2>Vos arguments</h2>
         <p className="empty-message">Aucun argument pour le moment.</p>
       </div>
     );
@@ -95,7 +119,6 @@ export function ArgumentTree({
 
   return (
     <div className="argument-tree">
-      <h2>Vos arguments</h2>
       <div className="arguments-list">
         {tree.children.map((argument) => (
           <ArgumentNode

@@ -116,3 +116,30 @@
   font-weight: bold;
   color: dimgrey;
 }
+
+/* Styles pour l'onglet Arguments */
+.argumentsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.addArgumentButton {
+  background-color: dimgrey;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.addArgumentButton:hover {
+  background-color: #696969;
+}
+
+.globalActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
