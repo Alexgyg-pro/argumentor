@@ -4,6 +4,13 @@ import { ArgumentaireForm } from "../forms/ArgumentaireForm";
 import { HiddenFileInput } from "../common/HiddenFileInput";
 import styles from "./StartScreen.module.css";
 
+/**
+ * Écran d'accueil de l'application
+ * @param {Function} onNewArgumentaire - Créer un nouvel argumentaire
+ * @param {Function} onImportInit - Ouvrir l'explorateur de fichiers
+ * @param {Object} fileInputRef - Référence vers l'input file caché
+ * @param {Function} onFileSelect - Gérer la sélection de fichier
+ */
 export function StartScreen({
   onNewArgumentaire,
   onImportInit,

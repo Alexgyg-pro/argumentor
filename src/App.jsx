@@ -34,6 +34,8 @@ function App() {
             <StartScreen
               onNewArgumentaire={argumentaire.handleNewArgumentaire}
               onImportInit={argumentaire.handleImportInit}
+              fileInputRef={argumentaire.fileInputRef}
+              onFileSelect={argumentaire.handleFileSelect}
             />
           ) : (
             <DisplayScreen

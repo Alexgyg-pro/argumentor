@@ -6,6 +6,24 @@ import { HiddenFileInput } from "../common/HiddenFileInput";
 import { useState } from "react";
 import styles from "./DisplayScreen.module.css";
 
+/**
+ * Écran principal d'affichage et d'édition de l'argumentaire
+ *
+ * @param {Object} argumentaire - L'état complet de l'argumentaire
+ * @param {Function} onNewArgumentaire - Créer un nouvel argumentaire (réinitialise tout)
+ * @param {string} thesis - La thèse principale de l'argumentaire
+ * @param {string} context - Le contexte de la thèse
+ * @param {string} forma - La forme de la thèse (descriptif, normatif, etc.)
+ * @param {Function} onUpdateArgumentaire - Mettre à jour les métadonnées de l'argumentaire
+ * @param {Object} argumentTree - La structure arborescente des arguments
+ * @param {Function} onAddArgument - Ajouter un nouvel argument
+ * @param {Function} onEditArgument - Modifier un argument existant
+ * @param {Function} onDeleteArgument - Supprimer un argument
+ * @param {Function} onExport - Exporter l'argumentaire en JSON
+ * @param {Function} onImportInit - Ouvrir l'explorateur de fichiers pour importer
+ * @param {Object} fileInputRef - Référence vers l'input file caché
+ * @param {Function} onFileSelect - Gérer la sélection de fichier d'import
+ */
 export function DisplayScreen({
   argumentaire,
   onNewArgumentaire,
@@ -171,11 +189,12 @@ export function DisplayScreen({
               </div>
             )}
 
+            <button onClick={onImportInit}>Ouvrir un argumentaire</button>
             {/* 
-            Ne pas jeté tant que StartScreen et les menus ne fonctionnent pas correctement.
+            Ne pas jeter tant que StartScreen et les menus ne fonctionnent pas correctement.
             <button onClick={onExport}>Exporter</button>
             <button onClick={onNewArgumentaire}>Nouvel argumentaire</button>
-            <button onClick={onImportInit}>Ouvrir un argumentaire</button> */}
+            */}
           </>
         ) : (
           <ArgumentaireForm
