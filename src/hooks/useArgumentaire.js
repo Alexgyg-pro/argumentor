@@ -381,6 +381,7 @@ export function useArgumentaire() {
     handleUpdateArgumentaire,
     editingArgumentaire,
     setEditingArgumentaire,
+    handleCancelEdit,
     // handleThesisChange,
 
     // Import

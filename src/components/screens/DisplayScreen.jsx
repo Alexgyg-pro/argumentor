@@ -32,6 +32,7 @@ export function DisplayScreen({
   forma,
   onUpdateArgumentaire,
   argumentTree,
+  onEdit,
   onExport,
   onImportInit,
   onAddArgument,
@@ -115,7 +116,15 @@ export function DisplayScreen({
               </div>
             )}
             <div className={styles.editButtonContainer}>
-              <button className={styles.editButton}>Modifier</button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  onEdit?.();
+                }}
+                className={styles.editButton}
+              >
+                Modifier
+              </button>
             </div>
           </div>
 

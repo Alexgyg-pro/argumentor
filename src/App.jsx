@@ -49,6 +49,7 @@ function App() {
               onImportInit={argumentaire.handleImportInit}
               fileInputRef={argumentaire.fileInputRef}
               onFileSelect={argumentaire.handleFileSelect}
+              onEdit={() => argumentaire.setEditingArgumentaire(true)}
               autoShowForm={argumentaire.currentMode === "start-with-form"}
             />
           ) : argumentaire.currentMode === "display" ? (
@@ -59,7 +60,8 @@ function App() {
                 thesis={argumentaire.thesis}
                 context={argumentaire.context}
                 forma={argumentaire.forma}
-                onUpdateArgumentaire={argumentaire.handleUpdateArgumentaire}
+                // onUpdateArgumentaire={argumentaire.handleUpdateArgumentaire}
+                onEdit={() => argumentaire.setEditingArgumentaire(true)}
                 argumentTree={argumentaire.argumentTree}
                 onAddArgument={argumentaire.handleAddArgument}
                 onEditArgument={argumentaire.handleEditArgument}
