@@ -10,6 +10,7 @@ import { Footer } from "./components/layout/Footer";
 import { StartScreen } from "./components/screens/StartScreen";
 import { DisplayScreen } from "./components/screens/DisplayScreen";
 import { ArgumentaireForm } from "./components/forms/ArgumentaireForm";
+import { ArgumentaireModal } from "./components/modals/ArgumentaireModal";
 
 import {
   PlusIcon,
@@ -71,13 +72,19 @@ function App() {
                 fileInputRef={argumentaire.fileInputRef}
                 onFileSelect={argumentaire.handleFileSelect}
               />
+              <ArgumentaireModal
+                isOpen={argumentaire.editingArgumentaire}
+                onClose={argumentaire.handleCancelEdit}
+                onSave={argumentaire.handleUpdateArgumentaire}
+                initialData={{
+                  thesis: argumentaire.thesis,
+                  context: argumentaire.context,
+                  forma: argumentaire.forma,
+                }}
+              />
+
               {/* MODALE D'ÉDITION - s'affiche par-dessus DisplayScreen */}
-              {console.log(
-                "📱 App - editingArgumentaire:",
-                argumentaire.editingArgumentaire
-              )}
-              {argumentaire.editingArgumentaire &&
-                (console.log("🎯 Modal d'édition devrait s'afficher"),
+              {/* {argumentaire.editingArgumentaire &&
                 (
                   <div className="modal-overlay">
                     <div className="modal-content">
@@ -93,7 +100,7 @@ function App() {
                       />
                     </div>
                   </div>
-                ))}
+                ))} */}
             </>
           ) : null}
         </div>
