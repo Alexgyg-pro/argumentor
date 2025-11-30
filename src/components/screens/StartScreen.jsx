@@ -1,5 +1,5 @@
 // src/components/screens/StartScreen.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArgumentaireForm } from "../forms/ArgumentaireForm";
 import { HiddenFileInput } from "../common/HiddenFileInput";
 import styles from "./StartScreen.module.css";
@@ -16,8 +16,13 @@ export function StartScreen({
   onImportInit,
   fileInputRef,
   onFileSelect,
+  autoShowForm = false,
 }) {
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(autoShowForm);
+
+  useEffect(() => {
+    setShowForm(autoShowForm);
+  }, [autoShowForm]);
 
   const handleNewClick = () => {
     setShowForm(true);
@@ -25,7 +30,7 @@ export function StartScreen({
 
   const handleFormSave = (formData) => {
     // Ici on va initialiser l'argumentaire avec les données du formulaire
-    onNewArgumentaire(formData);
+    onNewArgumentaire(formData, false);
     setShowForm(false);
   };
 

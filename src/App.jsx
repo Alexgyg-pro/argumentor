@@ -27,17 +27,27 @@ function App() {
   return (
     <div className={styles.app}>
       <Header />
-      <Menu />
+      <Menu
+        onNew={argumentaire.handleMenuNew}
+        onImport={argumentaire.handleMenuImport}
+        onEdit={argumentaire.handleEdit}
+        onSave={argumentaire.handleSave}
+        onExport={argumentaire.handleMenuExport}
+        onHelp={argumentaire.handleHelp}
+      />
       <main className={styles.main}>
         <div className={styles.contentContainer}>
-          {argumentaire.currentMode === "start" ? (
+          {console.log("📱 App - currentMode:", argumentaire.currentMode)}
+          {argumentaire.currentMode === "start" ||
+          argumentaire.currentMode === "start-with-form" ? (
             <StartScreen
               onNewArgumentaire={argumentaire.handleNewArgumentaire}
               onImportInit={argumentaire.handleImportInit}
               fileInputRef={argumentaire.fileInputRef}
               onFileSelect={argumentaire.handleFileSelect}
+              autoShowForm={argumentaire.currentMode === "start-with-form"}
             />
-          ) : (
+          ) : argumentaire.currentMode === "display" ? (
             <DisplayScreen
               argumentaire={argumentaire}
               onNewArgumentaire={argumentaire.handleNewArgumentaire}
@@ -54,7 +64,7 @@ function App() {
               fileInputRef={argumentaire.fileInputRef}
               onFileSelect={argumentaire.handleFileSelect}
             />
-          )}
+          ) : null}
         </div>
       </main>
       <Footer />

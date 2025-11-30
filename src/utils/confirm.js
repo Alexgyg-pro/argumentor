@@ -1,3 +1,5 @@
+// src/utils/confirm.js
+
 /**
  * Messages de confirmation prédéfinis
  */

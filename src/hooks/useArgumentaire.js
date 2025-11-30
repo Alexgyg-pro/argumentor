@@ -8,6 +8,7 @@ export function useArgumentaire() {
   const [forma, setForma] = useState("Descriptif");
   const [currentMode, setCurrentMode] = useState("start");
   const [isDirty, setIsDirty] = useState(false);
+  const [shouldAutoShowForm, setShouldAutoShowForm] = useState(false);
   const fileInputRef = useRef(null);
 
   // Pour l'arbre des arguments
@@ -17,7 +18,25 @@ export function useArgumentaire() {
   /**
    * Initialise un nouvel argumentaire vide
    */
-  const handleNewArgumentaire = (formData = {}) => {
+  // const handleNewArgumentaire = (formData = {}) => {
+  //   setThesis(formData.thesis || "");
+  //   setContext(formData.context || "");
+  //   setForma(formData.forma || "Descriptif");
+  //   setArgumentTree({
+  //     id: "root",
+  //     claim: formData.thesis || "",
+  //     children: [],
+  //   });
+  //   setCurrentMode("display");
+  //   setIsDirty(true);
+  // };
+
+  const handleNewArgumentaire = (formData = {}, forceShowForm = false) => {
+    console.log(
+      "🎯 handleNewArgumentaire appelé, forceShowForm:",
+      forceShowForm
+    );
+
     setThesis(formData.thesis || "");
     setContext(formData.context || "");
     setForma(formData.forma || "Descriptif");
@@ -26,8 +45,19 @@ export function useArgumentaire() {
       claim: formData.thesis || "",
       children: [],
     });
-    setCurrentMode("display");
-    setIsDirty(false);
+
+    const hasData = formData.thesis || formData.context || formData.forma;
+    setIsDirty(!!hasData);
+
+    console.log("📝 Avant setCurrentMode, forceShowForm:", forceShowForm);
+
+    if (forceShowForm) {
+      console.log("🚀 Set mode: start-with-form");
+      setCurrentMode("start-with-form");
+    } else {
+      console.log("🚀 Set mode: display");
+      setCurrentMode("display");
+    }
   };
 
   /**
@@ -272,6 +302,25 @@ export function useArgumentaire() {
     setIsDirty(true);
   };
 
+  // FONCTIONS DU MENU
+  const handleMenuNew = () => {
+    if (confirmIfDirty(isDirty)) {
+      handleNewArgumentaire({}, true);
+    }
+  };
+
+  const handleMenuImport = () => {
+    if (confirmIfDirty(isDirty)) {
+      handleImportInit();
+    }
+  };
+
+  const handleMenuExport = () => {
+    if (confirmIfDirty(isDirty)) {
+      handleExport();
+    }
+  };
+
   // FONCTIONS UTILITAIRES
   // Fonction utilitaire pour trouver un argument par ID
   const findArgumentById = (node, id) => {
@@ -310,5 +359,10 @@ export function useArgumentaire() {
     handleAddArgument,
     handleEditArgument,
     handleDeleteArgument,
+
+    // Menu
+    handleMenuNew,
+    handleMenuImport,
+    handleMenuExport,
   };
 }
