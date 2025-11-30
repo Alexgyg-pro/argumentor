@@ -1,4 +1,6 @@
 // src/layout/Menu.jsx
+
+import { confirmIfDirty } from "../../utils/confirm.js";
 import styles from "./Menu.module.css";
 
 export function Menu({
@@ -9,6 +11,7 @@ export function Menu({
   onDownload,
   onExport,
   onHelp,
+  isDirty,
 }) {
   return (
     <nav className={styles.menu}>
@@ -21,7 +24,9 @@ export function Menu({
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            onNew?.();
+            if (confirmIfDirty(isDirty)) {
+              onNew?.();
+            }
           }}
           className={styles.menuItem}
         >
@@ -31,7 +36,9 @@ export function Menu({
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            onImport?.();
+            if (confirmIfDirty(isDirty)) {
+              onImport?.();
+            }
           }}
           className={styles.menuItem}
         >

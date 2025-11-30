@@ -323,35 +323,35 @@ export function useArgumentaire() {
   };
 
   // FONCTIONS DU MENU
-  const handleMenuNew = () => {
-    if (confirmIfDirty(isDirty)) {
-      handleNewArgumentaire({}, true);
-    }
-  };
+  // const handleMenuNew = () => {
+  //   if (confirmIfDirty(isDirty)) {
+  //     handleNewArgumentaire({}, true);
+  //   }
+  // };
 
-  const handleMenuImport = () => {
-    if (confirmIfDirty(isDirty)) {
-      handleImportInit();
-    }
-  };
+  // const handleMenuImport = () => {
+  //   if (confirmIfDirty(isDirty)) {
+  //     handleImportInit();
+  //   }
+  // };
 
-  const handleMenuEdit = () => {
-    console.log("🎯 handleMenuEdit appelé");
-    console.log("📝 Avant setEditingArgumentaire:", editingArgumentaire);
-    setEditingArgumentaire(true);
-    setTimeout(() => {
-      console.log(
-        "📝 Après setEditingArgumentaire (via timeout):",
-        editingArgumentaire
-      );
-    }, 0);
-  };
+  // const handleMenuEdit = () => {
+  //   console.log("🎯 handleMenuEdit appelé");
+  //   console.log("📝 Avant setEditingArgumentaire:", editingArgumentaire);
+  //   setEditingArgumentaire(true);
+  //   setTimeout(() => {
+  //     console.log(
+  //       "📝 Après setEditingArgumentaire (via timeout):",
+  //       editingArgumentaire
+  //     );
+  //   }, 0);
+  // };
 
-  const handleMenuExport = () => {
-    if (confirmIfDirty(isDirty)) {
-      handleDownload();
-    }
-  };
+  // const handleMenuExport = () => {
+  //   if (confirmIfDirty(isDirty)) {
+  //     handleDownload();
+  //   }
+  // };
 
   // FONCTIONS UTILITAIRES
   // Fonction utilitaire pour trouver un argument par ID
@@ -400,9 +400,9 @@ export function useArgumentaire() {
     handleDeleteArgument,
 
     // Menu
-    handleMenuNew,
-    handleMenuImport,
-    handleMenuEdit,
-    handleMenuExport,
+    // handleMenuNew,
+    // handleMenuImport,
+    // handleMenuEdit,
+    // handleMenuExport,
   };
 }

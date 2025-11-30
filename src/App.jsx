@@ -29,12 +29,14 @@ function App() {
     <div className={styles.app}>
       <Header />
       <Menu
-        onNew={argumentaire.handleMenuNew}
-        onImport={argumentaire.handleMenuImport}
-        onEdit={argumentaire.handleMenuEdit}
+        isDirty={argumentaire.isDirty}
+        onNew={() => argumentaire.handleNewArgumentaire({}, true)}
+        onImport={argumentaire.handleImportInit}
+        // onEdit={argumentaire.handleMenuEdit}
+        onEdit={() => argumentaire.setEditingArgumentaire(true)}
         onSave={argumentaire.handleSave}
         onDownload={argumentaire.handleDownload}
-        onExport={argumentaire.handleMenuExport}
+        onExport={argumentaire.handleExportPdf}
         onHelp={argumentaire.handleHelp}
       />
       <main className={styles.main}>
