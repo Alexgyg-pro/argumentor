@@ -19,7 +19,16 @@ export function Menu({ onNew, onImport, onEdit, onSave, onExport, onHelp }) {
         >
           Nouveau
         </a>
-        <a className={styles.menuItem}>Importer</a>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            onImport?.();
+          }}
+          className={styles.menuItem}
+        >
+          Importer
+        </a>
         <a className={styles.menuItem}>Modifier</a>
         <a className={styles.menuItem}>Sauvegarder</a>
         <a className={styles.menuItem}>Exporter</a>

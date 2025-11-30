@@ -84,8 +84,7 @@ export function useArgumentaire() {
    * Initialise le processus d'import en déclenchant la sélection de fichier
    */
   const handleImportInit = () => {
-    console.log("handleImportInit called");
-    if (!confirmIfDirty(isDirty)) return;
+    // if (!confirmIfDirty(isDirty)) return;
     fileInputRef.current?.click();
   };
 
