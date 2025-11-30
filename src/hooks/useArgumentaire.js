@@ -20,21 +20,6 @@ export function useArgumentaire() {
   }, [editingArgumentaire]);
 
   // MODIFICATION DE L'ENSEMBLE DE L'ARGUMENTAIRE
-  /**
-   * Initialise un nouvel argumentaire vide
-   */
-  // const handleNewArgumentaire = (formData = {}) => {
-  //   setThesis(formData.thesis || "");
-  //   setContext(formData.context || "");
-  //   setForma(formData.forma || "Descriptif");
-  //   setArgumentTree({
-  //     id: "root",
-  //     claim: formData.thesis || "",
-  //     children: [],
-  //   });
-  //   setCurrentMode("display");
-  //   setIsDirty(true);
-  // };
 
   const handleNewArgumentaire = (formData = {}, forceShowForm = false) => {
     console.log(
@@ -80,15 +65,6 @@ export function useArgumentaire() {
   const handleCancelEdit = () => {
     setEditingArgumentaire(false);
   };
-
-  /**
-   * Met à jour la thèse principale (à supprimer, puisqu'il y a handleUpdateArgumentaire ?)
-   * @param {string} newValue
-   */
-  // const handleThesisChange = (newValue) => {
-  //   setThesis(newValue);
-  //   setIsDirty(true);
-  // };
 
   // IMPORT/EXPORT - Tout intégré ici
   /**
@@ -322,37 +298,6 @@ export function useArgumentaire() {
     setIsDirty(true);
   };
 
-  // FONCTIONS DU MENU
-  // const handleMenuNew = () => {
-  //   if (confirmIfDirty(isDirty)) {
-  //     handleNewArgumentaire({}, true);
-  //   }
-  // };
-
-  // const handleMenuImport = () => {
-  //   if (confirmIfDirty(isDirty)) {
-  //     handleImportInit();
-  //   }
-  // };
-
-  // const handleMenuEdit = () => {
-  //   console.log("🎯 handleMenuEdit appelé");
-  //   console.log("📝 Avant setEditingArgumentaire:", editingArgumentaire);
-  //   setEditingArgumentaire(true);
-  //   setTimeout(() => {
-  //     console.log(
-  //       "📝 Après setEditingArgumentaire (via timeout):",
-  //       editingArgumentaire
-  //     );
-  //   }, 0);
-  // };
-
-  // const handleMenuExport = () => {
-  //   if (confirmIfDirty(isDirty)) {
-  //     handleDownload();
-  //   }
-  // };
-
   // FONCTIONS UTILITAIRES
   // Fonction utilitaire pour trouver un argument par ID
   const findArgumentById = (node, id) => {
@@ -399,11 +344,5 @@ export function useArgumentaire() {
     handleAddArgument,
     handleEditArgument,
     handleDeleteArgument,
-
-    // Menu
-    // handleMenuNew,
-    // handleMenuImport,
-    // handleMenuEdit,
-    // handleMenuExport,
   };
 }

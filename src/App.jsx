@@ -2,25 +2,13 @@
 import "./App.module.css";
 import styles from "./App.module.css";
 import "./index.css";
-import { useState } from "react";
 import { useArgumentaire } from "./hooks/useArgumentaire";
 import { Header } from "./components/layout/Header";
 import { Menu } from "./components/layout/Menu";
 import { Footer } from "./components/layout/Footer";
 import { StartScreen } from "./components/screens/StartScreen";
 import { DisplayScreen } from "./components/screens/DisplayScreen";
-import { ArgumentaireForm } from "./components/forms/ArgumentaireForm";
 import { ArgumentaireModal } from "./components/modals/ArgumentaireModal";
-
-import {
-  PlusIcon,
-  DownloadIcon,
-  UploadIcon,
-  EditIcon,
-  TrashIcon,
-  PdfIcon,
-  NewIcon,
-} from "./components/common/Icons";
 import "./App.css";
 
 function App() {
@@ -82,25 +70,6 @@ function App() {
                   forma: argumentaire.forma,
                 }}
               />
-
-              {/* MODALE D'ÉDITION - s'affiche par-dessus DisplayScreen */}
-              {/* {argumentaire.editingArgumentaire &&
-                (
-                  <div className="modal-overlay">
-                    <div className="modal-content">
-                      <h2>Modifier l'argumentaire</h2>
-                      <ArgumentaireForm
-                        initialData={{
-                          thesis: argumentaire.thesis,
-                          context: argumentaire.context,
-                          forma: argumentaire.forma,
-                        }}
-                        onSave={argumentaire.handleUpdateArgumentaire}
-                        onCancel={argumentaire.handleCancelEdit}
-                      />
-                    </div>
-                  </div>
-                ))} */}
             </>
           ) : null}
         </div>
