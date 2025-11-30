@@ -135,17 +135,23 @@ export function useArgumentaire() {
     reader.readAsText(file);
   };
 
+  const handleSave = () => {
+    console.log("💾 Enregistrement local - à implémenter");
+    // Futur: sauvegarde automatique dans le localStorage/navigateur
+    setIsDirty(false);
+  };
+
   /**
-   * Exporte l'argumentaire actuel en fichier JSON
+   * Download l'argumentaire actuel en fichier JSON
    */
-  const handleExport = () => {
+  const handleDownload = () => {
     const data = {
       thesis,
       context,
       forma,
       tree: argumentTree,
       version: "1.0",
-      exportedAt: new Date().toISOString(),
+      downloadedAt: new Date().toISOString(),
     };
 
     const jsonString = JSON.stringify(data, null, 2);
@@ -158,6 +164,10 @@ export function useArgumentaire() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  const handleExportPdf = () => {
+    console.log("📄 Export PDF - à implémenter");
   };
 
   // GESTION DES ARGUMENTS
@@ -339,7 +349,7 @@ export function useArgumentaire() {
 
   const handleMenuExport = () => {
     if (confirmIfDirty(isDirty)) {
-      handleExport();
+      handleDownload();
     }
   };
 
@@ -366,18 +376,23 @@ export function useArgumentaire() {
     isDirty,
     argumentTree,
 
-    // Actions principales
+    // Actions sur l'argumentaire
     handleNewArgumentaire,
     handleUpdateArgumentaire,
     editingArgumentaire,
     setEditingArgumentaire,
     // handleThesisChange,
 
-    // Import/Export
+    // Import
     handleImportInit,
     handleFileSelect,
-    handleExport,
+    // handleExport,
     fileInputRef,
+
+    // Téléchargement
+    handleDownload,
+    handleSave,
+    handleExportPdf,
 
     // Arguments
     handleAddArgument,

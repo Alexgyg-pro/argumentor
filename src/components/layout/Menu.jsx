@@ -1,7 +1,15 @@
 // src/layout/Menu.jsx
 import styles from "./Menu.module.css";
 
-export function Menu({ onNew, onImport, onEdit, onSave, onExport, onHelp }) {
+export function Menu({
+  onNew,
+  onImport,
+  onEdit,
+  onSave,
+  onDownload,
+  onExport,
+  onHelp,
+}) {
   return (
     <nav className={styles.menu}>
       <div className={styles.leftSection}>
@@ -39,9 +47,46 @@ export function Menu({ onNew, onImport, onEdit, onSave, onExport, onHelp }) {
         >
           Modifier
         </a>
-        <a className={styles.menuItem}>Sauvegarder</a>
-        <a className={styles.menuItem}>Exporter</a>
-        <a className={styles.menuItem}>?</a>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            onSave?.();
+          }}
+          className={styles.menuItem}
+        >
+          Sauvegarder
+        </a>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            onDownload?.();
+          }}
+          className={styles.menuItem}
+        >
+          Télécharger
+        </a>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            onExport?.();
+          }}
+          className={styles.menuItem}
+        >
+          Exporter
+        </a>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            onHelp?.();
+          }}
+          className={styles.menuItem}
+        >
+          ?
+        </a>
       </div>
     </nav>
   );

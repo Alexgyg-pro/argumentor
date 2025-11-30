@@ -189,10 +189,10 @@ export function DisplayScreen({
               </div>
             )}
 
-            <button onClick={onImportInit}>Ouvrir un argumentaire</button>
-            <button onClick={onNewArgumentaire}>Nouvel argumentaire</button>
             {/* 
             Ne pas jeter tant que StartScreen et les menus ne fonctionnent pas correctement.
+            <button onClick={onImportInit}>Ouvrir un argumentaire</button>
+            <button onClick={onNewArgumentaire}>Nouvel argumentaire</button>
             <button onClick={onExport}>Exporter</button>
             */}
           </>

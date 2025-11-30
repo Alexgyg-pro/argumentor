@@ -33,6 +33,7 @@ function App() {
         onImport={argumentaire.handleMenuImport}
         onEdit={argumentaire.handleMenuEdit}
         onSave={argumentaire.handleSave}
+        onDownload={argumentaire.handleDownload}
         onExport={argumentaire.handleMenuExport}
         onHelp={argumentaire.handleHelp}
       />
