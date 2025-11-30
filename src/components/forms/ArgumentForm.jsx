@@ -1,5 +1,6 @@
 // src/components/forms/ArgumentForm.jsx
 import { useState, useEffect } from "react";
+import styles from "./Forms.module.css";
 
 export function ArgumentForm({ parentId, initialData = {}, onSave, onCancel }) {
   const [formData, setFormData] = useState(() => ({
@@ -64,20 +65,21 @@ export function ArgumentForm({ parentId, initialData = {}, onSave, onCancel }) {
 
   return (
     <form onSubmit={handleSubmit} className="argument-form">
-      <div className="form-group">
-        <label htmlFor="claim">Argument :</label>
-        <input
+      <div className={styles.mt20}>
+        <label htmlFor="claim">Argument</label>
+        <textarea
           id="claim"
-          type="text"
+          className={styles.claim}
           value={formData.claim}
           onChange={(e) => setFormData({ ...formData, claim: e.target.value })}
           placeholder="Votre argument..."
           required
+          rows="1"
         />
       </div>
 
-      <div className="form-group">
-        <label htmlFor="claimComment">Commentaire sur l'argument :</label>
+      <div className={styles.mt20}>
+        <label htmlFor="claimComment">Commentaire sur l'argument</label>
         <textarea
           id="claimComment"
           value={formData.claimComment}
@@ -89,9 +91,9 @@ export function ArgumentForm({ parentId, initialData = {}, onSave, onCancel }) {
         />
       </div>
 
-      <div className="form-row">
+      <div className={styles.groupOfHorizontalControls + " " + styles.mt20}>
         <div className="form-group">
-          <label htmlFor="causa">Causa :</label>
+          <label htmlFor="causa">Causa</label>
           <select
             id="causa"
             value={formData.causa}
@@ -106,7 +108,7 @@ export function ArgumentForm({ parentId, initialData = {}, onSave, onCancel }) {
         </div>
 
         <div className="form-group">
-          <label htmlFor="forma">Forma :</label>
+          <label htmlFor="forma">Forma</label>
           <select
             id="forma"
             value={formData.forma}
@@ -121,7 +123,7 @@ export function ArgumentForm({ parentId, initialData = {}, onSave, onCancel }) {
         </div>
 
         <div className="form-group">
-          <label htmlFor="natura">Natura :</label>
+          <label htmlFor="natura">Natura</label>
           <select
             id="natura"
             value={formData.natura}
@@ -135,7 +137,7 @@ export function ArgumentForm({ parentId, initialData = {}, onSave, onCancel }) {
         </div>
       </div>
 
-      <div className="form-row">
+      <div className={styles.groupOfHorizontalControls + " " + styles.mt20}>
         <div className="form-group">
           <label htmlFor="validity">Validité : {formData.validity}</label>
           <input
@@ -168,9 +170,9 @@ export function ArgumentForm({ parentId, initialData = {}, onSave, onCancel }) {
             }
           />
         </div>
-      </div>
+        {/* </div>
 
-      <div className="form-row">
+      <div className="form-row"> */}
         <div className="form-group">
           <label htmlFor="value">Valeur : {formData.value}</label>
           <input
@@ -202,29 +204,25 @@ export function ArgumentForm({ parentId, initialData = {}, onSave, onCancel }) {
         </div>
       </div>
 
-      <div className="form-group">
-        <label>Références :</label>
-        {formData.references.map((reference, index) => (
-          <div key={index} className="reference-item">
-            <input
-              type="text"
-              value={reference}
-              onChange={(e) => handleReferenceChange(index, e.target.value)}
-              placeholder="Référence..."
-            />
-            <button type="button" onClick={() => removeReference(index)}>
-              ×
-            </button>
-          </div>
-        ))}
-        <button type="button" onClick={addReference}>
-          + Ajouter une référence
+      <div className={styles.mt20 + " " + styles.textAlignRight}>
+        <button
+          type="button"
+          className={styles.primaryButton}
+          onClick={addReference}
+        >
+          Ajouter une référence
         </button>
       </div>
 
-      <div className="form-actions">
-        <button type="submit">Valider</button>
-        <button type="button" onClick={onCancel}>
+      <div className={styles.actionContainer + " " + styles.mt40}>
+        <button type="submit" className={styles.primaryButton}>
+          Valider
+        </button>
+        <button
+          type="button"
+          className={styles.secondaryButton}
+          onClick={onCancel}
+        >
           Annuler
         </button>
       </div>

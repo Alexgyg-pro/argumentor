@@ -82,3 +82,49 @@ select {
 .secondaryButton:hover {
   background-color: #e8e8e8;
 }
+
+.groupOfHorizontalControls {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.argumentButton:hover {
+  background-color: #696969;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.mt40 {
+  margin-top: 40px;
+}
+
+.textAlignRight {
+  text-align: right;
+}
+
+.actionContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+label {
+  display: block;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.claim {
+  width: 100%;
+  resize: vertical; /* Permet à l'utilisateur de redimensionner */
+  min-height: 60px;
+  max-height: 200px;
+}

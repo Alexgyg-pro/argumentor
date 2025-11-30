@@ -33,11 +33,14 @@ function ArgumentNode({
         style={{ marginLeft: `${depth * 20}px` }}
       >
         <div className={styles.argumentHeader}>
-          <ReticleIcon2 />
-          <LinkIcon />
-          <RelevanceIcon />
-          p1C1N1
-          <ChevronUpDownIcon />
+          <div>
+            <ReticleIcon2 />
+            <LinkIcon />
+            p1C1N1
+          </div>
+          <div>
+            <ChevronUpDownIcon />
+          </div>
         </div>
         <div className={styles.argumentBody}>
           <span className={styles.argumentId}>#0001</span> -{" "}
