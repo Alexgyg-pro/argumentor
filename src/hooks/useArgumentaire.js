@@ -1,5 +1,5 @@
 // src/hooks/useArgumentaire.js
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { confirmIfDirty } from "../utils/confirm";
 
 export function useArgumentaire() {
@@ -9,10 +9,15 @@ export function useArgumentaire() {
   const [currentMode, setCurrentMode] = useState("start");
   const [isDirty, setIsDirty] = useState(false);
   const [shouldAutoShowForm, setShouldAutoShowForm] = useState(false);
+  const [editingArgumentaire, setEditingArgumentaire] = useState(false);
   const fileInputRef = useRef(null);
 
   // Pour l'arbre des arguments
   const [argumentTree, setArgumentTree] = useState(null);
+
+  useEffect(() => {
+    console.log("🔄 editingArgumentaire a changé:", editingArgumentaire);
+  }, [editingArgumentaire]);
 
   // MODIFICATION DE L'ENSEMBLE DE L'ARGUMENTAIRE
   /**
@@ -64,20 +69,26 @@ export function useArgumentaire() {
    * Met à jour l'argumentaire complet
    */
   const handleUpdateArgumentaire = (formData) => {
+    console.log("🎯 handleUpdateArgumentaire appelé");
     setThesis(formData.thesis);
     setContext(formData.context);
     setForma(formData.forma);
     setIsDirty(true);
+    setEditingArgumentaire(false);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingArgumentaire(false);
   };
 
   /**
    * Met à jour la thèse principale (à supprimer, puisqu'il y a handleUpdateArgumentaire ?)
    * @param {string} newValue
    */
-  const handleThesisChange = (newValue) => {
-    setThesis(newValue);
-    setIsDirty(true);
-  };
+  // const handleThesisChange = (newValue) => {
+  //   setThesis(newValue);
+  //   setIsDirty(true);
+  // };
 
   // IMPORT/EXPORT - Tout intégré ici
   /**
@@ -314,6 +325,18 @@ export function useArgumentaire() {
     }
   };
 
+  const handleMenuEdit = () => {
+    console.log("🎯 handleMenuEdit appelé");
+    console.log("📝 Avant setEditingArgumentaire:", editingArgumentaire);
+    setEditingArgumentaire(true);
+    setTimeout(() => {
+      console.log(
+        "📝 Après setEditingArgumentaire (via timeout):",
+        editingArgumentaire
+      );
+    }, 0);
+  };
+
   const handleMenuExport = () => {
     if (confirmIfDirty(isDirty)) {
       handleExport();
@@ -346,7 +369,9 @@ export function useArgumentaire() {
     // Actions principales
     handleNewArgumentaire,
     handleUpdateArgumentaire,
-    handleThesisChange,
+    editingArgumentaire,
+    setEditingArgumentaire,
+    // handleThesisChange,
 
     // Import/Export
     handleImportInit,
@@ -362,6 +387,7 @@ export function useArgumentaire() {
     // Menu
     handleMenuNew,
     handleMenuImport,
+    handleMenuEdit,
     handleMenuExport,
   };
 }

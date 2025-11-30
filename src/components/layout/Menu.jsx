@@ -29,7 +29,16 @@ export function Menu({ onNew, onImport, onEdit, onSave, onExport, onHelp }) {
         >
           Importer
         </a>
-        <a className={styles.menuItem}>Modifier</a>
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            onEdit?.();
+          }}
+          className={styles.menuItem}
+        >
+          Modifier
+        </a>
         <a className={styles.menuItem}>Sauvegarder</a>
         <a className={styles.menuItem}>Exporter</a>
         <a className={styles.menuItem}>?</a>

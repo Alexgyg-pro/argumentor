@@ -9,6 +9,7 @@ import { Menu } from "./components/layout/Menu";
 import { Footer } from "./components/layout/Footer";
 import { StartScreen } from "./components/screens/StartScreen";
 import { DisplayScreen } from "./components/screens/DisplayScreen";
+import { ArgumentaireForm } from "./components/forms/ArgumentaireForm";
 
 import {
   PlusIcon,
@@ -30,7 +31,7 @@ function App() {
       <Menu
         onNew={argumentaire.handleMenuNew}
         onImport={argumentaire.handleMenuImport}
-        onEdit={argumentaire.handleEdit}
+        onEdit={argumentaire.handleMenuEdit}
         onSave={argumentaire.handleSave}
         onExport={argumentaire.handleMenuExport}
         onHelp={argumentaire.handleHelp}
@@ -48,22 +49,47 @@ function App() {
               autoShowForm={argumentaire.currentMode === "start-with-form"}
             />
           ) : argumentaire.currentMode === "display" ? (
-            <DisplayScreen
-              argumentaire={argumentaire}
-              onNewArgumentaire={argumentaire.handleNewArgumentaire}
-              thesis={argumentaire.thesis}
-              context={argumentaire.context}
-              forma={argumentaire.forma}
-              onUpdateArgumentaire={argumentaire.handleUpdateArgumentaire}
-              argumentTree={argumentaire.argumentTree}
-              onAddArgument={argumentaire.handleAddArgument}
-              onEditArgument={argumentaire.handleEditArgument}
-              onDeleteArgument={argumentaire.handleDeleteArgument}
-              onExport={argumentaire.handleExport}
-              onImportInit={argumentaire.handleImportInit}
-              fileInputRef={argumentaire.fileInputRef}
-              onFileSelect={argumentaire.handleFileSelect}
-            />
+            <>
+              <DisplayScreen
+                argumentaire={argumentaire}
+                onNewArgumentaire={argumentaire.handleNewArgumentaire}
+                thesis={argumentaire.thesis}
+                context={argumentaire.context}
+                forma={argumentaire.forma}
+                onUpdateArgumentaire={argumentaire.handleUpdateArgumentaire}
+                argumentTree={argumentaire.argumentTree}
+                onAddArgument={argumentaire.handleAddArgument}
+                onEditArgument={argumentaire.handleEditArgument}
+                onDeleteArgument={argumentaire.handleDeleteArgument}
+                onExport={argumentaire.handleExport}
+                onImportInit={argumentaire.handleImportInit}
+                fileInputRef={argumentaire.fileInputRef}
+                onFileSelect={argumentaire.handleFileSelect}
+              />
+              {/* MODALE D'ÉDITION - s'affiche par-dessus DisplayScreen */}
+              {console.log(
+                "📱 App - editingArgumentaire:",
+                argumentaire.editingArgumentaire
+              )}
+              {argumentaire.editingArgumentaire &&
+                (console.log("🎯 Modal d'édition devrait s'afficher"),
+                (
+                  <div className="modal-overlay">
+                    <div className="modal-content">
+                      <h2>Modifier l'argumentaire</h2>
+                      <ArgumentaireForm
+                        initialData={{
+                          thesis: argumentaire.thesis,
+                          context: argumentaire.context,
+                          forma: argumentaire.forma,
+                        }}
+                        onSave={argumentaire.handleUpdateArgumentaire}
+                        onCancel={argumentaire.handleCancelEdit}
+                      />
+                    </div>
+                  </div>
+                ))}
+            </>
           ) : null}
         </div>
       </main>
