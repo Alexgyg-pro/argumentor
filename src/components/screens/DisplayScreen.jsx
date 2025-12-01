@@ -2,6 +2,8 @@
 import { ArgumentTree } from "../ArgumentTree";
 import { ArgumentaireForm } from "../forms/ArgumentaireForm";
 import { ArgumentForm } from "../forms/ArgumentForm";
+import { ArgumentModal } from "../modals/ArgumentModal";
+import { ArgumentaireModal } from "../modals/ArgumentaireModal";
 import { HiddenFileInput } from "../common/HiddenFileInput";
 import { useState } from "react";
 import styles from "./DisplayScreen.module.css";
@@ -189,11 +191,18 @@ export function DisplayScreen({
                 <h3>
                   {editingArgument ? "Modifier l'argument" : "Nouvel argument"}
                 </h3>
-                <ArgumentForm
+                {/* <ArgumentForm
                   parentId={selectedParentId}
                   initialData={editingArgument || {}}
                   onSave={handleArgumentSave}
                   onCancel={handleArgumentCancel}
+                /> */}
+                <ArgumentModal
+                  isOpen={showArgumentForm}
+                  onClose={() => setShowArgumentForm(false)}
+                  onSave={handleArgumentSave}
+                  initialData={editingArgument || {}}
+                  parentId={selectedParentId}
                 />
               </div>
             )}
@@ -206,10 +215,16 @@ export function DisplayScreen({
             */}
           </>
         ) : (
-          <ArgumentaireForm
-            initialData={{ thesis, context, forma }}
+          // <ArgumentaireForm
+          //   initialData={{ thesis, context, forma }}
+          //   onSave={handleEditSave}
+          //   onCancel={handleEditCancel}
+          // />
+          <ArgumentaireModal
+            isOpen={showEditForm}
+            onClose={handleEditCancel}
             onSave={handleEditSave}
-            onCancel={handleEditCancel}
+            initialData={{ thesis, context, forma }}
           />
         )}
 
