@@ -1,0 +1,171 @@
+# Current README.md file structure
+
+docs/
+└── filestructure.md
+src/
+├── assets/
+│ ├── react.svg
+├── components/
+│ ├── argument/
+│ ├── common/ # Reusable UI components
+| │ ├── HiddenFileInput.jsx
+| │ ├── Icon.jsx
+| │ ├── Icons.jsx
+│ ├── definition/
+| │ ├── DefinitionsManager.jsx
+| │ ├── DefinitionsManager.module.css
+| │ ├── forms/
+| | │ ├── ArgumentaireForm.jsx
+| | │ ├── ArgumentForm.jsx
+| | │ ├── DefinitionForm.jsx
+| | │ ├── Forms.jsx
+| | │ ├── Forms.module.css
+│ ├── layout/
+| │ ├── Footer.jsx
+| │ ├── Header.jsx
+| │ ├── Header.module.css
+| │ ├── Menu.jsx
+| │ ├── Menu.module.css
+│ ├── modals/
+| │ ├── ArgumentaireModal.jsx
+| │ ├── ArgumentModal.jsx
+| │ ├── Modal.jsx
+| │ ├── Modal.module.css
+│ ├── references/
+| │ ├── ReferenceList.jsx
+| │ ├── ReferenceList.module.css
+| │ ├── ReferenceSelector.test.jsx
+│ ├── screens/ # Main view components
+| │ ├── DisplayScreen.jsx
+| │ ├── DisplayScreen.module.css
+| │ ├── StartScreen.jsx
+| │ ├── StartScreen.module.css
+│ ├── ArgumentTree.jsx
+│ ├── ArgumentTree.module.css
+├── hooks/
+│ ├── useArgumentaire.js # Global app state orchestration
+│ ├── useDefinitions.js 
+├── utils/
+│ ├── confirm.js
+└── App.css
+└── App.jsx
+└── App.module.css
+└── index.css
+└── main.jsx
+.eslintrc.cjs
+.gitignore
+eslint.config.js
+index.html
+package-lock.json
+package.json
+README.md
+vite.config.js
+
+---
+
+# old README.md file structure
+
+docs/
+src/
+├── tests/ # Comprehensive test suite
+│ ├── argumentIdManagement.test.js
+│ ├── argumentListPropagation.test.jsx
+│ ├── argumentArgumentCreation.test.jsx
+│ ├── Icon.test.jsx
+├── assets/
+│ ├── react.svg
+│ ├── styles.css
+├── components/
+│ ├── argument/
+│ │ ├── ArgumentCard.jsx # Recursive argument with collapse
+│ │ ├── ArgumentCard.module.css
+│ │ ├── ArgumentCard.test.jsx
+│ │ ├── ArgumentEditForm.jsx # Argument modification modal
+│ │ ├── ArgumentEditForm.module.css
+│ │ ├── ArgumentItem.jsx # Individual argument display
+│ │ ├── ArgumentItem.test.jsx
+│ │ ├── ArgumentList.jsx # Root argument list
+│ ├── common/ # Reusable UI components
+| │ ├── forms/
+| | │ ├── Form.jsx
+| | │ ├── Form.module.css
+| | │ ├── FormActions.jsx
+| | │ ├── FormActions.module.css
+| | │ ├── FormField.jsx
+| | │ ├── FormField.module.css
+| │ ├── AlertBanner.jsx
+| │ ├── AlertBanner.module.css
+| │ ├── ExportButton.jsx
+| │ ├── FileImput.jsx
+| │ ├── ImportButton.jsx
+| │ ├── Modal.jsx
+| │ ├── Modal.module.css
+| │ ├── NavigationConfirmModal.jsx
+| │ ├── NavigationConfirmModal.module.css
+| │ ├── NewArgumentaireModal.jsx
+| │ ├── NewArgumentaireModal.module.css
+│ ├── definition/
+| │ ├── DefinitionsManager.jsx
+| │ ├── DefinitionsManager.module.css
+| │ ├── DefinitionsManager.test.jsx
+│ ├── layout/ # App layout components
+| │ ├── Footer.jsx
+| │ ├── Footer.module.css
+| │ ├── Header.jsx
+| │ ├── Header.module.css
+| │ ├── Menu.jsx
+| │ ├── Menu.module.css
+│ ├── reference/
+| │ ├── ReferenceSelector.jsx
+| │ ├── ReferenceSelector.module.css
+| │ ├── ReferenceSelector.test.jsx
+| │ ├── ReferencesManager.jsx
+| │ ├── ReferencesManager.module.css
+| │ ├── ReferencesManager.test.jsx
+│ ├── screens/ # Main view components
+| │ ├── ChoiceScreen.jsx
+| │ ├── ChoiceScreen.module.css
+| │ ├── EditingScreen.jsx
+| │ ├── EditingScreen.module.css
+│ ├── thesis/
+| │ ├── EditThesisModal.jsx
+| │ ├── ThesisDisplay.jsx
+| │ ├── ThesisEditor.jsx
+| │ ├── ThesisEditor.module.css
+| │ ├── ThesisModal.jsx
+| │ ├── ThesisModal.module.css
+│ ├── Icon.jsx
+├── hooks/
+│ ├── useArgumentaire.js # Global app state orchestration
+│ ├── useArguments.js # Core argument tree management
+│ ├── useArguments.test.js
+│ ├── useDefinitions.js # Definition management
+│ ├── useDefinitions.test.js
+│ ├── useFileImport.js
+│ └── useReferences.js # Reference management
+│ └── useReferences.test.js
+├── utils/
+│ ├── argumentOperations.js # Pure tree manipulation functions
+│ ├── argumentOperations.test.js
+│ ├── calculations.js # Business logic computations
+│ ├── calculations.test.js
+│ ├── definitionUtils.js # Business logic computations
+│ ├── definitionUtils.test.js
+│ └── importExport.js # Data serialization utilities
+│ ├── referenceUtils.js # Business logic computations
+│ ├── referenceUtils.test.js
+└── App.css
+└── App.jsx
+└── App.module.css
+└── index.css
+└── main.jsx
+└── output.css
+.eslintrc.cjs
+.gitignore
+babel.config.msj
+eslint.config.js
+package-lock.json
+package.json
+project-map.js
+setupTests.js
+vite.config.js

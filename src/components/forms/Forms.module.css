@@ -128,3 +128,76 @@ label {
   min-height: 60px;
   max-height: 200px;
 }
+
+/* ***************** VIENT DE FORMFIELD DANS 1ère VERSION ***************** */
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* .label {
+  font-weight: bold;
+  color: #374151;
+} */
+
+.required {
+  color: #ef4444;
+  margin-left: 0.25rem;
+}
+
+.formField input,
+.formField textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px; /* Coins arrondis comme DefinitionsManager */
+  font-family: inherit;
+}
+
+.formField textarea {
+  min-height: 120px; /* Hauteur minimale comme DefinitionsManager */
+  resize: vertical;
+}
+
+.formField input:focus,
+.formField textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* ***************** VIENT DE FORMACTIONS DANS 1ère VERSION ***************** */
+
+.formActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.formActions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.formActions button[type="submit"] {
+  background: #3b82f6;
+  color: white;
+}
+
+.formActions button[type="submit"]:hover {
+  background: #2563eb;
+}
+
+.formActions button[type="button"] {
+  background: #6b7280;
+  color: white;
+}
+
+.formActions button[type="button"]:hover {
+  background: #4b5563;
+}

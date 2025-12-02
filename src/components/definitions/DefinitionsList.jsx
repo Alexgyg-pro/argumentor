@@ -1,4 +1,6 @@
-export function DefinitionsList() {
+import { DefinitionForm } from "../forms/DefinitionForm";
+
+export function DefinitionsList({ onAddDefinition = false }) {
   return (
     <div>
       {false ? (
@@ -10,6 +12,7 @@ export function DefinitionsList() {
           <li>Définition 3</li>
         </ul>
       )}
+      {onAddDefinition && <DefinitionForm />}
     </div>
   );
 }

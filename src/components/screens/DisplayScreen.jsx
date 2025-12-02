@@ -7,7 +7,7 @@ import { ArgumentaireModal } from "../modals/ArgumentaireModal";
 import { HiddenFileInput } from "../common/HiddenFileInput";
 import { useState } from "react";
 import styles from "./DisplayScreen.module.css";
-import { ReferencesList } from "../references/ReferncesList";
+import { ReferencesList } from "../references/ReferencesList";
 import { DefinitionsList } from "../definitions/DefinitionsList";
 
 /**
@@ -50,8 +50,8 @@ export function DisplayScreen({
   const [selectedParentId, setSelectedParentId] = useState("root");
   const [editingArgument, setEditingArgument] = useState(null);
   const [activeTab, setActiveTab] = useState("arguments");
+  const [showDefinitionForm, setShowDefinitionForm] = useState(false);
 
-  console.log("ArgumentTree:", argumentTree.children.length);
   if (!argumentTree) {
     return <div>Chargement de l'arbre...</div>;
   }
@@ -84,7 +84,6 @@ export function DisplayScreen({
   };
 
   const handleAddArgumentClick = (parentId = "root") => {
-    console.log("handleAddArgumentClick appelé avec parentId:", parentId);
     setSelectedParentId(parentId);
     setEditingArgument(null);
     setShowArgumentForm(true);
@@ -94,13 +93,23 @@ export function DisplayScreen({
     setEditingArgument(argument); // Stocker l'argument à modifier
     setShowArgumentForm(true);
   };
-  //const [selectedParent, setSelectedParent] = useState("root");
 
-  // const handleAddSubArgumentClick = (parentId) => {
-  //   setSelectedParentId(parentId);
-  //   setEditingArgument(null); // Mode création
-  //   setShowArgumentForm(true);
-  // };
+  // DEFINITIONS HANDLERS (à implémenter plus tard)
+  const handleNewDefinitionClick = (definitionData) => {
+    console.log("Ajouter une nouvelle définition :", definitionData);
+    setShowDefinitionForm(true);
+    // if (editingDefinition) {
+    //   // Mode modification - CORRECT
+    //   onEditDefinition(editingDefinition.id, definitionData);
+    // } else {
+    //   // Mode création
+    //   onAddDefinition(definitionData);
+    // }
+    // setShowArgumentForm(false);
+    // setEditingArgument(null);
+  };
+
+  // REFERENCES HANDLERS (à implémenter plus tard)
 
   return (
     <div className={styles.displayScreen}>
@@ -206,13 +215,13 @@ export function DisplayScreen({
               <div className={styles.argumentsHeader}>
                 <h3>Définitions</h3>
                 <button
-                  onClick={() => handleAddArgumentClick("root")}
+                  onClick={handleNewDefinitionClick}
                   className={styles.addArgumentButton}
                 >
                   Ajouter une définition
                 </button>
               </div>
-              <DefinitionsList />
+              <DefinitionsList onAddDefinition={showDefinitionForm} />
             </div>
           )}
         </div>
@@ -225,12 +234,7 @@ export function DisplayScreen({
                 <h3>
                   {editingArgument ? "Modifier l'argument" : "Nouvel argument"}
                 </h3>
-                {/* <ArgumentForm
-                  parentId={selectedParentId}
-                  initialData={editingArgument || {}}
-                  onSave={handleArgumentSave}
-                  onCancel={handleArgumentCancel}
-                /> */}
+
                 <ArgumentModal
                   isOpen={showArgumentForm}
                   onClose={() => setShowArgumentForm(false)}
@@ -240,20 +244,8 @@ export function DisplayScreen({
                 />
               </div>
             )}
-
-            {/* 
-            Ne pas jeter tant que StartScreen et les menus ne fonctionnent pas correctement.
-            <button onClick={onImportInit}>Ouvrir un argumentaire</button>
-            <button onClick={onNewArgumentaire}>Nouvel argumentaire</button>
-            <button onClick={onExport}>Exporter</button>
-            */}
           </>
         ) : (
-          // <ArgumentaireForm
-          //   initialData={{ thesis, context, forma }}
-          //   onSave={handleEditSave}
-          //   onCancel={handleEditCancel}
-          // />
           <ArgumentaireModal
             isOpen={showEditForm}
             onClose={handleEditCancel}
