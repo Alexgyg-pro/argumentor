@@ -7,6 +7,8 @@ import { ArgumentaireModal } from "../modals/ArgumentaireModal";
 import { HiddenFileInput } from "../common/HiddenFileInput";
 import { useState } from "react";
 import styles from "./DisplayScreen.module.css";
+import { ReferencesList } from "../references/ReferncesList";
+import { DefinitionsList } from "../definitions/DefinitionsList";
 
 /**
  * Écran principal d'affichage et d'édition de l'argumentaire
@@ -160,6 +162,8 @@ export function DisplayScreen({
             </div>
           </div>
           {/* Contenu des onglets */}
+
+          {/* Onglet Arguments */}
           {activeTab === "arguments" && (
             <div>
               <div className={styles.argumentsHeader}>
@@ -179,8 +183,38 @@ export function DisplayScreen({
               />
             </div>
           )}
-          {activeTab === "references" && <div>Contenu Références</div>}
-          {activeTab === "definitions" && <div>Contenu Définitions</div>}
+
+          {/* Onglet Références */}
+          {activeTab === "references" && (
+            <div>
+              <div className={styles.argumentsHeader}>
+                <h3>Références</h3>
+                <button
+                  onClick={() => handleAddArgumentClick("root")}
+                  className={styles.addArgumentButton}
+                >
+                  Ajouter une référence
+                </button>
+              </div>
+              <ReferencesList />
+            </div>
+          )}
+
+          {/* Onglet Définitions */}
+          {activeTab === "definitions" && (
+            <div>
+              <div className={styles.argumentsHeader}>
+                <h3>Définitions</h3>
+                <button
+                  onClick={() => handleAddArgumentClick("root")}
+                  className={styles.addArgumentButton}
+                >
+                  Ajouter une définition
+                </button>
+              </div>
+              <DefinitionsList />
+            </div>
+          )}
         </div>
         {/* Affichage des données */}
         {!showEditForm ? (
