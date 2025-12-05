@@ -3,6 +3,7 @@ import "./App.module.css";
 import styles from "./App.module.css";
 import "./index.css";
 import { useArgumentaire } from "./hooks/useArgumentaire";
+import { useDefinitions } from "./hooks/useDefinitions";
 import { Header } from "./components/layout/Header";
 import { Menu } from "./components/layout/Menu";
 import { Footer } from "./components/layout/Footer";
@@ -13,6 +14,7 @@ import "./App.css";
 
 function App() {
   const argumentaire = useArgumentaire();
+  const definitions = useDefinitions();
 
   return (
     <div className={styles.app}>
@@ -21,7 +23,6 @@ function App() {
         isDirty={argumentaire.isDirty}
         onNew={() => argumentaire.handleNewArgumentaire({}, true)}
         onImport={argumentaire.handleImportInit}
-        // onEdit={argumentaire.handleMenuEdit}
         onEdit={() => argumentaire.setEditingArgumentaire(true)}
         onSave={argumentaire.handleSave}
         onDownload={argumentaire.handleDownload}
@@ -44,12 +45,12 @@ function App() {
           ) : argumentaire.currentMode === "display" ? (
             <>
               <DisplayScreen
+                // Argumentaire
                 argumentaire={argumentaire}
                 onNewArgumentaire={argumentaire.handleNewArgumentaire}
                 thesis={argumentaire.thesis}
                 context={argumentaire.context}
                 forma={argumentaire.forma}
-                // onUpdateArgumentaire={argumentaire.handleUpdateArgumentaire}
                 onEdit={() => argumentaire.setEditingArgumentaire(true)}
                 argumentTree={argumentaire.argumentTree}
                 onAddArgument={argumentaire.handleAddArgument}
@@ -59,6 +60,11 @@ function App() {
                 onImportInit={argumentaire.handleImportInit}
                 fileInputRef={argumentaire.fileInputRef}
                 onFileSelect={argumentaire.handleFileSelect}
+                // Définitions
+                definitions={definitions.definitions}
+                onAddDefinition={definitions.addDefinition}
+                onUpdateDefinition={definitions.updateDefinition}
+                onDeleteDefinition={definitions.deleteDefinition}
               />
               <ArgumentaireModal
                 isOpen={argumentaire.editingArgumentaire}

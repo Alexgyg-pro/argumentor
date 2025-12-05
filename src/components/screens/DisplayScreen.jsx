@@ -30,27 +30,29 @@ import { DefinitionsList } from "../definitions/DefinitionsList";
  */
 export function DisplayScreen({
   argumentaire,
-  onNewArgumentaire,
   thesis,
   context,
   forma,
   onUpdateArgumentaire,
   argumentTree,
   onEdit,
-  onExport,
-  onImportInit,
   onAddArgument,
   onEditArgument,
   onDeleteArgument,
   fileInputRef,
   onFileSelect,
+  // Props pour les définitions
+  definitions = [],
+  onAddDefinition,
+  onUpdateDefinition,
+  onDeleteDefinition,
 }) {
   const [showEditForm, setShowEditForm] = useState(false);
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [selectedParentId, setSelectedParentId] = useState("root");
   const [editingArgument, setEditingArgument] = useState(null);
   const [activeTab, setActiveTab] = useState("arguments");
-  const [showDefinitionForm, setShowDefinitionForm] = useState(false);
+  const [showDefinitionForm, setShowDefinitionForm] = useState(null);
 
   if (!argumentTree) {
     return <div>Chargement de l'arbre...</div>;
@@ -211,18 +213,24 @@ export function DisplayScreen({
 
           {/* Onglet Définitions */}
           {activeTab === "definitions" && (
-            <div>
-              <div className={styles.argumentsHeader}>
-                <h3>Définitions</h3>
-                <button
-                  onClick={handleNewDefinitionClick}
-                  className={styles.addArgumentButton}
-                >
-                  Ajouter une définition
-                </button>
-              </div>
-              <DefinitionsList onAddDefinition={showDefinitionForm} />
-            </div>
+            <DefinitionsList
+              definitions={definitions}
+              onAddDefinition={onAddDefinition}
+              onUpdateDefinition={onUpdateDefinition}
+              onDeleteDefinition={onDeleteDefinition}
+            />
+            // <div>
+            //   <div className={styles.argumentsHeader}>
+            //     <h3>Définitions</h3>
+            //     <button
+            //       onClick={handleNewDefinitionClick}
+            //       className={styles.addArgumentButton}
+            //     >
+            //       Ajouter une définition
+            //     </button>
+            //   </div>
+            //   <DefinitionsList onAddDefinition={showDefinitionForm} />
+            // </div>
           )}
         </div>
         {/* Affichage des données */}
