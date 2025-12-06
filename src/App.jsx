@@ -4,6 +4,7 @@ import styles from "./App.module.css";
 import "./index.css";
 import { useArgumentaire } from "./hooks/useArgumentaire";
 import { useDefinitions } from "./hooks/useDefinitions";
+import { useReferences } from "./hooks/useReferences";
 import { Header } from "./components/layout/Header";
 import { Menu } from "./components/layout/Menu";
 import { Footer } from "./components/layout/Footer";
@@ -15,6 +16,7 @@ import "./App.css";
 function App() {
   const argumentaire = useArgumentaire();
   const definitions = useDefinitions();
+  const references = useReferences();
 
   return (
     <div className={styles.app}>
@@ -53,18 +55,24 @@ function App() {
                 forma={argumentaire.forma}
                 onEdit={() => argumentaire.setEditingArgumentaire(true)}
                 argumentTree={argumentaire.argumentTree}
-                onAddArgument={argumentaire.handleAddArgument}
-                onEditArgument={argumentaire.handleEditArgument}
-                onDeleteArgument={argumentaire.handleDeleteArgument}
                 onExport={argumentaire.handleExport}
                 onImportInit={argumentaire.handleImportInit}
                 fileInputRef={argumentaire.fileInputRef}
                 onFileSelect={argumentaire.handleFileSelect}
+                // Arguments
+                onAddArgument={argumentaire.handleAddArgument}
+                onEditArgument={argumentaire.handleEditArgument}
+                onDeleteArgument={argumentaire.handleDeleteArgument}
                 // Définitions
                 definitions={definitions.definitions}
                 onAddDefinition={definitions.addDefinition}
                 onUpdateDefinition={definitions.updateDefinition}
                 onDeleteDefinition={definitions.deleteDefinition}
+                // Références
+                references={references.references}
+                onAddReference={references.addReference}
+                onUpdateReference={references.updateReference}
+                onDeleteReference={references.deleteReference}
               />
               <ArgumentaireModal
                 isOpen={argumentaire.editingArgumentaire}

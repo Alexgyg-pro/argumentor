@@ -7,8 +7,8 @@ import { ArgumentaireModal } from "../modals/ArgumentaireModal";
 import { HiddenFileInput } from "../common/HiddenFileInput";
 import { useState } from "react";
 import styles from "./DisplayScreen.module.css";
-import { ReferencesList } from "../references/ReferencesList";
 import { DefinitionsList } from "../definitions/DefinitionsList";
+import { ReferencesList } from "../references/ReferencesList";
 
 /**
  * Écran principal d'affichage et d'édition de l'argumentaire
@@ -46,6 +46,11 @@ export function DisplayScreen({
   onAddDefinition,
   onUpdateDefinition,
   onDeleteDefinition,
+  // Props pour les références
+  references = [],
+  onAddReference,
+  onUpdateReference,
+  onDeleteReference,
 }) {
   const [showEditForm, setShowEditForm] = useState(false);
   const [showArgumentForm, setShowArgumentForm] = useState(false);
@@ -98,7 +103,6 @@ export function DisplayScreen({
 
   // DEFINITIONS HANDLERS (à implémenter plus tard)
   const handleNewDefinitionClick = (definitionData) => {
-    console.log("Ajouter une nouvelle définition :", definitionData);
     setShowDefinitionForm(true);
     // if (editingDefinition) {
     //   // Mode modification - CORRECT
@@ -197,18 +201,24 @@ export function DisplayScreen({
 
           {/* Onglet Références */}
           {activeTab === "references" && (
-            <div>
-              <div className={styles.argumentsHeader}>
-                <h3>Références</h3>
-                <button
-                  onClick={() => handleAddArgumentClick("root")}
-                  className={styles.addArgumentButton}
-                >
-                  Ajouter une référence
-                </button>
-              </div>
-              <ReferencesList />
-            </div>
+            <ReferencesList
+              references={references}
+              onAddReference={onAddReference}
+              onUpdateReference={onUpdateReference}
+              onDeleteReference={onDeleteReference}
+            />
+            // <div>
+            //   <div className={styles.argumentsHeader}>
+            //     <h3>Références</h3>
+            //     <button
+            //       onClick={() => handleAddArgumentClick("root")}
+            //       className={styles.addArgumentButton}
+            //     >
+            //       Ajouter une référence
+            //     </button>
+            //   </div>
+            //   <ReferencesList />
+            // </div>
           )}
 
           {/* Onglet Définitions */}
