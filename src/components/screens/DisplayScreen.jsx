@@ -207,18 +207,6 @@ export function DisplayScreen({
               onUpdateReference={onUpdateReference}
               onDeleteReference={onDeleteReference}
             />
-            // <div>
-            //   <div className={styles.argumentsHeader}>
-            //     <h3>Références</h3>
-            //     <button
-            //       onClick={() => handleAddArgumentClick("root")}
-            //       className={styles.addArgumentButton}
-            //     >
-            //       Ajouter une référence
-            //     </button>
-            //   </div>
-            //   <ReferencesList />
-            // </div>
           )}
 
           {/* Onglet Définitions */}

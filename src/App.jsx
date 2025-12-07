@@ -54,15 +54,16 @@ function App() {
                 context={argumentaire.context}
                 forma={argumentaire.forma}
                 onEdit={() => argumentaire.setEditingArgumentaire(true)}
-                argumentTree={argumentaire.argumentTree}
                 onExport={argumentaire.handleExport}
                 onImportInit={argumentaire.handleImportInit}
                 fileInputRef={argumentaire.fileInputRef}
                 onFileSelect={argumentaire.handleFileSelect}
-                // Arguments
+                // Arguments (gérés par useArgumentaire qui utilise useArguments en interne)
+                argumentTree={argumentaire.argumentTree}
                 onAddArgument={argumentaire.handleAddArgument}
                 onEditArgument={argumentaire.handleEditArgument}
                 onDeleteArgument={argumentaire.handleDeleteArgument}
+                onMoveArgument={argumentaire.handleMoveArgument}
                 // Définitions
                 definitions={definitions.definitions}
                 onAddDefinition={definitions.addDefinition}

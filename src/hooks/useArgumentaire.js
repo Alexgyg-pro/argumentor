@@ -1,6 +1,7 @@
 // src/hooks/useArgumentaire.js
 import { useState, useRef, useEffect } from "react";
 import { confirmIfDirty } from "../utils/confirm";
+import { useArguments } from "./useArguments";
 
 export function useArgumentaire() {
   const [thesis, setThesis] = useState("");
@@ -11,9 +12,19 @@ export function useArgumentaire() {
   const [shouldAutoShowForm, setShouldAutoShowForm] = useState(false);
   const [editingArgumentaire, setEditingArgumentaire] = useState(false);
   const fileInputRef = useRef(null);
+  const {
+    argumentTree,
+    addArgument,
+    updateArgument,
+    deleteArgument,
+    moveArgument,
+    importArguments,
+    resetArguments,
+    setArguments,
+  } = useArguments();
 
   // Pour l'arbre des arguments
-  const [argumentTree, setArgumentTree] = useState(null);
+  // const [argumentTree, setArgumentTree] = useState(null);
 
   useEffect(() => {
     console.log("🔄 editingArgumentaire a changé:", editingArgumentaire);
@@ -30,11 +41,7 @@ export function useArgumentaire() {
     setThesis(formData.thesis || "");
     setContext(formData.context || "");
     setForma(formData.forma || "Descriptif");
-    setArgumentTree({
-      id: "root",
-      claim: formData.thesis || "",
-      children: [],
-    });
+    setArguments(null);
 
     const hasData = formData.thesis || formData.context || formData.forma;
     setIsDirty(!!hasData);
@@ -341,8 +348,13 @@ export function useArgumentaire() {
     handleExportPdf,
 
     // Arguments
-    handleAddArgument,
-    handleEditArgument,
-    handleDeleteArgument,
+    argumentTree,
+    handleAddArgument: addArgument,
+    handleEditArgument: updateArgument,
+    handleDeleteArgument: deleteArgument,
+    handleMoveArgument: moveArgument,
+    importArgumentTree: importArguments,
+    resetArgumentTree: resetArguments,
+    setArgumentTree: setArguments,
   };
 }
