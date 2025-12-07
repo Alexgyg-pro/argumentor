@@ -7,7 +7,13 @@ import {
 } from "../utils/argumentUtils";
 
 export function useArguments(initialArgumentTree = null) {
-  const [argumentTree, setArgumentTree] = useState(initialArgumentTree);
+  const [argumentTree, setArgumentTree] = useState(
+    initialArgumentTree || {
+      id: "root",
+      claim: "",
+      children: [],
+    }
+  );
 
   const addArgument = useCallback(
     (parentId, data) => {

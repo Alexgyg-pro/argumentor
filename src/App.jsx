@@ -18,6 +18,10 @@ function App() {
   const definitions = useDefinitions();
   const references = useReferences();
 
+  console.log("📱 App - currentMode:", argumentaire.currentMode);
+  console.log("📱 App - argumentTree:", argumentaire.argumentTree);
+  console.log("📱 App - thesis:", argumentaire.thesis);
+
   return (
     <div className={styles.app}>
       <Header />

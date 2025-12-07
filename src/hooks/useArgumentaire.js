@@ -33,15 +33,18 @@ export function useArgumentaire() {
   // MODIFICATION DE L'ENSEMBLE DE L'ARGUMENTAIRE
 
   const handleNewArgumentaire = (formData = {}, forceShowForm = false) => {
-    console.log(
-      "🎯 handleNewArgumentaire appelé, forceShowForm:",
-      forceShowForm
-    );
+    console.log("🆕 handleNewArgumentaire appelé avec:", formData);
 
     setThesis(formData.thesis || "");
     setContext(formData.context || "");
     setForma(formData.forma || "Descriptif");
-    setArguments(null);
+    // setArguments(null);
+
+    setArguments({
+      id: "root",
+      claim: formData.thesis || "",
+      children: [],
+    });
 
     const hasData = formData.thesis || formData.context || formData.forma;
     setIsDirty(!!hasData);

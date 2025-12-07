@@ -52,6 +52,9 @@ export function DisplayScreen({
   onUpdateReference,
   onDeleteReference,
 }) {
+  console.log("🎯 DisplayScreen - argumentTree:", argumentTree);
+  console.log("🎯 DisplayScreen - thesis:", thesis);
+
   const [showEditForm, setShowEditForm] = useState(false);
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [selectedParentId, setSelectedParentId] = useState("root");
