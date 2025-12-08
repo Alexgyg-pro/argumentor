@@ -26,15 +26,13 @@ export function useArgumentaire() {
   // Pour l'arbre des arguments
   // const [argumentTree, setArgumentTree] = useState(null);
 
-  useEffect(() => {
-    console.log("🔄 editingArgumentaire a changé:", editingArgumentaire);
-  }, [editingArgumentaire]);
+  // useEffect(() => {
+  //   console.log("🔄 editingArgumentaire a changé:", editingArgumentaire);
+  // }, [editingArgumentaire]);
 
   // MODIFICATION DE L'ENSEMBLE DE L'ARGUMENTAIRE
 
   const handleNewArgumentaire = (formData = {}, forceShowForm = false) => {
-    console.log("🆕 handleNewArgumentaire appelé avec:", formData);
-
     setThesis(formData.thesis || "");
     setContext(formData.context || "");
     setForma(formData.forma || "Descriptif");
@@ -49,13 +47,9 @@ export function useArgumentaire() {
     const hasData = formData.thesis || formData.context || formData.forma;
     setIsDirty(!!hasData);
 
-    console.log("📝 Avant setCurrentMode, forceShowForm:", forceShowForm);
-
     if (forceShowForm) {
-      console.log("🚀 Set mode: start-with-form");
       setCurrentMode("start-with-form");
     } else {
-      console.log("🚀 Set mode: display");
       setCurrentMode("display");
     }
   };
@@ -64,7 +58,6 @@ export function useArgumentaire() {
    * Met à jour l'argumentaire complet
    */
   const handleUpdateArgumentaire = (formData) => {
-    console.log("🎯 handleUpdateArgumentaire appelé");
     setThesis(formData.thesis);
     setContext(formData.context);
     setForma(formData.forma);

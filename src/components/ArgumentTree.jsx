@@ -1,4 +1,7 @@
 // src/components/ArgumentTree.jsx
+import { useState } from "react";
+import { ArgumentModal } from "./modals/ArgumentModal";
+import styles from "./screens/DisplayScreen.module.css";
 import {
   ReticleIcon,
   ReticleIcon2,
@@ -14,7 +17,6 @@ import {
   PlusIcon,
 } from "./common/Icons";
 // import { Icon } from "./common/Icon";
-import styles from "./ArgumentTree.module.css";
 
 // Composant récursif pour un argument
 function ArgumentNode({
@@ -108,31 +110,84 @@ function ArgumentNode({
 
 export function ArgumentTree({
   tree,
-  onDeleteArgument,
-  onEditArgument,
   onAddArgument,
+  onEditArgument,
+  onDeleteArgument,
 }) {
-  if (!tree || !tree.children || tree.children.length === 0) {
-    return (
-      <div className="argument-tree">
-        <p className="empty-message">Aucun argument pour le moment.</p>
-      </div>
-    );
-  }
+  const [showArgumentForm, setShowArgumentForm] = useState(false);
+  const [editingArgument, setEditingArgument] = useState(null);
+  const [parentId, setParentId] = useState("root");
+
+  // ARGUMENT HANDLERS
+  const handleArgumentSave = (argumentData) => {
+    if (editingArgument) {
+      // Mode modification - CORRECT
+      onEditArgument(editingArgument.id, argumentData);
+    } else {
+      // Mode création
+      onAddArgument(parentId, argumentData);
+    }
+    setShowArgumentForm(false);
+    setEditingArgument(null);
+    setParentId("root"); // <-- Reset parentId after adding
+  };
+
+  const handleArgumentCancel = () => {
+    setShowArgumentForm(false);
+    setEditingArgument(null);
+    setParentId("root");
+  };
+
+  const handleAddArgumentClick = (newParentId = "root") => {
+    setParentId(newParentId);
+    setEditingArgument(null);
+    setShowArgumentForm(true);
+  };
+
+  const handleEditArgumentClick = (argument) => {
+    setEditingArgument(argument); // Stocker l'argument à modifier
+    setParentId(argument.parentId || "root");
+    setShowArgumentForm(true);
+  };
 
   return (
-    <div className="argument-tree">
-      <div className="arguments-list">
-        {tree.children.map((argument) => (
-          <ArgumentNode
-            key={argument.id}
-            argument={argument}
-            onDeleteArgument={onDeleteArgument}
-            onEditArgument={onEditArgument}
-            onAddArgument={onAddArgument}
-          />
-        ))}
+    <div className={styles.tabContainer}>
+      <div className={styles.tabHeader}>
+        <h3>Arguments</h3>
+        <button
+          onClick={() => handleAddArgumentClick("root")}
+          className={styles.addButton}
+        >
+          Ajouter un argument
+        </button>
       </div>
+      {tree.children.length === 0 ? (
+        <p className={styles.emptyMessage}>
+          Aucun argument pour le moment.{console.log(tree)}
+        </p>
+      ) : (
+        <div className="arguments-list">
+          {tree.children.map((argument) => (
+            <ArgumentNode
+              key={argument.id}
+              argument={argument}
+              onDeleteArgument={onDeleteArgument}
+              onEditArgument={handleEditArgumentClick}
+              onAddArgument={handleAddArgumentClick} // CORRECT: on passe la fonction, pas juste une référence
+            />
+          ))}
+        </div>
+      )}
+      {/* Modale pour ajouter/modifier un argument */}
+      {showArgumentForm && (
+        <ArgumentModal
+          isOpen={showArgumentForm}
+          onClose={handleArgumentCancel}
+          onSave={handleArgumentSave}
+          initialData={editingArgument || {}}
+          parentId={parentId}
+        />
+      )}
     </div>
   );
 }

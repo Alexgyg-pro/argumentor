@@ -18,10 +18,6 @@ function App() {
   const definitions = useDefinitions();
   const references = useReferences();
 
-  console.log("📱 App - currentMode:", argumentaire.currentMode);
-  console.log("📱 App - argumentTree:", argumentaire.argumentTree);
-  console.log("📱 App - thesis:", argumentaire.thesis);
-
   return (
     <div className={styles.app}>
       <Header />
@@ -37,7 +33,6 @@ function App() {
       />
       <main className={styles.main}>
         <div className={styles.contentContainer}>
-          {console.log("📱 App - currentMode:", argumentaire.currentMode)}
           {argumentaire.currentMode === "start" ||
           argumentaire.currentMode === "start-with-form" ? (
             <StartScreen

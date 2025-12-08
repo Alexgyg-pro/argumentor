@@ -6,14 +6,14 @@ src/
 ├── assets/
 │ ├── react.svg
 ├── components/
-│ ├── argument/
+│ ├── arguments/
 │ ├── common/ # Reusable UI components
 | │ ├── HiddenFileInput.jsx
 | │ ├── Icon.jsx
 | │ ├── Icons.jsx
-│ ├── definition/
-| │ ├── DefinitionsManager.jsx
-| │ ├── DefinitionsManager.module.css
+│ ├── definitions/
+| │ ├── DefinitionsList.jsx
+| │ ├── DefinitionsList.module.css
 | │ ├── forms/
 | | │ ├── ArgumentaireForm.jsx
 | | │ ├── ArgumentForm.jsx
@@ -34,7 +34,6 @@ src/
 │ ├── references/
 | │ ├── ReferenceList.jsx
 | │ ├── ReferenceList.module.css
-| │ ├── ReferenceSelector.test.jsx
 │ ├── screens/ # Main view components
 | │ ├── DisplayScreen.jsx
 | │ ├── DisplayScreen.module.css
@@ -44,9 +43,14 @@ src/
 │ ├── ArgumentTree.module.css
 ├── hooks/
 │ ├── useArgumentaire.js # Global app state orchestration
+│ ├── useArguments.js 
 │ ├── useDefinitions.js 
+│ ├── useReferences.js 
 ├── utils/
+│ ├── argumentUtils.js
 │ ├── confirm.js
+│ ├── definitionUtils.js
+│ ├── referenceUtils.js
 └── App.css
 └── App.jsx
 └── App.module.css

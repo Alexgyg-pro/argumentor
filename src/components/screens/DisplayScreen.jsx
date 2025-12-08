@@ -1,8 +1,5 @@
 // src/components/screens/DisplayScreen.jsx
 import { ArgumentTree } from "../ArgumentTree";
-import { ArgumentaireForm } from "../forms/ArgumentaireForm";
-import { ArgumentForm } from "../forms/ArgumentForm";
-import { ArgumentModal } from "../modals/ArgumentModal";
 import { ArgumentaireModal } from "../modals/ArgumentaireModal";
 import { HiddenFileInput } from "../common/HiddenFileInput";
 import { useState } from "react";
@@ -10,57 +7,39 @@ import styles from "./DisplayScreen.module.css";
 import { DefinitionsList } from "../definitions/DefinitionsList";
 import { ReferencesList } from "../references/ReferencesList";
 
-/**
- * Écran principal d'affichage et d'édition de l'argumentaire
- *
- * @param {Object} argumentaire - L'état complet de l'argumentaire
- * @param {Function} onNewArgumentaire - Créer un nouvel argumentaire (réinitialise tout)
- * @param {string} thesis - La thèse principale de l'argumentaire
- * @param {string} context - Le contexte de la thèse
- * @param {string} forma - La forme de la thèse (descriptif, normatif, etc.)
- * @param {Function} onUpdateArgumentaire - Mettre à jour les métadonnées de l'argumentaire
- * @param {Object} argumentTree - La structure arborescente des arguments
- * @param {Function} onAddArgument - Ajouter un nouvel argument
- * @param {Function} onEditArgument - Modifier un argument existant
- * @param {Function} onDeleteArgument - Supprimer un argument
- * @param {Function} onExport - Exporter l'argumentaire en JSON
- * @param {Function} onImportInit - Ouvrir l'explorateur de fichiers pour importer
- * @param {Object} fileInputRef - Référence vers l'input file caché
- * @param {Function} onFileSelect - Gérer la sélection de fichier d'import
- */
 export function DisplayScreen({
   argumentaire,
   thesis,
   context,
   forma,
   onUpdateArgumentaire,
-  argumentTree,
   onEdit,
+
+  // Props pour l'import
+  fileInputRef,
+  onFileSelect,
+
+  // Props pour les arguments
+  argumentTree,
   onAddArgument,
   onEditArgument,
   onDeleteArgument,
-  fileInputRef,
-  onFileSelect,
+
   // Props pour les définitions
   definitions = [],
   onAddDefinition,
   onUpdateDefinition,
   onDeleteDefinition,
+
   // Props pour les références
   references = [],
   onAddReference,
   onUpdateReference,
   onDeleteReference,
 }) {
-  console.log("🎯 DisplayScreen - argumentTree:", argumentTree);
-  console.log("🎯 DisplayScreen - thesis:", thesis);
-
   const [showEditForm, setShowEditForm] = useState(false);
-  const [showArgumentForm, setShowArgumentForm] = useState(false);
-  const [selectedParentId, setSelectedParentId] = useState("root");
-  const [editingArgument, setEditingArgument] = useState(null);
   const [activeTab, setActiveTab] = useState("arguments");
-  const [showDefinitionForm, setShowDefinitionForm] = useState(null);
+  // const [showDefinitionForm, setShowDefinitionForm] = useState(null);
 
   if (!argumentTree) {
     return <div>Chargement de l'arbre...</div>;
@@ -76,33 +55,33 @@ export function DisplayScreen({
     setShowEditForm(false);
   };
 
-  // ARGUMENT HANDLERS
-  const handleArgumentSave = (argumentData) => {
-    if (editingArgument) {
-      // Mode modification - CORRECT
-      onEditArgument(editingArgument.id, argumentData);
-    } else {
-      // Mode création
-      onAddArgument(selectedParentId, argumentData);
-    }
-    setShowArgumentForm(false);
-    setEditingArgument(null);
-  };
+  // // ARGUMENT HANDLERS
+  // const handleArgumentSave = (argumentData) => {
+  //   if (editingArgument) {
+  //     // Mode modification - CORRECT
+  //     onEditArgument(editingArgument.id, argumentData);
+  //   } else {
+  //     // Mode création
+  //     onAddArgument(selectedParentId, argumentData);
+  //   }
+  //   setShowArgumentForm(false);
+  //   setEditingArgument(null);
+  // };
 
-  const handleArgumentCancel = () => {
-    setShowArgumentForm(false);
-  };
+  // const handleArgumentCancel = () => {
+  //   setShowArgumentForm(false);
+  // };
 
-  const handleAddArgumentClick = (parentId = "root") => {
-    setSelectedParentId(parentId);
-    setEditingArgument(null);
-    setShowArgumentForm(true);
-  };
+  // const handleAddArgumentClick = (parentId = "root") => {
+  //   setSelectedParentId(parentId);
+  //   setEditingArgument(null);
+  //   setShowArgumentForm(true);
+  // };
 
-  const handleEditArgumentClick = (argument) => {
-    setEditingArgument(argument); // Stocker l'argument à modifier
-    setShowArgumentForm(true);
-  };
+  // const handleEditArgumentClick = (argument) => {
+  //   setEditingArgument(argument); // Stocker l'argument à modifier
+  //   setShowArgumentForm(true);
+  // };
 
   // DEFINITIONS HANDLERS (à implémenter plus tard)
   const handleNewDefinitionClick = (definitionData) => {
@@ -119,6 +98,11 @@ export function DisplayScreen({
   };
 
   // REFERENCES HANDLERS (à implémenter plus tard)
+
+  // Compteurs pour les onglets
+  const argumentsCount = argumentTree.children?.length || 0;
+  const definitionsCount = definitions.length;
+  const referencesCount = references.length;
 
   return (
     <div className={styles.displayScreen}>
@@ -137,6 +121,7 @@ export function DisplayScreen({
                 <p>{argumentaire.context}</p>
               </div>
             )}
+
             <div className={styles.editButtonContainer}>
               <button
                 onClick={(e) => {
@@ -159,7 +144,7 @@ export function DisplayScreen({
                 }`}
                 onClick={() => setActiveTab("arguments")}
               >
-                Arguments (0)
+                Arguments ({argumentsCount})
               </button>
               <button
                 className={`${styles.tab} ${
@@ -167,7 +152,7 @@ export function DisplayScreen({
                 }`}
                 onClick={() => setActiveTab("references")}
               >
-                Références (0)
+                Références ({referencesCount} )
               </button>
               <button
                 className={`${styles.tab} ${
@@ -175,7 +160,7 @@ export function DisplayScreen({
                 }`}
                 onClick={() => setActiveTab("definitions")}
               >
-                Définitions (0)
+                Définitions ({definitionsCount})
               </button>
             </div>
           </div>
@@ -183,23 +168,12 @@ export function DisplayScreen({
 
           {/* Onglet Arguments */}
           {activeTab === "arguments" && (
-            <div>
-              <div className={styles.argumentsHeader}>
-                <h3>Arguments</h3>
-                <button
-                  onClick={() => handleAddArgumentClick("root")}
-                  className={styles.addArgumentButton}
-                >
-                  Ajouter un argument
-                </button>
-              </div>
-              <ArgumentTree
-                tree={argumentTree}
-                onAddArgument={handleAddArgumentClick}
-                onEditArgument={handleEditArgumentClick}
-                onDeleteArgument={onDeleteArgument}
-              />
-            </div>
+            <ArgumentTree
+              tree={argumentTree}
+              onAddArgument={onAddArgument}
+              onEditArgument={onEditArgument}
+              onDeleteArgument={onDeleteArgument}
+            />
           )}
 
           {/* Onglet Références */}
@@ -234,27 +208,8 @@ export function DisplayScreen({
             // </div>
           )}
         </div>
-        {/* Affichage des données */}
-        {!showEditForm ? (
-          <>
-            {/* Formulaire unique */}
-            {showArgumentForm && (
-              <div className="argument-form-container">
-                <h3>
-                  {editingArgument ? "Modifier l'argument" : "Nouvel argument"}
-                </h3>
-
-                <ArgumentModal
-                  isOpen={showArgumentForm}
-                  onClose={() => setShowArgumentForm(false)}
-                  onSave={handleArgumentSave}
-                  initialData={editingArgument || {}}
-                  parentId={selectedParentId}
-                />
-              </div>
-            )}
-          </>
-        ) : (
+        {/* Modale pour modifier l'argumentaire */}
+        {!showEditForm && (
           <ArgumentaireModal
             isOpen={showEditForm}
             onClose={handleEditCancel}

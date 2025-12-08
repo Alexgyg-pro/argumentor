@@ -86,14 +86,14 @@
   padding-bottom: 8px;
 }
 
-.tabsContainer {
+/* .tabsContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 20px 0;
   border-bottom: 1px solid #e0e0e0;
   padding-bottom: 8px;
-}
+} */
 
 .tabs {
   display: flex;
@@ -118,14 +118,35 @@
 }
 
 /* Styles pour l'onglet Arguments */
-.argumentsHeader {
+/* .argumentsHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+} */
+
+.tabContainer {
+  margin-top: 20px;
 }
 
-.addArgumentButton {
+.tabHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.tabHeader h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+  text-align: left;
+}
+
+.addButton {
   background-color: dimgrey;
   color: white;
   padding: 0.5rem 1rem;
@@ -134,7 +155,7 @@
   cursor: pointer;
 }
 
-.addArgumentButton:hover {
+.addButton:hover {
   background-color: #696969;
 }
 
