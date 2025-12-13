@@ -84,18 +84,18 @@ export function DisplayScreen({
   // };
 
   // DEFINITIONS HANDLERS (à implémenter plus tard)
-  const handleNewDefinitionClick = (definitionData) => {
-    setShowDefinitionForm(true);
-    // if (editingDefinition) {
-    //   // Mode modification - CORRECT
-    //   onEditDefinition(editingDefinition.id, definitionData);
-    // } else {
-    //   // Mode création
-    //   onAddDefinition(definitionData);
-    // }
-    // setShowArgumentForm(false);
-    // setEditingArgument(null);
-  };
+  // const handleNewDefinitionClick = (definitionData) => {
+  // setShowDefinitionForm(true);
+  // if (editingDefinition) {
+  //   // Mode modification - CORRECT
+  //   onEditDefinition(editingDefinition.id, definitionData);
+  // } else {
+  //   // Mode création
+  //   onAddDefinition(definitionData);
+  // }
+  // setShowArgumentForm(false);
+  // setEditingArgument(null);
+  // };
 
   // REFERENCES HANDLERS (à implémenter plus tard)
 
@@ -194,18 +194,6 @@ export function DisplayScreen({
               onUpdateDefinition={onUpdateDefinition}
               onDeleteDefinition={onDeleteDefinition}
             />
-            // <div>
-            //   <div className={styles.argumentsHeader}>
-            //     <h3>Définitions</h3>
-            //     <button
-            //       onClick={handleNewDefinitionClick}
-            //       className={styles.addArgumentButton}
-            //     >
-            //       Ajouter une définition
-            //     </button>
-            //   </div>
-            //   <DefinitionsList onAddDefinition={showDefinitionForm} />
-            // </div>
           )}
         </div>
         {/* Modale pour modifier l'argumentaire */}

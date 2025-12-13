@@ -1,0 +1,55 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3">
+  <diagram name="Page-1" id="Nr1DNJUbsBBxnHLnCQOm">
+    <mxGraphModel dx="679" dy="423" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-1" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="80" width="220" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-2" value="DisplayScreen" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="270" y="80" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-3" value="argumentaire, thesis, context, forma, onUpdateArgumentaire, onEdit" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="230" y="120" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-4" value="fileInputRef, onFileSelect" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="230" y="150" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-5" value="argumentTree, onAddArgument, onEditArgument, onDeleteArgument" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="230" y="180" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-6" value="definitions[], onAddDefinition, onUpdateDefinition, onDeleteDefinition" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="230" y="220" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-7" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="270" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-8" value="ArgumentTree" style="text;strokeColor=none;fillColor=none;html=1;fontSize=14;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="490" y="270" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-10" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="130" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-11" value="ReferencesList" style="text;strokeColor=none;fillColor=none;html=1;fontSize=14;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="490" y="130" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-12" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="390" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-13" value="DefinitionsList" style="text;strokeColor=none;fillColor=none;html=1;fontSize=14;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="490" y="390" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-9" value="&lt;ul&gt;&lt;li&gt;references = references&lt;/li&gt;&lt;li&gt;onAddReference = onAddReference&lt;/li&gt;&lt;li&gt;onUpdateReference = onUpdateReference&lt;/li&gt;&lt;li&gt;onDeleteReference = onDeleteReference&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;fontSize=8;spacing=-20;" vertex="1" parent="1">
+          <mxGeometry x="490" y="149" width="181" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-14" value="&lt;ul&gt;&lt;li&gt;tree= argumentTree&lt;/li&gt;&lt;li&gt;onAddArgument = onAddArgument&lt;/li&gt;&lt;li&gt;onEditArgument = onEditArgument&lt;/li&gt;&lt;li&gt;onDeleteArgument = onDeleteArgument&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;fontSize=8;spacing=-20;" vertex="1" parent="1">
+          <mxGeometry x="490" y="290" width="178" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="mEZxrOVuLt6LIkdOrSHA-15" value="&lt;ul&gt;&lt;li&gt;defnitions = definitions&lt;/li&gt;&lt;li&gt;onAddDefinition = onAddDefinition&lt;/li&gt;&lt;li&gt;onUpdateDefinition = onUpdateDefinition&lt;/li&gt;&lt;li&gt;onDeleteDefinition = onDeleteDefinition&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;fontSize=8;spacing=-20;" vertex="1" parent="1">
+          <mxGeometry x="490" y="410" width="181" height="45" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
