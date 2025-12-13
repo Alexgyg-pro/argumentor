@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { DefinitionForm } from "../forms/DefinitionForm";
 import styles from "./DefinitionsList.module.css";
+import { DefinitionModal } from "../modals/definitionModal";
 
 export function DefinitionsList({
   definitions = [],
@@ -54,10 +55,16 @@ export function DefinitionsList({
       </div>
 
       {showForm ? (
-        <DefinitionForm
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
+        // <DefinitionForm
+        //   onSubmit={handleSubmit}
+        //   onCancel={handleCancel}
+        //   initialData={editingDefinition}
+        // />
+        <DefinitionModal
+          isOpen={showForm}
+          onClose={handleCancel}
           initialData={editingDefinition}
+          onSave={handleSubmit}
         />
       ) : definitions.length === 0 ? (
         <p className={styles.emptyMessage}>Aucune définition pour le moment.</p>

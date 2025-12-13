@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ReferenceForm } from "../forms/ReferenceForm";
 import styles from "./ReferencesList.module.css"; // Tu peux réutiliser le même CSS que DefinitionsList
+import { ReferenceModal } from "../modals/referenceModal";
 
 export function ReferencesList({
   references = [],
@@ -55,12 +56,18 @@ export function ReferencesList({
       </div>
 
       {showForm ? (
-        <ReferenceForm
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
+        <ReferenceModal
+          isOpen={showForm}
+          onClose={handleCancel}
           initialData={editingReference}
+          onSave={handleSubmit}
         />
-      ) : references.length === 0 ? (
+      ) : // <ReferenceForm
+      //   onSubmit={handleSubmit}
+      //   onCancel={handleCancel}
+      //   initialData={editingReference}
+      // />
+      references.length === 0 ? (
         <p className={styles.emptyMessage}>Aucune référence pour le moment.</p>
       ) : (
         <div className={styles.list}>
