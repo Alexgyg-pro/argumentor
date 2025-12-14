@@ -8,6 +8,8 @@ src/
 │ ├── react.svg
 ├── components/
 │ ├── arguments/
+| │ ├── ArgumentTree.jsx
+| │ ├── ArgumentTree.module.css
 │ ├── common/
 | │ ├── HiddenFileInput.jsx
 | │ ├── Icon.jsx
@@ -44,8 +46,6 @@ src/
 | │ ├── DisplayScreen.module.css
 | │ ├── StartScreen.jsx
 | │ ├── StartScreen.module.css
-│ ├── ArgumentTree.jsx
-│ ├── ArgumentTree.module.css
 ├── hooks/
 │ ├── useArgumentaire.js # Global app state orchestration
 │ ├── useArguments.js 

@@ -1,8 +1,8 @@
 // src/components/ArgumentTree.jsx
 /* ***********  ATTENTION ! IL Y A DEUX FONCTIONS DANS CE FICHIER : ArgumentNode et ArgumentTree ************/
 import { useState } from "react";
-import { ArgumentModal } from "./modals/ArgumentModal";
-import styles from "./screens/DisplayScreen.module.css";
+import { ArgumentModal } from "../modals/ArgumentModal";
+import styles from "../screens/DisplayScreen.module.css";
 import {
   ReticleIcon,
   ReticleIcon2,
@@ -16,7 +16,7 @@ import {
   TrashIcon,
   EditIcon,
   PlusIcon,
-} from "./common/Icons";
+} from "../common/Icons";
 // import { Icon } from "./common/Icon";
 
 // Composant récursif pour un argument
@@ -34,7 +34,7 @@ function ArgumentNode({
   const associatedRefs = references.filter((ref) =>
     argument.references?.includes(ref.id)
   );
-return (
+  return (
     <>
       <div
         className={styles.argumentNode}
@@ -45,15 +45,13 @@ return (
             {/* Tes icônes ici */}
             <span>p1C1N1</span>
           </div>
-          <div>
-            {/* Icône chevron */}
-          </div>
+          <div>{/* Icône chevron */}</div>
         </div>
         <div className={styles.argumentBody}>
           <span className={styles.argumentId}>#{argument.id}</span> -{" "}
           <span className={styles.argumentClaim}>{argument.claim}</span>
         </div>
-        
+
         {/* AFFICHAGE DES RÉFÉRENCES ASSOCIÉES */}
         {associatedRefs.length > 0 && (
           <div className={styles.associatedReferences}>
@@ -61,7 +59,7 @@ return (
               <small>📚 Références associées :</small>
             </div>
             <div className={styles.referencesList}>
-              {associatedRefs.map(ref => (
+              {associatedRefs.map((ref) => (
                 <div key={ref.id} className={styles.referenceBadge}>
                   <span className={styles.refBadgeId}>{ref.id}</span>
                   <span className={styles.refBadgeTitle}>{ref.title}</span>
@@ -70,7 +68,7 @@ return (
             </div>
           </div>
         )}
-        
+
         <div className={styles.argumentFooter}>
           <p className={styles.natura}>{argument.natura}</p>
           <small>
@@ -85,8 +83,7 @@ return (
               }}
               title="Ajouter un sous-argument"
             >
-              {/* <PlusIcon size={12} /> */}
-              +
+              {/* <PlusIcon size={12} /> */}+
             </button>
 
             <button
@@ -123,7 +120,7 @@ return (
               onAddArgument={onAddArgument}
               onEditArgument={onEditArgument}
               onDeleteArgument={onDeleteArgument}
-              references={references}  // ← Passe les références aux enfants
+              references={references} // ← Passe les références aux enfants
             />
           ))}
         </div>

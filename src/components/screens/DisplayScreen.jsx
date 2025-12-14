@@ -1,5 +1,5 @@
 // src/components/screens/DisplayScreen.jsx
-import { ArgumentTree } from "../ArgumentTree";
+import { ArgumentTree } from "../arguments/ArgumentTree";
 import { ArgumentaireModal } from "../modals/ArgumentaireModal";
 import { HiddenFileInput } from "../common/HiddenFileInput";
 import { useState } from "react";
