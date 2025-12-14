@@ -1,61 +1,54 @@
 // src/hooks/useArgumentaire.js
-import { useState, useRef, useEffect } from "react";
-import { confirmIfDirty } from "../utils/confirm";
+import { useState, useRef } from "react";
 import { useArguments } from "./useArguments";
+import { useDefinitions } from "./useDefinitions";
+import { useReferences } from "./useReferences";
 
 export function useArgumentaire() {
+  // ============ ÉTAT DE L'ARGUMENTAIRE ============
   const [thesis, setThesis] = useState("");
   const [context, setContext] = useState("");
   const [forma, setForma] = useState("Descriptif");
   const [currentMode, setCurrentMode] = useState("start");
   const [isDirty, setIsDirty] = useState(false);
-  const [shouldAutoShowForm, setShouldAutoShowForm] = useState(false);
   const [editingArgumentaire, setEditingArgumentaire] = useState(false);
   const fileInputRef = useRef(null);
-  const {
-    argumentTree,
-    addArgument,
-    updateArgument,
-    deleteArgument,
-    moveArgument,
-    importArguments,
-    resetArguments,
-    setArguments,
-  } = useArguments();
 
-  // Pour l'arbre des arguments
-  // const [argumentTree, setArgumentTree] = useState(null);
+  // ============ HOOKS SPÉCIALISÉS ============
+  const argumentsHook = useArguments();
+  const definitionsHook = useDefinitions();
+  const referencesHook = useReferences();
 
-  // useEffect(() => {
-  //   console.log("🔄 editingArgumentaire a changé:", editingArgumentaire);
-  // }, [editingArgumentaire]);
+  // ============ FONCTIONS DE GESTION DE L'ARGUMENTAIRE ============
 
-  // MODIFICATION DE L'ENSEMBLE DE L'ARGUMENTAIRE
-
+  /**
+   * Crée un nouvel argumentaire (réinitialise tout)
+   */
   const handleNewArgumentaire = (formData = {}, forceShowForm = false) => {
+    // 1. Métadonnées
     setThesis(formData.thesis || "");
     setContext(formData.context || "");
     setForma(formData.forma || "Descriptif");
-    // setArguments(null);
 
-    setArguments({
+    // 2. Réinitialiser TOUTES les données
+    argumentsHook.setArguments({
       id: "root",
       claim: formData.thesis || "",
       children: [],
     });
+    definitionsHook.resetDefinitions();
+    referencesHook.resetReferences();
 
+    // 3. État
     const hasData = formData.thesis || formData.context || formData.forma;
     setIsDirty(!!hasData);
 
-    if (forceShowForm) {
-      setCurrentMode("start-with-form");
-    } else {
-      setCurrentMode("display");
-    }
+    // 4. Mode d'affichage
+    setCurrentMode(forceShowForm ? "start-with-form" : "display");
   };
 
   /**
-   * Met à jour l'argumentaire complet
+   * Met à jour les métadonnées de l'argumentaire
    */
   const handleUpdateArgumentaire = (formData) => {
     setThesis(formData.thesis);
@@ -65,23 +58,24 @@ export function useArgumentaire() {
     setEditingArgumentaire(false);
   };
 
+  /**
+   * Annule l'édition de l'argumentaire
+   */
   const handleCancelEdit = () => {
     setEditingArgumentaire(false);
   };
 
-  // IMPORT/EXPORT - Tout intégré ici
+  // ============ IMPORT/EXPORT ============
+
   /**
-   * Initialise le processus d'import en déclenchant la sélection de fichier
+   * Déclenche la sélection de fichier pour l'import
    */
   const handleImportInit = () => {
-    // if (!confirmIfDirty(isDirty)) return;
     fileInputRef.current?.click();
   };
 
   /**
-   * Gère la sélection d'un fichier pour l'import
-   * @param {*} event
-   * @returns
+   * Gère l'import d'un fichier JSON
    */
   const handleFileSelect = (event) => {
     const file = event.target.files?.[0];
@@ -92,17 +86,27 @@ export function useArgumentaire() {
       try {
         const jsonData = JSON.parse(e.target.result);
 
-        // Met à jour l'état avec les données importées
+        // 1. Métadonnées
         setThesis(jsonData.thesis || "");
-        setArgumentTree(
-          jsonData.tree ||
-            jsonData.argumentTree || {
-              id: "root",
-              claim: jsonData.thesis || "",
-              children: jsonData.arguments || [],
-            }
+        setContext(jsonData.context || "");
+        setForma(jsonData.forma || "Descriptif");
+
+        // 2. Arbre d'arguments
+        argumentsHook.importArguments(
+          jsonData.tree || {
+            id: "root",
+            claim: jsonData.thesis || "",
+            children: [],
+          }
         );
 
+        // 3. Définitions
+        definitionsHook.importDefinitions(jsonData.definitions || []);
+
+        // 4. Références
+        referencesHook.importReferences(jsonData.globalReferences || []);
+
+        // 5. État
         setCurrentMode("display");
         setIsDirty(false);
       } catch (error) {
@@ -114,243 +118,111 @@ export function useArgumentaire() {
     reader.readAsText(file);
   };
 
-  const handleSave = () => {
-    console.log("💾 Enregistrement local - à implémenter");
-    // Futur: sauvegarde automatique dans le localStorage/navigateur
-    setIsDirty(false);
-  };
-
   /**
-   * Download l'argumentaire actuel en fichier JSON
+   * Exporte l'argumentaire complet en JSON
    */
   const handleDownload = () => {
     const data = {
+      // Métadonnées
       thesis,
       context,
       forma,
-      tree: argumentTree,
+
+      // Données structurées (même pattern pour tout)
+      definitions: definitionsHook.definitions,
+      globalReferences: referencesHook.references,
+      tree: argumentsHook.argumentTree,
+
+      // Métadonnées techniques
       version: "1.0",
       downloadedAt: new Date().toISOString(),
     };
 
+    // Création et téléchargement du fichier
     const jsonString = JSON.stringify(data, null, 2);
     const blob = new Blob([jsonString], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "argumentaire.json";
+
+    // Nom du fichier basé sur la thèse
+    const fileName = thesis
+      ? `argumentaire_${thesis.substring(0, 20)}.json`.replace(
+          /[^a-z0-9]/gi,
+          "_"
+        )
+      : "argumentaire.json";
+    a.download = fileName;
+
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
 
+  /**
+   * Sauvegarde l'argumentaire (à implémenter plus tard)
+   */
+  const handleSave = () => {
+    console.log("💾 Sauvegarde - à implémenter");
+    setIsDirty(false);
+  };
+
+  /**
+   * Exporte en PDF (à implémenter plus tard)
+   */
   const handleExportPdf = () => {
     console.log("📄 Export PDF - à implémenter");
   };
 
-  // GESTION DES ARGUMENTS
-  /**
-   * Ajoute un nouvel argument à l'arbre des arguments
-   * @param {string} parentId - ID de l'argument parent
-   * @param {object} argumentData - Données de l'argument à ajouter
-   */
-  const handleAddArgument = (parentId, argumentData) => {
-    const newArgument = {
-      id: Date.now().toString(),
-      parentId: parentId,
-      claim: argumentData.claim,
-      claimComment: argumentData.claimComment || "",
-      causa: argumentData.causa || "neutralis",
-      forma: argumentData.forma || "descriptif",
-      natura: argumentData.natura || "validity",
-      validity:
-        argumentData.validity !== undefined ? argumentData.validity : 0.5,
-      relevance:
-        argumentData.relevance !== undefined ? argumentData.relevance : 0.5,
-      value: argumentData.value !== undefined ? argumentData.value : 0.5,
-      weight: argumentData.weight !== undefined ? argumentData.weight : 0.5,
-      references: argumentData.references || [],
-      children: [],
-    };
-
-    // Fonction récursive pour ajouter l'argument au bon parent
-    const addToTree = (node) => {
-      // Si c'est le parent qu'on cherche, on ajoute directement
-      if (node.id === parentId) {
-        return {
-          ...node,
-          children: [...(node.children || []), newArgument],
-        };
-      }
-
-      // Sinon, on cherche dans les enfants
-      if (node.children && node.children.length > 0) {
-        // Vérifier d'abord si le parent est dans les enfants directs
-        const directChildIndex = node.children.findIndex(
-          (child) => child.id === parentId
-        );
-        if (directChildIndex !== -1) {
-          // Parent trouvé dans les enfants directs - ajouter et s'arrêter
-          const updatedChildren = [...node.children];
-          updatedChildren[directChildIndex] = {
-            ...updatedChildren[directChildIndex],
-            children: [
-              ...(updatedChildren[directChildIndex].children || []),
-              newArgument,
-            ],
-          };
-          return {
-            ...node,
-            children: updatedChildren,
-          };
-        }
-
-        // Si pas trouvé dans les enfants directs, chercher récursivement
-        const updatedChildren = node.children.map((child) => addToTree(child));
-        return {
-          ...node,
-          children: updatedChildren,
-        };
-      }
-
-      return node;
-    };
-
-    setArgumentTree(addToTree(argumentTree));
-    setIsDirty(true);
-  };
-
-  /**
-   * Modifie un argument existant
-   * @param {string} argumentId - ID de l'argument à modifier
-   * @param {object} newData - Nouvelles données de l'argument
-   */
-  const handleEditArgument = (argumentId, newData) => {
-    const updateInTree = (node) => {
-      if (node.id === argumentId) {
-        return {
-          ...node,
-          claim: newData.claim,
-          claimComment: newData.claimComment,
-          causa: newData.causa,
-          forma: newData.forma,
-          natura: newData.natura,
-          validity: newData.validity,
-          relevance: newData.relevance,
-          value: newData.value,
-          weight: newData.weight,
-          references: newData.references,
-        };
-      }
-
-      if (node.children) {
-        return {
-          ...node,
-          children: node.children.map((child) => updateInTree(child)),
-        };
-      }
-
-      return node;
-    };
-
-    setArgumentTree(updateInTree(argumentTree));
-    setIsDirty(true);
-  };
-
-  /**
-   * Déplace un argument vers un nouveau parent
-   */
-  const handleMoveArgument = (argumentId, newParentId) => {
-    // Validation : éviter les cycles (argument → ses propres descendants)
-    // Modification du parentId + restructuration de l'arbre
-    // + facile avec parentId explicite !
-  };
-
-  /**
-   * Supprime un argument après confirmation
-   * @param {string} argumentId - ID de l'argument à supprimer
-   */
-  const handleDeleteArgument = (argumentId) => {
-    // Vérifier si l'argument a des enfants
-    const argument = findArgumentById(argumentTree, argumentId);
-    if (argument && argument.children && argument.children.length > 0) {
-      alert(
-        "Impossible de supprimer cet argument car il contient des sous-arguments."
-      );
-      return;
-    }
-
-    // Demander confirmation
-    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cet argument ?")) {
-      return;
-    }
-
-    // Supprimer l'argument
-    const deleteFromTree = (node) => {
-      if (node.children) {
-        return {
-          ...node,
-          children: node.children.filter((child) => child.id !== argumentId),
-        };
-      }
-      return node;
-    };
-
-    setArgumentTree(deleteFromTree(argumentTree));
-    setIsDirty(true);
-  };
-
-  // FONCTIONS UTILITAIRES
-  // Fonction utilitaire pour trouver un argument par ID
-  const findArgumentById = (node, id) => {
-    if (node.id === id) return node;
-    if (node.children) {
-      for (let child of node.children) {
-        const found = findArgumentById(child, id);
-        if (found) return found;
-      }
-    }
-    return null;
-  };
+  // ============ RETOUR DE L'HOOK ============
 
   return {
-    // État
+    // === ÉTAT ===
+    // Métadonnées
     thesis,
     context,
     forma,
     currentMode,
     setCurrentMode,
     isDirty,
-    argumentTree,
-
-    // Actions sur l'argumentaire
-    handleNewArgumentaire,
-    handleUpdateArgumentaire,
     editingArgumentaire,
     setEditingArgumentaire,
-    handleCancelEdit,
-    // handleThesisChange,
 
-    // Import
-    handleImportInit,
-    handleFileSelect,
-    // handleExport,
+    // Données
+    argumentTree: argumentsHook.argumentTree,
+    definitions: definitionsHook.definitions,
+    references: referencesHook.references,
+
+    // Références techniques
     fileInputRef,
 
-    // Téléchargement
+    // === ACTIONS SUR L'ARGUMENTAIRE ===
+    handleNewArgumentaire,
+    handleUpdateArgumentaire,
+    handleCancelEdit,
+
+    // === IMPORT/EXPORT ===
+    handleImportInit,
+    handleFileSelect,
     handleDownload,
     handleSave,
     handleExportPdf,
 
-    // Arguments
-    argumentTree,
-    handleAddArgument: addArgument,
-    handleEditArgument: updateArgument,
-    handleDeleteArgument: deleteArgument,
-    handleMoveArgument: moveArgument,
-    importArgumentTree: importArguments,
-    resetArgumentTree: resetArguments,
-    setArgumentTree: setArguments,
+    // === ACTIONS SUR LES ARGUMENTS ===
+    onAddArgument: argumentsHook.addArgument,
+    onEditArgument: argumentsHook.updateArgument,
+    onDeleteArgument: argumentsHook.deleteArgument,
+    onMoveArgument: argumentsHook.moveArgument,
+
+    // === ACTIONS SUR LES DÉFINITIONS ===
+    onAddDefinition: definitionsHook.addDefinition,
+    onUpdateDefinition: definitionsHook.updateDefinition,
+    onDeleteDefinition: definitionsHook.deleteDefinition,
+
+    // === ACTIONS SUR LES RÉFÉRENCES ===
+    onAddReference: referencesHook.addReference,
+    onUpdateReference: referencesHook.updateReference,
+    onDeleteReference: referencesHook.deleteReference,
   };
 }

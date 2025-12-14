@@ -3,20 +3,15 @@ import "./App.module.css";
 import styles from "./App.module.css";
 import "./index.css";
 import { useArgumentaire } from "./hooks/useArgumentaire";
-import { useDefinitions } from "./hooks/useDefinitions";
-import { useReferences } from "./hooks/useReferences";
 import { Header } from "./components/layout/Header";
 import { Menu } from "./components/layout/Menu";
 import { Footer } from "./components/layout/Footer";
 import { StartScreen } from "./components/screens/StartScreen";
 import { DisplayScreen } from "./components/screens/DisplayScreen";
 import { ArgumentaireModal } from "./components/modals/ArgumentaireModal";
-import "./App.css";
 
 function App() {
   const argumentaire = useArgumentaire();
-  const definitions = useDefinitions();
-  const references = useReferences();
 
   return (
     <div className={styles.app}>
@@ -29,7 +24,6 @@ function App() {
         onSave={argumentaire.handleSave}
         onDownload={argumentaire.handleDownload}
         onExport={argumentaire.handleExportPdf}
-        onHelp={argumentaire.handleHelp}
       />
       <main className={styles.main}>
         <div className={styles.contentContainer}>
@@ -48,31 +42,28 @@ function App() {
               <DisplayScreen
                 // Argumentaire
                 argumentaire={argumentaire}
-                onNewArgumentaire={argumentaire.handleNewArgumentaire}
                 thesis={argumentaire.thesis}
                 context={argumentaire.context}
                 forma={argumentaire.forma}
                 onEdit={() => argumentaire.setEditingArgumentaire(true)}
-                onExport={argumentaire.handleExport}
                 onImportInit={argumentaire.handleImportInit}
                 fileInputRef={argumentaire.fileInputRef}
                 onFileSelect={argumentaire.handleFileSelect}
-                // Arguments (gérés par useArgumentaire qui utilise useArguments en interne)
+                // Arguments
                 argumentTree={argumentaire.argumentTree}
-                onAddArgument={argumentaire.handleAddArgument}
-                onEditArgument={argumentaire.handleEditArgument}
-                onDeleteArgument={argumentaire.handleDeleteArgument}
-                onMoveArgument={argumentaire.handleMoveArgument}
+                onAddArgument={argumentaire.onAddArgument}
+                onEditArgument={argumentaire.onEditArgument}
+                onDeleteArgument={argumentaire.onDeleteArgument}
                 // Définitions
-                definitions={definitions.definitions}
-                onAddDefinition={definitions.addDefinition}
-                onUpdateDefinition={definitions.updateDefinition}
-                onDeleteDefinition={definitions.deleteDefinition}
+                definitions={argumentaire.definitions}
+                onAddDefinition={argumentaire.onAddDefinition}
+                onUpdateDefinition={argumentaire.onUpdateDefinition}
+                onDeleteDefinition={argumentaire.onDeleteDefinition}
                 // Références
-                references={references.references}
-                onAddReference={references.addReference}
-                onUpdateReference={references.updateReference}
-                onDeleteReference={references.deleteReference}
+                references={argumentaire.references}
+                onAddReference={argumentaire.onAddReference}
+                onUpdateReference={argumentaire.onUpdateReference}
+                onDeleteReference={argumentaire.onDeleteReference}
               />
               <ArgumentaireModal
                 isOpen={argumentaire.editingArgumentaire}
