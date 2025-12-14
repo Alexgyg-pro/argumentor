@@ -173,6 +173,7 @@ export function DisplayScreen({
               onAddArgument={onAddArgument}
               onEditArgument={onEditArgument}
               onDeleteArgument={onDeleteArgument}
+              references={references}
             />
           )}
 

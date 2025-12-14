@@ -1,4 +1,5 @@
 // src/components/ArgumentTree.jsx
+/* ***********  ATTENTION ! IL Y A DEUX FONCTIONS DANS CE FICHIER : ArgumentNode et ArgumentTree ************/
 import { useState } from "react";
 import { ArgumentModal } from "./modals/ArgumentModal";
 import styles from "./screens/DisplayScreen.module.css";
@@ -25,10 +26,15 @@ function ArgumentNode({
   onDeleteArgument,
   onEditArgument,
   onAddArgument,
+  references = [],
 }) {
   const hasChildren = argument.children && argument.children.length > 0;
 
-  return (
+  // Obtenir les références associées à cet argument
+  const associatedRefs = references.filter((ref) =>
+    argument.references?.includes(ref.id)
+  );
+return (
     <>
       <div
         className={styles.argumentNode}
@@ -36,27 +42,41 @@ function ArgumentNode({
       >
         <div className={styles.argumentHeader}>
           <div>
-            <ReticleIcon2 />
-            <LinkIcon />
-            p1C1N1
+            {/* Tes icônes ici */}
+            <span>p1C1N1</span>
           </div>
           <div>
-            <ChevronUpDownIcon />
+            {/* Icône chevron */}
           </div>
         </div>
         <div className={styles.argumentBody}>
-          <span className={styles.argumentId}>#0001</span> -{" "}
+          <span className={styles.argumentId}>#{argument.id}</span> -{" "}
           <span className={styles.argumentClaim}>{argument.claim}</span>
         </div>
+        
+        {/* AFFICHAGE DES RÉFÉRENCES ASSOCIÉES */}
+        {associatedRefs.length > 0 && (
+          <div className={styles.associatedReferences}>
+            <div className={styles.referencesHeader}>
+              <small>📚 Références associées :</small>
+            </div>
+            <div className={styles.referencesList}>
+              {associatedRefs.map(ref => (
+                <div key={ref.id} className={styles.referenceBadge}>
+                  <span className={styles.refBadgeId}>{ref.id}</span>
+                  <span className={styles.refBadgeTitle}>{ref.title}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
         <div className={styles.argumentFooter}>
           <p className={styles.natura}>{argument.natura}</p>
           <small>
             {argument.causa} | {argument.forma} | {argument.natura} | Validité:{" "}
             {argument.validity} | Pertinence: {argument.relevance}
           </small>
-          {/* {argument.claimComment && (
-            <p className="argument-comment">{argument.claimComment}</p>
-          )} */}
           <div className={styles.argumentActions}>
             <button
               onClick={(e) => {
@@ -65,7 +85,8 @@ function ArgumentNode({
               }}
               title="Ajouter un sous-argument"
             >
-              <PlusIcon size={12} />
+              {/* <PlusIcon size={12} /> */}
+              +
             </button>
 
             <button
@@ -75,7 +96,8 @@ function ArgumentNode({
               }}
               title="Modifier l'argument"
             >
-              <EditIcon size={12} />
+              {/* <EditIcon size={12} /> */}
+              ✏️
             </button>
             <button
               onClick={(e) => {
@@ -84,14 +106,15 @@ function ArgumentNode({
               }}
               title="Supprimer l'argument"
             >
-              <TrashIcon size={12} />
+              {/* <TrashIcon size={12} /> */}
+              🗑️
             </button>
           </div>
         </div>
       </div>
       {/* Affichage récursif des enfants */}
       {hasChildren && (
-        <div className="argument-children">
+        <div className={styles.argumentChildren}>
           {argument.children.map((child) => (
             <ArgumentNode
               key={child.id}
@@ -100,6 +123,7 @@ function ArgumentNode({
               onAddArgument={onAddArgument}
               onEditArgument={onEditArgument}
               onDeleteArgument={onDeleteArgument}
+              references={references}  // ← Passe les références aux enfants
             />
           ))}
         </div>
@@ -113,6 +137,7 @@ export function ArgumentTree({
   onAddArgument,
   onEditArgument,
   onDeleteArgument,
+  references = [],
 }) {
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [editingArgument, setEditingArgument] = useState(null);
@@ -186,6 +211,7 @@ export function ArgumentTree({
           onSave={handleArgumentSave}
           initialData={editingArgument || {}}
           parentId={parentId}
+          references={references}
         />
       )}
     </div>

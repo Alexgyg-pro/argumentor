@@ -1,13 +1,14 @@
 # Current README.md file structure
 
 docs/
+├── Diagramme UI.drawio
 └── filestructure.md
 src/
 ├── assets/
 │ ├── react.svg
 ├── components/
 │ ├── arguments/
-│ ├── common/ # Reusable UI components
+│ ├── common/
 | │ ├── HiddenFileInput.jsx
 | │ ├── Icon.jsx
 | │ ├── Icons.jsx
@@ -20,6 +21,8 @@ src/
 | | │ ├── DefinitionForm.jsx
 | | │ ├── Forms.jsx
 | | │ ├── Forms.module.css
+| | │ ├── ReferenceForm.jsx
+| | │ ├── ReferenceSelector.jsx
 │ ├── layout/
 | │ ├── Footer.jsx
 | │ ├── Header.jsx
@@ -29,8 +32,10 @@ src/
 │ ├── modals/
 | │ ├── ArgumentaireModal.jsx
 | │ ├── ArgumentModal.jsx
+| │ ├── DefinitionModal.jsx
 | │ ├── Modal.jsx
 | │ ├── Modal.module.css
+| │ ├── ReferenceModal.jsx
 │ ├── references/
 | │ ├── ReferenceList.jsx
 | │ ├── ReferenceList.module.css
@@ -50,6 +55,7 @@ src/
 │ ├── argumentUtils.js
 │ ├── confirm.js
 │ ├── definitionUtils.js
+│ ├── idUtils.js
 │ ├── referenceUtils.js
 └── App.css
 └── App.jsx

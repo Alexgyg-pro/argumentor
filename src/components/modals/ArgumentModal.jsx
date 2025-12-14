@@ -6,10 +6,13 @@ export function ArgumentModal({
   isOpen,
   onClose,
   onSave,
-  initialData,
+  initialData = {},
   parentId,
+  references = [],
 }) {
   if (!isOpen) return null;
+
+  const title = initialData.id ? "Modifier l'argument" : "Nouvel argument";
 
   return (
     <Modal
@@ -19,8 +22,9 @@ export function ArgumentModal({
       <ArgumentForm
         parentId={parentId}
         initialData={initialData}
-        onSave={onSave}
+        onSubmit={onSave}
         onCancel={onClose}
+        references={references}
       />
     </Modal>
   );
