@@ -5,6 +5,25 @@ import {
   getNextArgumentId,
   getPossibleNewParents,
 } from "../utils/argumentUtils";
+import {
+  getNextId,
+  initializeCountersFromItems,
+  resetCounter,
+} from "../utils/idUtils";
+
+const extractAllArguments = (tree) => {
+  const args = [];
+  const traverse = (node) => {
+    if (node.id && node.id.startsWith("arg")) {
+      args.push(node);
+    }
+    if (node.children) {
+      node.children.forEach(traverse);
+    }
+  };
+  traverse(tree);
+  return args;
+};
 
 export function useArguments(initialArgumentTree = null) {
   const [argumentTree, setArgumentTree] = useState(
@@ -15,10 +34,16 @@ export function useArguments(initialArgumentTree = null) {
     }
   );
 
+  // Initialiser le compteur d'arguments
+  if (initialArgumentTree) {
+    const allArgs = extractAllArguments(initialArgumentTree);
+    initializeCountersFromItems(allArgs, "arg");
+  }
+
   const addArgument = useCallback(
     (parentId, data) => {
       const newArg = {
-        id: getNextArgumentId(argumentTree),
+        id: getNextId("arg"),
         parentId,
         claim: data.claim || "",
         claimComment: data.claimComment || "",
@@ -187,6 +212,8 @@ export function useArguments(initialArgumentTree = null) {
     setArgumentTree(newTree);
   }, []);
 
+  // Fonction pour extraire tous les arguments d'un arbre
+
   return {
     // État
     argumentTree,
@@ -204,6 +231,6 @@ export function useArguments(initialArgumentTree = null) {
     // Import/export
     importArguments,
     resetArguments,
-    setArguments,
+    setArguments: setArgumentTree,
   };
 }
