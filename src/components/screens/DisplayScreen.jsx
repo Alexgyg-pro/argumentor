@@ -122,13 +122,13 @@ export function DisplayScreen({
               </div>
             )}
 
-            <div className={styles.editButtonContainer}>
+            <div className={styles.editArgumentaireButtonContainer}>
               <button
                 onClick={(e) => {
                   e.preventDefault();
                   onEdit?.();
                 }}
-                className={styles.editButton}
+                className={styles.editArgumentaireButton}
               >
                 Modifier
               </button>

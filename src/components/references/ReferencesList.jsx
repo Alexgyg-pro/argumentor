@@ -1,8 +1,22 @@
 // src/components/references/ReferencesList.jsx
 import { useState } from "react";
 import { ReferenceForm } from "../forms/ReferenceForm";
-import styles from "./ReferencesList.module.css"; // Tu peux réutiliser le même CSS que DefinitionsList
+import styles from "../screens/DisplayScreen.module.css";
 import { ReferenceModal } from "../modals/referenceModal";
+import {
+  ReticleIcon,
+  ReticleIcon2,
+  TargetIcon,
+  LinkIcon,
+  RelevanceIcon,
+  ArrowUpDownIcon,
+  ArrowUpDownIcon2,
+  ChevronUpDownIcon,
+  ChevronUpDownIcon2,
+  TrashIcon,
+  EditIcon,
+  PlusIcon,
+} from "../common/Icons";
 
 export function ReferencesList({
   references = [],
@@ -74,8 +88,8 @@ export function ReferencesList({
           {references.map((ref) => (
             <div key={ref.id} className={styles.item}>
               <div className={styles.content}>
-                <div className={styles.title}>{ref.title}</div>
-                <div className={styles.contentText}>{ref.content}</div>
+                <div className={styles.DefRefTitle}>{ref.title}</div>
+                <div className={styles.DefRefContent}>{ref.content}</div>
               </div>
               <div className={styles.actions}>
                 <button
@@ -83,14 +97,14 @@ export function ReferencesList({
                   className={styles.editButton}
                   title="Modifier"
                 >
-                  ✏️
+                  <EditIcon />
                 </button>
                 <button
                   onClick={() => handleDelete(ref.id)}
                   className={styles.deleteButton}
                   title="Supprimer"
                 >
-                  🗑️
+                  <TrashIcon />
                 </button>
               </div>
             </div>
