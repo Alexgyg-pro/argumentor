@@ -42,10 +42,13 @@ function ArgumentNode({
       >
         <div className={styles.argumentHeader}>
           <div>
-            {/* Tes icônes ici */}
+            <TargetIcon size={12} />
+            <LinkIcon size={12} />
             <span>p1C1N1</span>
           </div>
-          <div>{/* Icône chevron */}</div>
+          <div>
+            <ChevronUpDownIcon />
+          </div>
         </div>
         <div className={styles.argumentBody}>
           <span className={styles.argumentId}>#{argument.id}</span> -{" "}
@@ -83,7 +86,7 @@ function ArgumentNode({
               }}
               title="Ajouter un sous-argument"
             >
-              {/* <PlusIcon size={12} /> */}+
+              <PlusIcon size={12} />
             </button>
 
             <button
@@ -94,7 +97,7 @@ function ArgumentNode({
               title="Modifier l'argument"
             >
               {/* <EditIcon size={12} /> */}
-              ✏️
+              <EditIcon size={12} />
             </button>
             <button
               onClick={(e) => {
@@ -103,8 +106,7 @@ function ArgumentNode({
               }}
               title="Supprimer l'argument"
             >
-              {/* <TrashIcon size={12} /> */}
-              🗑️
+              <TrashIcon size={12} />
             </button>
           </div>
         </div>

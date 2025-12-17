@@ -212,3 +212,67 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Styles pour l'onglet Arguments */
+.argumentNode {
+  min-height: 50px;
+  width: 750px;
+  border: 1px solid black;
+  border-radius: 15px;
+  box-shadow: 5px 5px 5px grey;
+  margin: 5px;
+  padding: 5px;
+  background-color: white;
+  /* cursor: pointer; */
+}
+
+/* .argumentNode:hover {
+  background-color: lightgrey; 
+} */
+
+.argumentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.argumentBody {
+  margin-left: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.argumentId,
+.argumentClaim {
+  font-size: 1.1rem;
+  color: dimgrey;
+}
+
+.argumentFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.natura {
+  font-style: italic;
+  color: #666;
+  font-weight: bold;
+}
+
+.argumentActions {
+  display: flex;
+  gap: 5px;
+}
+
+.argumentActions button {
+  background-color: dimgrey;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
