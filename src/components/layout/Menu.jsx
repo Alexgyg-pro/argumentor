@@ -54,7 +54,7 @@ export function Menu({
         >
           Modifier
         </a>
-        <a
+        {/* <a
           href="#"
           onClick={(e) => {
             e.preventDefault();
@@ -63,7 +63,7 @@ export function Menu({
           className={styles.menuItem}
         >
           Sauvegarder
-        </a>
+        </a> */}
         <a
           href="#"
           onClick={(e) => {
