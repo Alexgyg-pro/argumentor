@@ -55,48 +55,6 @@ export function DisplayScreen({
     setShowEditForm(false);
   };
 
-  // // ARGUMENT HANDLERS
-  // const handleArgumentSave = (argumentData) => {
-  //   if (editingArgument) {
-  //     // Mode modification - CORRECT
-  //     onEditArgument(editingArgument.id, argumentData);
-  //   } else {
-  //     // Mode création
-  //     onAddArgument(selectedParentId, argumentData);
-  //   }
-  //   setShowArgumentForm(false);
-  //   setEditingArgument(null);
-  // };
-
-  // const handleArgumentCancel = () => {
-  //   setShowArgumentForm(false);
-  // };
-
-  // const handleAddArgumentClick = (parentId = "root") => {
-  //   setSelectedParentId(parentId);
-  //   setEditingArgument(null);
-  //   setShowArgumentForm(true);
-  // };
-
-  // const handleEditArgumentClick = (argument) => {
-  //   setEditingArgument(argument); // Stocker l'argument à modifier
-  //   setShowArgumentForm(true);
-  // };
-
-  // DEFINITIONS HANDLERS (à implémenter plus tard)
-  // const handleNewDefinitionClick = (definitionData) => {
-  // setShowDefinitionForm(true);
-  // if (editingDefinition) {
-  //   // Mode modification - CORRECT
-  //   onEditDefinition(editingDefinition.id, definitionData);
-  // } else {
-  //   // Mode création
-  //   onAddDefinition(definitionData);
-  // }
-  // setShowArgumentForm(false);
-  // setEditingArgument(null);
-  // };
-
   // REFERENCES HANDLERS (à implémenter plus tard)
 
   // Compteurs pour les onglets

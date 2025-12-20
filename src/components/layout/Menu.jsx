@@ -54,16 +54,7 @@ export function Menu({
         >
           Modifier
         </a>
-        {/* <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            onSave?.();
-          }}
-          className={styles.menuItem}
-        >
-          Sauvegarder
-        </a> */}
+
         <a
           href="#"
           onClick={(e) => {

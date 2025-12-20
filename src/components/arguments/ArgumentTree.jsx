@@ -175,8 +175,10 @@ export function ArgumentTree({
   };
 
   return (
-    <div className={styles.tabContainer}>
-      <div className={styles.tabHeader}>
+    // <div className={styles.tabContainer}>
+    //   <div className={styles.tabHeader}>
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h3>Arguments</h3>
         <button
           onClick={() => handleAddArgumentClick("root")}
@@ -186,9 +188,7 @@ export function ArgumentTree({
         </button>
       </div>
       {tree.children.length === 0 ? (
-        <p className={styles.emptyMessage}>
-          Aucun argument pour le moment.{console.log(tree)}
-        </p>
+        <p className={styles.emptyMessage}>Aucun argument pour le moment.</p>
       ) : (
         <div className="arguments-list">
           {tree.children.map((argument) => (

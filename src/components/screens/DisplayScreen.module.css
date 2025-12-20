@@ -204,13 +204,16 @@
   background: none;
   cursor: pointer;
   border-bottom: 3px solid transparent;
-  transition: all 0.3s ease;
+  /* transition: all 0.3s ease; */
+  transition: border-bottom-color 0.5s ease, color 0.1s ease;
+  font-weight: bold;
+  color: #aaa;
 }
 
 .activeTab {
   border-bottom-color: dimgrey;
-  font-weight: bold;
   color: dimgrey;
+  transition: border-bottom-color 0.5s ease, color 0.5s;
 }
 
 /* ===== STYLES SPÉCIFIQUES ===== */

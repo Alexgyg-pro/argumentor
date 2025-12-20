@@ -9,14 +9,12 @@ src/
 ├── components/
 │ ├── arguments/
 | │ ├── ArgumentTree.jsx
-| │ ├── ArgumentTree.module.css
 │ ├── common/
 | │ ├── HiddenFileInput.jsx
 | │ ├── Icon.jsx
 | │ ├── Icons.jsx
 │ ├── definitions/
 | │ ├── DefinitionsList.jsx
-| │ ├── DefinitionsList.module.css
 | │ ├── forms/
 | | │ ├── ArgumentaireForm.jsx
 | | │ ├── ArgumentForm.jsx
@@ -40,7 +38,6 @@ src/
 | │ ├── ReferenceModal.jsx
 │ ├── references/
 | │ ├── ReferenceList.jsx
-| │ ├── ReferenceList.module.css
 │ ├── screens/ # Main view components
 | │ ├── DisplayScreen.jsx
 | │ ├── DisplayScreen.module.css
@@ -51,6 +48,8 @@ src/
 │ ├── useArguments.js 
 │ ├── useDefinitions.js 
 │ ├── useReferences.js 
+├── styles/
+│ ├── utilities.css
 ├── utils/
 │ ├── argumentUtils.js
 │ ├── confirm.js
