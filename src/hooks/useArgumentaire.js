@@ -1,5 +1,5 @@
 // src/hooks/useArgumentaire.js
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useArguments } from "./useArguments";
 import { useDefinitions } from "./useDefinitions";
 import { useReferences } from "./useReferences";
@@ -175,7 +175,15 @@ export function useArgumentaire() {
     console.log("📄 Export PDF - à implémenter");
   };
 
+  /**
+   * Compte tous les arguments dans l'arbre
+   */
+  const countArguments = useCallback(() => {
+    return argumentsHook.countAllArguments();
+  }, [argumentsHook]);
+
   // ============ RETOUR DE L'HOOK ============
+  console.log("Nombre de références :", referencesHook.references.length);
 
   return {
     // === ÉTAT ===
@@ -193,6 +201,11 @@ export function useArgumentaire() {
     argumentTree: argumentsHook.argumentTree,
     definitions: definitionsHook.definitions,
     references: referencesHook.references,
+
+    // Compteurs
+    argumentsCount: countArguments(), // ← NOUVEAU
+    definitionsCount: definitionsHook.definitions.length,
+    referencesCount: referencesHook.references.length,
 
     // Références techniques
     fileInputRef,

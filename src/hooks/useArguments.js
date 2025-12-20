@@ -214,6 +214,18 @@ export function useArguments(initialArgumentTree = null) {
 
   // Fonction pour extraire tous les arguments d'un arbre
 
+  const countAllArguments = (tree) => {
+    let count = 0;
+
+    const traverse = (node) => {
+      if (node.id !== "root") count++;
+      node.children?.forEach(traverse);
+    };
+
+    traverse(tree);
+    return count;
+  };
+
   return {
     // État
     argumentTree,
@@ -227,6 +239,7 @@ export function useArguments(initialArgumentTree = null) {
     // Fonctions utilitaires
     getPossibleParents,
     findArgumentById: (id) => findArgumentById(argumentTree, id),
+    countAllArguments: () => countAllArguments(argumentTree),
 
     // Import/export
     importArguments,

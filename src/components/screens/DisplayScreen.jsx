@@ -24,18 +24,21 @@ export function DisplayScreen({
   onAddArgument,
   onEditArgument,
   onDeleteArgument,
+  argumentsCount,
 
   // Props pour les définitions
   definitions = [],
   onAddDefinition,
   onUpdateDefinition,
   onDeleteDefinition,
+  definitionsCount,
 
   // Props pour les références
   references = [],
   onAddReference,
   onUpdateReference,
   onDeleteReference,
+  referencesCount,
 }) {
   const [showEditForm, setShowEditForm] = useState(false);
   const [activeTab, setActiveTab] = useState("arguments");
@@ -58,10 +61,15 @@ export function DisplayScreen({
   // REFERENCES HANDLERS (à implémenter plus tard)
 
   // Compteurs pour les onglets
-  const argumentsCount = argumentTree.children?.length || 0;
-  const definitionsCount = definitions.length;
-  const referencesCount = references.length;
-
+  // const argumentsCount = argumentTree.children?.length || 0;
+  // const definitionsCount = definitions.length;
+  // const referencesCount = references.length;
+  console.log(
+    "argumentsCount,definitionsCount, referencesCount : ",
+    argumentsCount,
+    definitionsCount,
+    referencesCount
+  );
   return (
     <div className={styles.displayScreen}>
       <main>

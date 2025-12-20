@@ -54,16 +54,19 @@ function App() {
                 onAddArgument={argumentaire.onAddArgument}
                 onEditArgument={argumentaire.onEditArgument}
                 onDeleteArgument={argumentaire.onDeleteArgument}
+                argumentsCount={argumentaire.argumentsCount}
                 // Définitions
                 definitions={argumentaire.definitions}
                 onAddDefinition={argumentaire.onAddDefinition}
                 onUpdateDefinition={argumentaire.onUpdateDefinition}
                 onDeleteDefinition={argumentaire.onDeleteDefinition}
+                definitionsCount={argumentaire.definitionsCount}
                 // Références
                 references={argumentaire.references}
                 onAddReference={argumentaire.onAddReference}
                 onUpdateReference={argumentaire.onUpdateReference}
                 onDeleteReference={argumentaire.onDeleteReference}
+                referencesCount={argumentaire.referencesCount}
               />
               <ArgumentaireModal
                 isOpen={argumentaire.editingArgumentaire}
