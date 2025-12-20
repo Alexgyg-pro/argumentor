@@ -55,6 +55,7 @@ function App() {
                 onEditArgument={argumentaire.onEditArgument}
                 onDeleteArgument={argumentaire.onDeleteArgument}
                 argumentsCount={argumentaire.argumentsCount}
+                neutralArgumentsCount={argumentaire.neutralArgumentsCount}
                 // Définitions
                 definitions={argumentaire.definitions}
                 onAddDefinition={argumentaire.onAddDefinition}

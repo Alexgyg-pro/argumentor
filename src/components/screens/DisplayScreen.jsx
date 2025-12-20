@@ -25,6 +25,7 @@ export function DisplayScreen({
   onEditArgument,
   onDeleteArgument,
   argumentsCount,
+  neutralArgumentsCount,
 
   // Props pour les définitions
   definitions = [],
@@ -58,18 +59,6 @@ export function DisplayScreen({
     setShowEditForm(false);
   };
 
-  // REFERENCES HANDLERS (à implémenter plus tard)
-
-  // Compteurs pour les onglets
-  // const argumentsCount = argumentTree.children?.length || 0;
-  // const definitionsCount = definitions.length;
-  // const referencesCount = references.length;
-  console.log(
-    "argumentsCount,definitionsCount, referencesCount : ",
-    argumentsCount,
-    definitionsCount,
-    referencesCount
-  );
   return (
     <div className={styles.displayScreen}>
       <main>
@@ -100,6 +89,18 @@ export function DisplayScreen({
               </button>
             </div>
           </div>
+
+          {/* Bandeau d'alerte pour arguments neutres */}
+          {neutralArgumentsCount > 0 && (
+            <div className={styles.neutralAlert}>
+              <div className={styles.alertContent}>
+                ⚠️{" "}
+                <strong>{neutralArgumentsCount} argument(s) neutre(s)</strong> -
+                Veuillez les positionner en "Pour" ou "Contre" avant de
+                finaliser l'argumentaire.
+              </div>
+            </div>
+          )}
 
           {/* Onglets Arguments/Références/Définitions */}
           <div className={styles.tabsContainer}>

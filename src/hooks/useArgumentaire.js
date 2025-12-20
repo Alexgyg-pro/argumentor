@@ -182,9 +182,11 @@ export function useArgumentaire() {
     return argumentsHook.countAllArguments();
   }, [argumentsHook]);
 
-  // ============ RETOUR DE L'HOOK ============
-  console.log("Nombre de références :", referencesHook.references.length);
+  const countNeutralArguments = useCallback(() => {
+    return argumentsHook.countNeutralArguments();
+  }, [argumentsHook]);
 
+  // ============ RETOUR DU HOOK ============
   return {
     // === ÉTAT ===
     // Métadonnées
@@ -203,7 +205,8 @@ export function useArgumentaire() {
     references: referencesHook.references,
 
     // Compteurs
-    argumentsCount: countArguments(), // ← NOUVEAU
+    argumentsCount: countArguments(),
+    neutralArgumentsCount: countNeutralArguments(),
     definitionsCount: definitionsHook.definitions.length,
     referencesCount: referencesHook.references.length,
 

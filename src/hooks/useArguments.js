@@ -226,6 +226,23 @@ export function useArguments(initialArgumentTree = null) {
     return count;
   };
 
+  const countNeutralArguments = (tree) => {
+    let count = 0;
+
+    const traverse = (node) => {
+      if (node.causa === "neutralis") {
+        count++;
+      }
+      node.children?.forEach(traverse);
+    };
+
+    if (tree && tree.children) {
+      tree.children.forEach(traverse);
+    }
+
+    return count;
+  };
+
   return {
     // État
     argumentTree,
@@ -240,6 +257,7 @@ export function useArguments(initialArgumentTree = null) {
     getPossibleParents,
     findArgumentById: (id) => findArgumentById(argumentTree, id),
     countAllArguments: () => countAllArguments(argumentTree),
+    countNeutralArguments: () => countNeutralArguments(argumentTree),
 
     // Import/export
     importArguments,

@@ -299,3 +299,66 @@
   color: #777;
   font-style: italic;
 }
+
+/* Bandeau d'alerte */
+/* Bandeau d'alerte pour arguments neutres */
+.neutralAlert {
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0 1.5rem 0;
+  color: #856404;
+  animation: fadeIn 0.3s ease;
+}
+
+.alertContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Option: rendre l'onglet Arguments plus visible */
+.tabWarning {
+  position: relative;
+}
+
+.tabWarning::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  background-color: #ffc107;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
