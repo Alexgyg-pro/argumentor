@@ -53,6 +53,8 @@ function App() {
                 argumentTree={argumentaire.argumentTree}
                 onAddArgument={argumentaire.onAddArgument}
                 onEditArgument={argumentaire.onEditArgument}
+                onMoveArgument={argumentaire.onMoveArgument}
+                onGetPossibleParents={argumentaire.onGetPossibleParents}
                 onDeleteArgument={argumentaire.onDeleteArgument}
                 argumentsCount={argumentaire.argumentsCount}
                 neutralArgumentsCount={argumentaire.neutralArgumentsCount}

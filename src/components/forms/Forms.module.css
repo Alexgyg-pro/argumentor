@@ -427,3 +427,11 @@ label {
   border-radius: 4px;
   cursor: pointer;
 }
+
+.helpText {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: #666;
+  font-style: italic;
+}

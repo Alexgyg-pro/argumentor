@@ -230,6 +230,7 @@ export function useArgumentaire() {
     onEditArgument: argumentsHook.updateArgument,
     onDeleteArgument: argumentsHook.deleteArgument,
     onMoveArgument: argumentsHook.moveArgument,
+    onGetPossibleParents: argumentsHook.getPossibleParents,
 
     // === ACTIONS SUR LES DÉFINITIONS ===
     onAddDefinition: definitionsHook.addDefinition,

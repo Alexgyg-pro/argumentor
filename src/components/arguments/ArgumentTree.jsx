@@ -34,6 +34,31 @@ function ArgumentNode({
   const associatedRefs = references.filter((ref) =>
     argument.references?.includes(ref.id)
   );
+
+  // const handleArgumentSave = (argumentData) => {
+  //   if (editingArgument) {
+  //     // Vérifier si le parent a changé
+  //     if (
+  //       argumentData.parentId &&
+  //       argumentData.parentId !== editingArgument.parentId
+  //     ) {
+  //       // Déplacer l'argument
+  //       onMoveArgument(editingArgument.id, argumentData.parentId);
+  //       // Mettre à jour les autres données
+  //       onEditArgument(editingArgument.id, argumentData);
+  //     } else {
+  //       // Mode modification simple
+  //       onEditArgument(editingArgument.id, argumentData);
+  //     }
+  //   } else {
+  //     // Mode création
+  //     onAddArgument(parentId, argumentData);
+  //   }
+  //   setShowArgumentForm(false);
+  //   setEditingArgument(null);
+  //   setParentId("root");
+  // };
+
   return (
     <>
       <div
@@ -136,6 +161,8 @@ export function ArgumentTree({
   onAddArgument,
   onEditArgument,
   onDeleteArgument,
+  onMoveArgument,
+  onGetPossibleParents,
   references = [],
 }) {
   const [showArgumentForm, setShowArgumentForm] = useState(false);
@@ -143,17 +170,59 @@ export function ArgumentTree({
   const [parentId, setParentId] = useState("root");
 
   // ARGUMENT HANDLERS
+  // const handleArgumentSave = (argumentData) => {
+  //   if (editingArgument) {
+  //     // Mode modification - CORRECT
+  //     onEditArgument(editingArgument.id, argumentData);
+  //   } else {
+  //     // Mode création
+  //     onAddArgument(parentId, argumentData);
+  //   }
+  //   setShowArgumentForm(false);
+  //   setEditingArgument(null);
+  //   setParentId("root"); // <-- Reset parentId after adding
+  // };
+
   const handleArgumentSave = (argumentData) => {
+    console.log("handleArgumentSave appelé avec:", argumentData);
+    console.log("editingArgument:", editingArgument);
+
     if (editingArgument) {
-      // Mode modification - CORRECT
-      onEditArgument(editingArgument.id, argumentData);
+      // Vérifier si le parent a changé
+      const hasParentChanged =
+        argumentData.parentId &&
+        argumentData.parentId !== editingArgument.parentId;
+
+      console.log("Parent changé?", hasParentChanged);
+
+      if (hasParentChanged) {
+        // 1. Déplacer l'argument
+        console.log(
+          "Déplacement via onMoveArgument:",
+          editingArgument.id,
+          "->",
+          argumentData.parentId
+        );
+        onMoveArgument(editingArgument.id, argumentData.parentId);
+
+        // 2. Mettre à jour les autres données (sans parentId)
+        const { parentId, ...dataWithoutParent } = argumentData;
+        console.log("Mise à jour via onEditArgument:", dataWithoutParent);
+        onEditArgument(editingArgument.id, dataWithoutParent);
+      } else {
+        // Mode modification simple
+        console.log("Modification simple via onEditArgument");
+        onEditArgument(editingArgument.id, argumentData);
+      }
     } else {
       // Mode création
+      console.log("Création via onAddArgument avec parent:", parentId);
       onAddArgument(parentId, argumentData);
     }
+
     setShowArgumentForm(false);
     setEditingArgument(null);
-    setParentId("root"); // <-- Reset parentId after adding
+    setParentId("root");
   };
 
   const handleArgumentCancel = () => {
@@ -211,6 +280,7 @@ export function ArgumentTree({
           initialData={editingArgument || {}}
           parentId={parentId}
           references={references}
+          onGetPossibleParents={onGetPossibleParents}
         />
       )}
     </div>

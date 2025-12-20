@@ -26,6 +26,8 @@ export function DisplayScreen({
   onDeleteArgument,
   argumentsCount,
   neutralArgumentsCount,
+  onMoveArgument,
+  onGetPossibleParents,
 
   // Props pour les définitions
   definitions = [],
@@ -141,6 +143,8 @@ export function DisplayScreen({
               onEditArgument={onEditArgument}
               onDeleteArgument={onDeleteArgument}
               references={references}
+              onGetPossibleParents={onGetPossibleParents}
+              onMoveArgument={onMoveArgument}
             />
           )}
 

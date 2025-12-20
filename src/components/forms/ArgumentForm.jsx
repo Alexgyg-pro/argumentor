@@ -4,11 +4,13 @@ import { Form, FormField, FormActions } from "./Forms";
 import { ReferenceSelector } from "./ReferenceSelector";
 import styles from "./Forms.module.css";
 
-export function ArgumentForm({ 
-  initialData = {}, 
-  onSubmit, 
-  onCancel, 
-  references = []  // ← Nouvelle prop pour toutes les références
+export function ArgumentForm({
+  initialData = {},
+  onSubmit,
+  onCancel,
+  parentId,
+  references = [],
+  onGetPossibleParents,
 }) {
   const [formData, setFormData] = useState({
     claim: "",
@@ -20,14 +22,17 @@ export function ArgumentForm({
     relevance: 0.5,
     value: 0.5,
     weight: 0.5,
-    references: [],  // ← IDs des références associées
+    references: [], // ← IDs des références associées
+    parentId: parentId,
     ...initialData,
   });
 
-  // Mettre à jour formData quand initialData change
+  const [possibleParents, setPossibleParents] = useState([]);
+
+  // Premier useEffect : mettre à jour formData quand initialData change
   useEffect(() => {
     if (initialData) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         ...initialData,
         references: initialData.references || [],
@@ -35,17 +40,33 @@ export function ArgumentForm({
     }
   }, [initialData]);
 
+  // Deuxième useEffect : Charger les parents possibles en mode édition
+  useEffect(() => {
+    if (initialData.id && onGetPossibleParents) {
+      const parents = onGetPossibleParents(initialData.id);
+      setPossibleParents(parents);
+
+      // Si initialData n'a pas de parentId, utiliser le parentId passé en prop
+      if (!initialData.parentId && parentId) {
+        setFormData((prev) => ({ ...prev, parentId }));
+      }
+    }
+  }, [initialData.id, onGetPossibleParents, initialData.parentId, parentId]);
+  console.log("Mode édition:", initialData.id);
+  console.log("Possible parents:", possibleParents);
+  console.log("onGetPossibleParents existe:", !!onGetPossibleParents);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Validation basique
     if (!formData.claim.trim()) {
       alert("L'énoncé de l'argument est obligatoire");
       return;
     }
-    
+
     onSubmit(formData);
-    
+
     // Réinitialiser seulement si pas en mode édition
     if (!initialData.id) {
       setFormData({
@@ -64,7 +85,7 @@ export function ArgumentForm({
   };
 
   const handleReferenceChange = (selectedRefIds) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       references: selectedRefIds,
     }));
@@ -72,10 +93,40 @@ export function ArgumentForm({
 
   return (
     <Form onSubmit={handleSubmit}>
+      {initialData.id && possibleParents.length > 0 && (
+        <FormField label="Changer le parent">
+          <select
+            value={formData.parentId}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                parentId: e.target.value,
+              }))
+            }
+            className={styles.select}
+          >
+            <option value="">-- Garder le parent actuel --</option>
+            {possibleParents.map((parent) => (
+              <option key={parent.id} value={parent.id}>
+                {parent.claim.length > 50
+                  ? `[${parent.id}] ${parent.claim.substring(0, 50)}...`
+                  : `[${parent.id}] ${parent.claim}`}
+              </option>
+            ))}
+          </select>
+          <small className={styles.helpText}>
+            Changer le parent déplacera l'argument dans l'arbre.
+            {possibleParents.length === 0 && " Aucun autre parent disponible."}
+          </small>
+        </FormField>
+      )}
+
       <FormField label="Énoncé de l'argument" required>
         <textarea
           value={formData.claim}
-          onChange={(e) => setFormData(prev => ({ ...prev, claim: e.target.value }))}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, claim: e.target.value }))
+          }
           placeholder="Énoncez clairement l'argument..."
           rows={3}
           required
@@ -87,7 +138,9 @@ export function ArgumentForm({
       <FormField label="Commentaire (optionnel)">
         <textarea
           value={formData.claimComment}
-          onChange={(e) => setFormData(prev => ({ ...prev, claimComment: e.target.value }))}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, claimComment: e.target.value }))
+          }
           placeholder="Explications, précisions, contexte..."
           rows={2}
           className={styles.textarea}
@@ -98,7 +151,9 @@ export function ArgumentForm({
         <FormField label="Cause" className={styles.halfWidth}>
           <select
             value={formData.causa}
-            onChange={(e) => setFormData(prev => ({ ...prev, causa: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, causa: e.target.value }))
+            }
             className={styles.select}
           >
             <option value="pro">Pour</option>
@@ -110,7 +165,9 @@ export function ArgumentForm({
         <FormField label="Forme" className={styles.halfWidth}>
           <select
             value={formData.forma}
-            onChange={(e) => setFormData(prev => ({ ...prev, forma: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, forma: e.target.value }))
+            }
             className={styles.select}
           >
             <option value="descriptif">Descriptif</option>
@@ -124,7 +181,9 @@ export function ArgumentForm({
         <FormField label="Nature" className={styles.halfWidth}>
           <select
             value={formData.natura}
-            onChange={(e) => setFormData(prev => ({ ...prev, natura: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, natura: e.target.value }))
+            }
             className={styles.select}
           >
             <option value="validity">Validité</option>
@@ -141,10 +200,17 @@ export function ArgumentForm({
             max="1"
             step="0.1"
             value={formData.validity}
-            onChange={(e) => setFormData(prev => ({ ...prev, validity: parseFloat(e.target.value) }))}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                validity: parseFloat(e.target.value),
+              }))
+            }
             className={styles.range}
           />
-          <span className={styles.rangeValue}>{formData.validity.toFixed(1)}</span>
+          <span className={styles.rangeValue}>
+            {formData.validity.toFixed(1)}
+          </span>
         </FormField>
       </div>
 
@@ -156,10 +222,17 @@ export function ArgumentForm({
             max="1"
             step="0.1"
             value={formData.relevance}
-            onChange={(e) => setFormData(prev => ({ ...prev, relevance: parseFloat(e.target.value) }))}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                relevance: parseFloat(e.target.value),
+              }))
+            }
             className={styles.range}
           />
-          <span className={styles.rangeValue}>{formData.relevance.toFixed(1)}</span>
+          <span className={styles.rangeValue}>
+            {formData.relevance.toFixed(1)}
+          </span>
         </FormField>
 
         <FormField label="Valeur" className={styles.halfWidth}>
@@ -169,7 +242,12 @@ export function ArgumentForm({
             max="1"
             step="0.1"
             value={formData.value}
-            onChange={(e) => setFormData(prev => ({ ...prev, value: parseFloat(e.target.value) }))}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                value: parseFloat(e.target.value),
+              }))
+            }
             className={styles.range}
           />
           <span className={styles.rangeValue}>{formData.value.toFixed(1)}</span>
@@ -180,9 +258,11 @@ export function ArgumentForm({
       <FormField label="Références associées">
         {references.length === 0 ? (
           <div className={styles.infoMessage}>
-            Aucune référence disponible. 
+            Aucune référence disponible.
             <br />
-            <small>Créez d'abord des références dans l'onglet "Références".</small>
+            <small>
+              Créez d'abord des références dans l'onglet "Références".
+            </small>
           </div>
         ) : (
           <ReferenceSelector
@@ -197,7 +277,11 @@ export function ArgumentForm({
         <button type="submit" className={styles.primaryButton}>
           {initialData.id ? "Modifier" : "Ajouter"}
         </button>
-        <button type="button" onClick={onCancel} className={styles.secondaryButton}>
+        <button
+          type="button"
+          onClick={onCancel}
+          className={styles.secondaryButton}
+        >
           Annuler
         </button>
       </FormActions>
