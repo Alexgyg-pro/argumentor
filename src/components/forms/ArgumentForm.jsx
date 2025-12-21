@@ -52,9 +52,6 @@ export function ArgumentForm({
       }
     }
   }, [initialData.id, onGetPossibleParents, initialData.parentId, parentId]);
-  console.log("Mode édition:", initialData.id);
-  console.log("Possible parents:", possibleParents);
-  console.log("onGetPossibleParents existe:", !!onGetPossibleParents);
 
   const handleSubmit = (e) => {
     e.preventDefault();

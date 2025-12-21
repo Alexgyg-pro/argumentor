@@ -35,6 +35,8 @@ function ArgumentNode({
     ? getArgumentCode(argument.id)
     : `#${argument.id}`;
   const color = getArgumentColor ? getArgumentColor(argument.id) : "inherit";
+  const code = getArgumentCode(argument.id);
+  console.log("code : ", code);
 
   // Obtenir les références associées à cet argument
   const associatedRefs = references.filter((ref) =>
@@ -55,7 +57,7 @@ function ArgumentNode({
           <div>
             <TargetIcon size={12} />
             <LinkIcon size={12} />
-            <span>p1C1N1</span>
+            <span>{code}</span>
           </div>
           <div>
             <ChevronUpDownIcon />
@@ -160,9 +162,6 @@ export function ArgumentTree({
   const [parentId, setParentId] = useState("root");
 
   const handleArgumentSave = (argumentData) => {
-    console.log("handleArgumentSave appelé avec:", argumentData);
-    console.log("editingArgument:", editingArgument);
-
     if (editingArgument) {
       // Vérifier si le parent a changé
       const hasParentChanged =
@@ -192,7 +191,6 @@ export function ArgumentTree({
       }
     } else {
       // Mode création
-      console.log("Création via onAddArgument avec parent:", parentId);
       onAddArgument(parentId, argumentData);
     }
 
