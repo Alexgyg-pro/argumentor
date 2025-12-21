@@ -31,12 +31,12 @@ function ArgumentNode({
   getArgumentColor,
 }) {
   const hasChildren = argument.children && argument.children.length > 0;
-  const hierarchicalCode = getArgumentCode
+  const code = getArgumentCode
     ? getArgumentCode(argument.id)
     : `#${argument.id}`;
   const color = getArgumentColor ? getArgumentColor(argument.id) : "inherit";
-  const code = getArgumentCode(argument.id);
-  console.log("code : ", code);
+  // const code = getArgumentCode(argument.id);
+  console.log(argument);
 
   // Obtenir les références associées à cet argument
   const associatedRefs = references.filter((ref) =>
@@ -55,8 +55,15 @@ function ArgumentNode({
       >
         <div className={styles.argumentHeader}>
           <div>
-            <TargetIcon size={12} />
-            <LinkIcon size={12} />
+            {/* <TargetIcon size={12} />
+            <LinkIcon size={12} /> */}
+            {argument.natura === "validity" ? (
+              <TargetIcon size={12} />
+            ) : argument.natura === "relevance" ? (
+              <LinkIcon size={12} />
+            ) : (
+              <span>?</span>
+            )}
             <span>{code}</span>
           </div>
           <div>
