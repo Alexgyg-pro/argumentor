@@ -28,6 +28,8 @@ export function DisplayScreen({
   neutralArgumentsCount,
   onMoveArgument,
   onGetPossibleParents,
+  getArgumentCode,
+  getArgumentColor,
 
   // Props pour les définitions
   definitions = [],
@@ -145,6 +147,8 @@ export function DisplayScreen({
               references={references}
               onGetPossibleParents={onGetPossibleParents}
               onMoveArgument={onMoveArgument}
+              getArgumentCode={getArgumentCode}
+              getArgumentColor={getArgumentColor}
             />
           )}
 

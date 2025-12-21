@@ -27,43 +27,29 @@ function ArgumentNode({
   onEditArgument,
   onAddArgument,
   references = [],
+  getArgumentCode,
+  getArgumentColor,
 }) {
   const hasChildren = argument.children && argument.children.length > 0;
+  const hierarchicalCode = getArgumentCode
+    ? getArgumentCode(argument.id)
+    : `#${argument.id}`;
+  const color = getArgumentColor ? getArgumentColor(argument.id) : "inherit";
 
   // Obtenir les références associées à cet argument
   const associatedRefs = references.filter((ref) =>
     argument.references?.includes(ref.id)
   );
 
-  // const handleArgumentSave = (argumentData) => {
-  //   if (editingArgument) {
-  //     // Vérifier si le parent a changé
-  //     if (
-  //       argumentData.parentId &&
-  //       argumentData.parentId !== editingArgument.parentId
-  //     ) {
-  //       // Déplacer l'argument
-  //       onMoveArgument(editingArgument.id, argumentData.parentId);
-  //       // Mettre à jour les autres données
-  //       onEditArgument(editingArgument.id, argumentData);
-  //     } else {
-  //       // Mode modification simple
-  //       onEditArgument(editingArgument.id, argumentData);
-  //     }
-  //   } else {
-  //     // Mode création
-  //     onAddArgument(parentId, argumentData);
-  //   }
-  //   setShowArgumentForm(false);
-  //   setEditingArgument(null);
-  //   setParentId("root");
-  // };
-
   return (
     <>
       <div
         className={styles.argumentNode}
-        style={{ marginLeft: `${depth * 20}px` }}
+        style={{
+          marginLeft: `${depth * 20}px`,
+          paddingLeft: "20px",
+          borderLeft: `4px solid ${color}`,
+        }}
       >
         <div className={styles.argumentHeader}>
           <div>
@@ -147,7 +133,9 @@ function ArgumentNode({
               onAddArgument={onAddArgument}
               onEditArgument={onEditArgument}
               onDeleteArgument={onDeleteArgument}
-              references={references} // ← Passe les références aux enfants
+              references={references}
+              getArgumentCode={getArgumentCode}
+              getArgumentColor={getArgumentColor}
             />
           ))}
         </div>
@@ -164,24 +152,12 @@ export function ArgumentTree({
   onMoveArgument,
   onGetPossibleParents,
   references = [],
+  getArgumentCode,
+  getArgumentColor,
 }) {
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [editingArgument, setEditingArgument] = useState(null);
   const [parentId, setParentId] = useState("root");
-
-  // ARGUMENT HANDLERS
-  // const handleArgumentSave = (argumentData) => {
-  //   if (editingArgument) {
-  //     // Mode modification - CORRECT
-  //     onEditArgument(editingArgument.id, argumentData);
-  //   } else {
-  //     // Mode création
-  //     onAddArgument(parentId, argumentData);
-  //   }
-  //   setShowArgumentForm(false);
-  //   setEditingArgument(null);
-  //   setParentId("root"); // <-- Reset parentId after adding
-  // };
 
   const handleArgumentSave = (argumentData) => {
     console.log("handleArgumentSave appelé avec:", argumentData);
@@ -267,6 +243,9 @@ export function ArgumentTree({
               onDeleteArgument={onDeleteArgument}
               onEditArgument={handleEditArgumentClick}
               onAddArgument={handleAddArgumentClick} // CORRECT: on passe la fonction, pas juste une référence
+              references={references}
+              getArgumentCode={getArgumentCode} // ← Passe les fonctions
+              getArgumentColor={getArgumentColor} // ← Passe les fonctions
             />
           ))}
         </div>

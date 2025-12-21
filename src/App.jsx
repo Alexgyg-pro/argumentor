@@ -58,6 +58,8 @@ function App() {
                 onDeleteArgument={argumentaire.onDeleteArgument}
                 argumentsCount={argumentaire.argumentsCount}
                 neutralArgumentsCount={argumentaire.neutralArgumentsCount}
+                getArgumentCode={argumentaire.getArgumentCode}
+                getArgumentColor={argumentaire.getArgumentColor}
                 // Définitions
                 definitions={argumentaire.definitions}
                 onAddDefinition={argumentaire.onAddDefinition}

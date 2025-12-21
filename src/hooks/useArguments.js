@@ -1,9 +1,12 @@
 // src/hooks/useArguments.js
-import { useState, useCallback } from "react";
+
+import { useState, useCallback, useEffect } from "react";
 import {
   findArgumentById,
   getNextArgumentId,
   getPossibleNewParents,
+  recalculateCodesAndColors,
+  findParentById,
 } from "../utils/argumentUtils";
 import {
   getNextId,
@@ -32,6 +35,35 @@ export function useArguments(initialArgumentTree = null) {
       claim: "",
       children: [],
     }
+  );
+
+  const [argumentCodes, setArgumentCodes] = useState({});
+
+  // Recalculer les codes quand l'arbre change
+  useEffect(() => {
+    if (argumentTree) {
+      const codes = recalculateCodesAndColors(
+        argumentTree,
+        findParentById,
+        true // parentEstPourTheseDefault
+      );
+      setArgumentCodes(codes);
+    }
+  }, [argumentTree]);
+
+  const getArgumentCode = useCallback(
+    (argumentId) => {
+      return argumentCodes[argumentId]?.code || `#${argumentId}`;
+    },
+    [argumentCodes]
+  );
+
+  // Fonction pour obtenir la couleur d'un argument
+  const getArgumentColor = useCallback(
+    (argumentId) => {
+      return argumentCodes[argumentId]?.color || "gray";
+    },
+    [argumentCodes]
   );
 
   // Initialiser le compteur d'arguments
@@ -246,6 +278,7 @@ export function useArguments(initialArgumentTree = null) {
   return {
     // État
     argumentTree,
+    argumentCodes,
 
     // Fonctions CRUD
     addArgument,
@@ -258,6 +291,8 @@ export function useArguments(initialArgumentTree = null) {
     findArgumentById: (id) => findArgumentById(argumentTree, id),
     countAllArguments: () => countAllArguments(argumentTree),
     countNeutralArguments: () => countNeutralArguments(argumentTree),
+    getArgumentCode,
+    getArgumentColor,
 
     // Import/export
     importArguments,

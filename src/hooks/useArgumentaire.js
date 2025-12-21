@@ -210,6 +210,11 @@ export function useArgumentaire() {
     definitionsCount: definitionsHook.definitions.length,
     referencesCount: referencesHook.references.length,
 
+    // Codes et couleurs
+    argumentCodes: argumentsHook.argumentCodes,
+    getArgumentCode: argumentsHook.getArgumentCode,
+    getArgumentColor: argumentsHook.getArgumentColor,
+
     // Références techniques
     fileInputRef,
 
