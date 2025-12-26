@@ -2,6 +2,7 @@
 /* ***********  ATTENTION ! IL Y A DEUX FONCTIONS DANS CE FICHIER : ArgumentNode et ArgumentTree ************/
 import { useState } from "react";
 import { ArgumentModal } from "../modals/ArgumentModal";
+import { ReferencePreviewModal } from "../modals/ReferencePreviewModal";
 import styles from "../screens/DisplayScreen.module.css";
 import {
   ReticleIcon,
@@ -35,13 +36,17 @@ function ArgumentNode({
     ? getArgumentCode(argument.id)
     : `#${argument.id}`;
   const color = getArgumentColor ? getArgumentColor(argument.id) : "inherit";
-  // const code = getArgumentCode(argument.id);
-  console.log(argument);
-
   // Obtenir les références associées à cet argument
   const associatedRefs = references.filter((ref) =>
     argument.references?.includes(ref.id)
   );
+  const [previewReference, setPreviewReference] = useState(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+
+  const handleReferenceClick = (reference) => {
+    setPreviewReference(reference);
+    setShowPreviewModal(true);
+  };
 
   return (
     <>
@@ -83,15 +88,19 @@ function ArgumentNode({
             </div>
             <div className={styles.referencesList}>
               {associatedRefs.map((ref) => (
-                <div key={ref.id} className={styles.referenceBadge}>
+                <button
+                  key={ref.id}
+                  className={styles.referenceBadge}
+                  onClick={() => handleReferenceClick(ref)}
+                  title={`Cliquer pour voir: ${ref.title}`}
+                >
                   <span className={styles.refBadgeId}>{ref.id}</span>
                   <span className={styles.refBadgeTitle}>{ref.title}</span>
-                </div>
+                </button>
               ))}
             </div>
           </div>
         )}
-
         <div className={styles.argumentFooter}>
           <p className={styles.natura}>{argument.natura}</p>
           <small>
@@ -149,6 +158,12 @@ function ArgumentNode({
           ))}
         </div>
       )}
+      {/* Modale de prévisualisation */}
+      <ReferencePreviewModal
+        isOpen={showPreviewModal}
+        onClose={() => setShowPreviewModal(false)}
+        reference={previewReference}
+      />
     </>
   );
 }
