@@ -80,7 +80,9 @@ function ArgumentNode({
           style={{
             marginLeft: `${depth * 20}px`,
             borderLeft: `4px solid ${borderColor}`,
+            cursor: "default", // Flèche, pas main
           }}
+          onClick={() => console.log("Ligne cliquée")} // Pour debug
         >
           <div className={styles.lineModeContent}>
             {/* Icône validité/pertinence */}
@@ -107,18 +109,18 @@ function ArgumentNode({
             </span>
             {toggleButton}
             {/* Indicateur enfants */}
-            {argument.children?.length > 0 && (
+            {/* {argument.children?.length > 0 && (
               <span className={styles.childCount}>
                 ({argument.children.length})
               </span>
-            )}
+            )} */}
 
             {/* Références mini */}
-            {associatedRefs.length > 0 && (
+            {/* {associatedRefs.length > 0 && (
               <span className={styles.lineModeRefs}>
                 📚{associatedRefs.length}
               </span>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -168,7 +170,7 @@ function ArgumentNode({
           </div>
           <div>
             {toggleButton}
-            <ChevronUpDownIcon />
+            {/* <ChevronUpDownIcon /> */}
           </div>
         </div>
         <div className={styles.argumentBody}>
@@ -354,22 +356,29 @@ export function ArgumentTree({
     //   <div className={styles.tabHeader}>
     <div className={styles.container}>
       <div className={styles.header}>
-        <h3>Arguments</h3>
-        <button
-          onClick={allToLineMode}
-          style={{ padding: "8px 16px", marginRight: "10px" }}
-        >
-          Tout en ligne
-        </button>
-        <button onClick={allToCardMode} style={{ padding: "8px 16px" }}>
-          Tout en carte
-        </button>
-        <button
-          onClick={() => handleAddArgumentClick("root")}
-          className={styles.addButton}
-        >
-          Ajouter un argument
-        </button>
+        <div>
+          <h3>Arguments</h3>
+        </div>
+        <div>
+          <button
+            onClick={allToLineMode}
+            style={{ padding: "8px 16px", marginRight: "10px" }}
+          >
+            Tout en ligne
+          </button>
+          <button
+            onClick={allToCardMode}
+            style={{ padding: "8px 16px", marginRight: "10px" }}
+          >
+            Tout en carte
+          </button>
+          <button
+            onClick={() => handleAddArgumentClick("root")}
+            className={styles.addButton}
+          >
+            Ajouter un argument
+          </button>
+        </div>
       </div>
       {tree.children.length === 0 ? (
         <p className={styles.emptyMessage}>Aucun argument pour le moment.</p>
