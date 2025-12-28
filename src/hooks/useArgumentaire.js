@@ -164,7 +164,6 @@ export function useArgumentaire() {
    * Sauvegarde l'argumentaire (à implémenter plus tard)
    */
   const handleSave = () => {
-    console.log("💾 Sauvegarde - à implémenter");
     setIsDirty(false);
   };
 
@@ -246,5 +245,16 @@ export function useArgumentaire() {
     onAddReference: referencesHook.addReference,
     onUpdateReference: referencesHook.updateReference,
     onDeleteReference: referencesHook.deleteReference,
+
+    // Mode collapse
+    lineMode: argumentsHook.lineMode,
+    allToLineMode: argumentsHook.allToLineMode,
+    allToCardMode: argumentsHook.allToCardMode,
+
+    // Débug
+    _debug: {
+      collapseAllExists: !!argumentsHook.collapseAll,
+      expandAll: !!argumentsHook.expandAll,
+    },
   };
 }

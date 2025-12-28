@@ -60,6 +60,10 @@ function App() {
                 neutralArgumentsCount={argumentaire.neutralArgumentsCount}
                 getArgumentCode={argumentaire.getArgumentCode}
                 getArgumentColor={argumentaire.getArgumentColor}
+                // line & card mode
+                lineMode={argumentaire.lineMode}
+                allToLineMode={argumentaire.allToLineMode}
+                allToCardMode={argumentaire.allToCardMode}
                 // Définitions
                 definitions={argumentaire.definitions}
                 onAddDefinition={argumentaire.onAddDefinition}

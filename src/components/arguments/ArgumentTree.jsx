@@ -30,7 +30,9 @@ function ArgumentNode({
   references = [],
   getArgumentCode,
   getArgumentColor,
+  lineMode = new Set(),
 }) {
+  const isLineMode = lineMode.has(argument.id);
   const hasChildren = argument.children && argument.children.length > 0;
   const code = getArgumentCode
     ? getArgumentCode(argument.id)
@@ -47,7 +49,43 @@ function ArgumentNode({
     setPreviewReference(reference);
     setShowPreviewModal(true);
   };
-
+  if (isLineMode) {
+    // MODE ENLIGNE
+    return (
+      <div
+        style={{
+          marginLeft: `${depth * 20}px`,
+          padding: "8px",
+          borderLeft: `4px solid ${
+            getArgumentColor ? getArgumentColor(argument.id) : "gray"
+          }`,
+          background: "#f5f5f5",
+          borderRadius: "4px",
+          marginBottom: "4px",
+          cursor: "pointer",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ fontWeight: "bold", color: "#666" }}>
+            {getArgumentCode ? getArgumentCode(argument.id) : `#${argument.id}`}
+          </span>
+          <span
+            style={{
+              flex: 1,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {argument.claim || "Sans titre"}
+          </span>
+          <span style={{ color: "#999", fontSize: "0.8em" }}>
+            {argument.children?.length ? `(${argument.children.length})` : ""}
+          </span>
+        </div>
+      </div>
+    );
+  }
   return (
     <>
       <div
@@ -154,6 +192,7 @@ function ArgumentNode({
               references={references}
               getArgumentCode={getArgumentCode}
               getArgumentColor={getArgumentColor}
+              lineMode={lineMode}
             />
           ))}
         </div>
@@ -178,6 +217,11 @@ export function ArgumentTree({
   references = [],
   getArgumentCode,
   getArgumentColor,
+
+  // Line & Card modes
+  lineMode = new Set(),
+  allToLineMode = () => {},
+  allToCardMode = () => {},
 }) {
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [editingArgument, setEditingArgument] = useState(null);
@@ -190,25 +234,15 @@ export function ArgumentTree({
         argumentData.parentId &&
         argumentData.parentId !== editingArgument.parentId;
 
-      console.log("Parent changé?", hasParentChanged);
-
       if (hasParentChanged) {
         // 1. Déplacer l'argument
-        console.log(
-          "Déplacement via onMoveArgument:",
-          editingArgument.id,
-          "->",
-          argumentData.parentId
-        );
         onMoveArgument(editingArgument.id, argumentData.parentId);
 
         // 2. Mettre à jour les autres données (sans parentId)
         const { parentId, ...dataWithoutParent } = argumentData;
-        console.log("Mise à jour via onEditArgument:", dataWithoutParent);
         onEditArgument(editingArgument.id, dataWithoutParent);
       } else {
         // Mode modification simple
-        console.log("Modification simple via onEditArgument");
         onEditArgument(editingArgument.id, argumentData);
       }
     } else {
@@ -239,12 +273,37 @@ export function ArgumentTree({
     setShowArgumentForm(true);
   };
 
+  const handleTestClick = () => {
+    if (collapseAll && typeof collapseAll === "function") {
+      collapseAll();
+    } else {
+      console.error("❌ collapseAll n'est pas une fonction");
+    }
+  };
+
+  const testAllToLineMode = () => {
+    // Force un changement visible
+    if (lineMode && lineMode.size === 0) {
+      // Si vide, ajoute un ID factice
+      // Tu dois passer toggleLineMode pour ça
+    }
+  };
+
   return (
     // <div className={styles.tabContainer}>
     //   <div className={styles.tabHeader}>
     <div className={styles.container}>
       <div className={styles.header}>
         <h3>Arguments</h3>
+        <button
+          onClick={allToLineMode}
+          style={{ padding: "8px 16px", marginRight: "10px" }}
+        >
+          Tout en ligne
+        </button>
+        <button onClick={allToCardMode} style={{ padding: "8px 16px" }}>
+          Tout en carte
+        </button>
         <button
           onClick={() => handleAddArgumentClick("root")}
           className={styles.addButton}
@@ -266,6 +325,7 @@ export function ArgumentTree({
               references={references}
               getArgumentCode={getArgumentCode} // ← Passe les fonctions
               getArgumentColor={getArgumentColor} // ← Passe les fonctions
+              lineMode={lineMode}
             />
           ))}
         </div>

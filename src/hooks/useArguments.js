@@ -36,6 +36,8 @@ export function useArguments(initialArgumentTree = null) {
       children: [],
     }
   );
+  const [lineMode, setLineMode] = useState(new Set());
+  const [expandedParents, setExpandedParents] = useState(new Set()); // Parents dont on voit les enfants
 
   const [argumentCodes, setArgumentCodes] = useState({});
 
@@ -275,6 +277,23 @@ export function useArguments(initialArgumentTree = null) {
     return count;
   };
 
+  const allToLineMode = useCallback(() => {
+    if (!argumentTree) return;
+
+    const allIds = new Set();
+    const collectIds = (node) => {
+      if (node.id && node.id !== "root") allIds.add(node.id);
+      node.children?.forEach(collectIds);
+    };
+
+    collectIds(argumentTree);
+    setLineMode(allIds);
+  }, [argumentTree]);
+
+  const allToCardMode = useCallback(() => {
+    setLineMode(new Set());
+  }, []);
+
   return {
     // État
     argumentTree,
@@ -298,5 +317,10 @@ export function useArguments(initialArgumentTree = null) {
     importArguments,
     resetArguments,
     setArguments: setArgumentTree,
+
+    // Line/Card-mode
+    lineMode,
+    allToLineMode,
+    allToCardMode,
   };
 }

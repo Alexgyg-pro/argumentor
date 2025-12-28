@@ -31,6 +31,11 @@ export function DisplayScreen({
   getArgumentCode,
   getArgumentColor,
 
+  // Collapse mode
+  lineMode,
+  allToLineMode,
+  allToCardMode,
+
   // Props pour les définitions
   definitions = [],
   onAddDefinition,
@@ -149,6 +154,9 @@ export function DisplayScreen({
               onMoveArgument={onMoveArgument}
               getArgumentCode={getArgumentCode}
               getArgumentColor={getArgumentColor}
+              lineMode={lineMode}
+              allToLineMode={allToLineMode}
+              allToCardMode={allToCardMode}
             />
           )}
 
