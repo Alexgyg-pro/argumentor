@@ -294,6 +294,21 @@ export function useArguments(initialArgumentTree = null) {
     setLineMode(new Set());
   }, []);
 
+  const toggleLineMode = useCallback((argumentId) => {
+    console.log("🔄 toggleLineMode pour:", argumentId);
+    setLineMode((prev) => {
+      const next = new Set(prev);
+      if (next.has(argumentId)) {
+        next.delete(argumentId);
+        console.log("  -> Supprimé, maintenant", next.size, "en ligne");
+      } else {
+        next.add(argumentId);
+        console.log("  -> Ajouté, maintenant", next.size, "en ligne");
+      }
+      return next;
+    });
+  }, []);
+
   return {
     // État
     argumentTree,
@@ -322,5 +337,6 @@ export function useArguments(initialArgumentTree = null) {
     lineMode,
     allToLineMode,
     allToCardMode,
+    toggleLineMode,
   };
 }

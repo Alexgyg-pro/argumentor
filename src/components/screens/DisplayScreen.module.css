@@ -377,3 +377,65 @@
     opacity: 1;
   }
 }
+
+/* Mode Ligne */
+.lineModeNode {
+  padding: 8px 12px;
+  margin: 2px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #f8fafc;
+}
+
+.lineModeNode:hover {
+  background: #f1f5f9;
+  transform: translateX(2px);
+}
+
+.lineModeContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0; /* Pour ellipsis */
+}
+
+.lineModeIcon {
+  opacity: 0.7;
+}
+
+.lineModeCode {
+  font-family: "Monaco", "Courier New", monospace;
+  font-weight: bold;
+  color: #334155;
+  min-width: 60px;
+  font-size: 0.9em;
+}
+
+.lineModeClaim {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #475569;
+}
+
+.childCount {
+  font-size: 0.8em;
+  color: #64748b;
+  background: #e2e8f0;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.lineModeRefs {
+  font-size: 0.8em;
+  color: #4f46e5;
+  background: #e0e7ff;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.lineModeChildren {
+  margin-left: 20px;
+}

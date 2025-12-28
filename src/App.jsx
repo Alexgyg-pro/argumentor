@@ -64,6 +64,7 @@ function App() {
                 lineMode={argumentaire.lineMode}
                 allToLineMode={argumentaire.allToLineMode}
                 allToCardMode={argumentaire.allToCardMode}
+                toggleLineMode={argumentaire.toggleLineMode}
                 // Définitions
                 definitions={argumentaire.definitions}
                 onAddDefinition={argumentaire.onAddDefinition}

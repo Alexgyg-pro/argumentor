@@ -31,10 +31,11 @@ export function DisplayScreen({
   getArgumentCode,
   getArgumentColor,
 
-  // Collapse mode
+  // Line & Card modes
   lineMode,
   allToLineMode,
   allToCardMode,
+  toggleLineMode,
 
   // Props pour les définitions
   definitions = [],
@@ -157,6 +158,7 @@ export function DisplayScreen({
               lineMode={lineMode}
               allToLineMode={allToLineMode}
               allToCardMode={allToCardMode}
+              toggleLineMode={toggleLineMode}
             />
           )}
 

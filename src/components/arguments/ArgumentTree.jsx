@@ -31,13 +31,18 @@ function ArgumentNode({
   getArgumentCode,
   getArgumentColor,
   lineMode = new Set(),
+  toggleLineMode = () => {},
 }) {
   const isLineMode = lineMode.has(argument.id);
   const hasChildren = argument.children && argument.children.length > 0;
   const code = getArgumentCode
     ? getArgumentCode(argument.id)
     : `#${argument.id}`;
+
+  // 🎯 Récupérer la couleur - l'un c'est pour inline et l'autre pour card. Perser à l'unifier
+  const borderColor = getArgumentColor ? getArgumentColor(argument.id) : "gray";
   const color = getArgumentColor ? getArgumentColor(argument.id) : "inherit";
+
   // Obtenir les références associées à cet argument
   const associatedRefs = references.filter((ref) =>
     argument.references?.includes(ref.id)
@@ -49,41 +54,95 @@ function ArgumentNode({
     setPreviewReference(reference);
     setShowPreviewModal(true);
   };
+
+  const toggleButton = (
+    <button
+      className={styles.toggleModeButton}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (toggleLineMode) {
+          toggleLineMode(argument.id);
+        }
+      }}
+      title={isLineMode ? "Passer en mode carte" : "Passer en mode ligne"}
+    >
+      {/* <ChevronUpDownIcon /> */}
+      {isLineMode ? "📄" : "📏"}
+    </button>
+  );
+
   if (isLineMode) {
     // MODE ENLIGNE
     return (
-      <div
-        style={{
-          marginLeft: `${depth * 20}px`,
-          padding: "8px",
-          borderLeft: `4px solid ${
-            getArgumentColor ? getArgumentColor(argument.id) : "gray"
-          }`,
-          background: "#f5f5f5",
-          borderRadius: "4px",
-          marginBottom: "4px",
-          cursor: "pointer",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ fontWeight: "bold", color: "#666" }}>
-            {getArgumentCode ? getArgumentCode(argument.id) : `#${argument.id}`}
-          </span>
-          <span
-            style={{
-              flex: 1,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {argument.claim || "Sans titre"}
-          </span>
-          <span style={{ color: "#999", fontSize: "0.8em" }}>
-            {argument.children?.length ? `(${argument.children.length})` : ""}
-          </span>
+      <>
+        <div
+          className={styles.lineModeNode}
+          style={{
+            marginLeft: `${depth * 20}px`,
+            borderLeft: `4px solid ${borderColor}`,
+          }}
+        >
+          <div className={styles.lineModeContent}>
+            {/* Icône validité/pertinence */}
+            <span className={styles.lineModeIcon}>
+              {argument.natura === "validity" ? (
+                <TargetIcon size={12} />
+              ) : argument.natura === "relevance" ? (
+                <LinkIcon size={12} />
+              ) : null}
+            </span>
+
+            {/* Code (p1C1, etc.) */}
+            <span className={styles.lineModeCode}>
+              {getArgumentCode
+                ? getArgumentCode(argument.id)
+                : `#${argument.id}`}
+            </span>
+
+            {/* Titre (tronqué) */}
+            <span className={styles.lineModeClaim} title={argument.claim}>
+              {argument.claim.length > 60
+                ? argument.claim.substring(0, 57) + "..."
+                : argument.claim}
+            </span>
+            {toggleButton}
+            {/* Indicateur enfants */}
+            {argument.children?.length > 0 && (
+              <span className={styles.childCount}>
+                ({argument.children.length})
+              </span>
+            )}
+
+            {/* Références mini */}
+            {associatedRefs.length > 0 && (
+              <span className={styles.lineModeRefs}>
+                📚{associatedRefs.length}
+              </span>
+            )}
+          </div>
         </div>
-      </div>
+
+        {/* 🎯 IMPORTANT : Enfants TOUJOURS visibles */}
+        {argument.children && argument.children.length > 0 && (
+          <div className={styles.lineModeChildren}>
+            {argument.children.map((child) => (
+              <ArgumentNode
+                key={child.id}
+                argument={child}
+                depth={depth + 1}
+                lineMode={lineMode}
+                getArgumentColor={getArgumentColor}
+                getArgumentCode={getArgumentCode}
+                references={references}
+                toggleLineMode={toggleLineMode}
+                onAddArgument={onAddArgument}
+                onEditArgument={onEditArgument}
+                onDeleteArgument={onDeleteArgument}
+              />
+            ))}
+          </div>
+        )}
+      </>
     );
   }
   return (
@@ -98,8 +157,6 @@ function ArgumentNode({
       >
         <div className={styles.argumentHeader}>
           <div>
-            {/* <TargetIcon size={12} />
-            <LinkIcon size={12} /> */}
             {argument.natura === "validity" ? (
               <TargetIcon size={12} />
             ) : argument.natura === "relevance" ? (
@@ -110,6 +167,7 @@ function ArgumentNode({
             <span>{code}</span>
           </div>
           <div>
+            {toggleButton}
             <ChevronUpDownIcon />
           </div>
         </div>
@@ -193,6 +251,7 @@ function ArgumentNode({
               getArgumentCode={getArgumentCode}
               getArgumentColor={getArgumentColor}
               lineMode={lineMode}
+              toggleLineMode={toggleLineMode}
             />
           ))}
         </div>
@@ -222,6 +281,7 @@ export function ArgumentTree({
   lineMode = new Set(),
   allToLineMode = () => {},
   allToCardMode = () => {},
+  toggleLineMode,
 }) {
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [editingArgument, setEditingArgument] = useState(null);
@@ -326,6 +386,7 @@ export function ArgumentTree({
               getArgumentCode={getArgumentCode} // ← Passe les fonctions
               getArgumentColor={getArgumentColor} // ← Passe les fonctions
               lineMode={lineMode}
+              toggleLineMode={toggleLineMode}
             />
           ))}
         </div>

@@ -250,6 +250,7 @@ export function useArgumentaire() {
     lineMode: argumentsHook.lineMode,
     allToLineMode: argumentsHook.allToLineMode,
     allToCardMode: argumentsHook.allToCardMode,
+    toggleLineMode: argumentsHook.toggleLineMode,
 
     // Débug
     _debug: {
