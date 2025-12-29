@@ -2,13 +2,14 @@
 
 docs/
 ├── Diagramme UI.drawio
-└── filestructure.md
+├── filestructure.md
+└── rules.md
 src/
 ├── assets/
 │ ├── react.svg
 ├── components/
 │ ├── arguments/
-| │ ├── ArgumentTree.jsx
+| │ ├── ArgumentTree.jsx # components ArgumentTree and ArgumentNode
 │ ├── common/
 | │ ├── HiddenFileInput.jsx
 | │ ├── Icon.jsx
@@ -36,6 +37,7 @@ src/
 | │ ├── Modal.jsx
 | │ ├── Modal.module.css
 | │ ├── ReferenceModal.jsx
+| │ ├── ReferencePreviewModal.jsx
 │ ├── references/
 | │ ├── ReferenceList.jsx
 │ ├── screens/ # Main view components
@@ -45,9 +47,9 @@ src/
 | │ ├── StartScreen.module.css
 ├── hooks/
 │ ├── useArgumentaire.js # Global app state orchestration
-│ ├── useArguments.js 
-│ ├── useDefinitions.js 
-│ ├── useReferences.js 
+│ ├── useArguments.js
+│ ├── useDefinitions.js
+│ ├── useReferences.js
 ├── styles/
 │ ├── utilities.css
 ├── utils/

@@ -8,12 +8,6 @@ export function ReferenceSelector({
   onChange,
   disabled = false,
 }) {
-  console.log("ReferenceSelector render", {
-    allReferencesCount: allReferences.length,
-    selectedRefIds,
-    selectedRefIdsCount: selectedRefIds.length,
-  });
-
   const [availableRefs, setAvailableRefs] = useState([]);
   const [selectedRefs, setSelectedRefs] = useState([]);
   const [selectedAvailableIds, setSelectedAvailableIds] = useState([]);
@@ -21,27 +15,14 @@ export function ReferenceSelector({
 
   // Effet SEULEMENT pour initialiser les listes
   useEffect(() => {
-    console.log("Initialisation effect", {
-      allReferences,
-      selectedRefIds,
-    });
-
     // Références disponibles = toutes sauf celles déjà sélectionnées
     const available = allReferences.filter(
       (ref) => !selectedRefIds.includes(ref.id)
-    );
-    console.log(
-      "Available refs:",
-      available.map((r) => r.id)
     );
 
     // Références sélectionnées = celles dont l'ID est dans selectedRefIds
     const selected = allReferences.filter((ref) =>
       selectedRefIds.includes(ref.id)
-    );
-    console.log(
-      "Selected refs:",
-      selected.map((r) => r.id)
     );
 
     setAvailableRefs(available);
@@ -163,13 +144,6 @@ export function ReferenceSelector({
       onChange(newSelected.map((r) => r.id));
     }
   };
-
-  console.log("État actuel:", {
-    availableRefs: availableRefs.map((r) => r.id),
-    selectedRefs: selectedRefs.map((r) => r.id),
-    selectedAvailableIds,
-    selectedSelectedIds,
-  });
 
   return (
     <div className={styles.referenceSelector}>

@@ -12,6 +12,7 @@ import {
   getNextId,
   initializeCountersFromItems,
   resetCounter,
+  getCounter,
 } from "../utils/idUtils";
 
 const extractAllArguments = (tree) => {
@@ -68,16 +69,16 @@ export function useArguments(initialArgumentTree = null) {
     [argumentCodes]
   );
 
-  // Initialiser le compteur d'arguments
-  if (initialArgumentTree) {
-    const allArgs = extractAllArguments(initialArgumentTree);
-    initializeCountersFromItems(allArgs, "arg");
-  }
-
   const addArgument = useCallback(
     (parentId, data) => {
+      console.log("➕ addArgument appelé");
+      console.log("📊 Compteur arg avant:", getCounter("arg"));
+
+      const newId = getNextId("arg"); // Générer l'ID une seule fois
+      console.log("🆔 Nouvel ID généré:", newId);
+
       const newArg = {
-        id: getNextId("arg"),
+        id: newId, // Utiliser l'ID généré
         parentId,
         claim: data.claim || "",
         claimComment: data.claimComment || "",
@@ -91,6 +92,8 @@ export function useArguments(initialArgumentTree = null) {
         references: data.references || [],
         children: [],
       };
+
+      console.log("📊 Compteur arg après:", getCounter("arg"));
 
       if (!argumentTree) {
         setArgumentTree({
@@ -234,18 +237,50 @@ export function useArguments(initialArgumentTree = null) {
     [argumentTree]
   );
 
+  // const importArguments = useCallback((importedTree) => {
+  //   setArgumentTree(importedTree);
+  // }, []);
+
   const importArguments = useCallback((importedTree) => {
+    console.log("📥 IMPORT - Initialisation des compteurs");
+    const allArgs = extractAllArguments(importedTree);
+    console.log(
+      "📊 Arguments détectés:",
+      allArgs.map((a) => a.id)
+    );
+    initializeCountersFromItems(allArgs, "arg");
     setArgumentTree(importedTree);
   }, []);
 
+  // const resetArguments = useCallback(() => {
+  //   setArgumentTree(null);
+  // }, []);
+
   const resetArguments = useCallback(() => {
+    console.log("🔄 resetArguments - Réinitialisation complète");
+    resetCounter("arg");
     setArgumentTree(null);
   }, []);
 
+  // const setArguments = useCallback((newTree) => {
+  //   setArgumentTree(newTree);
+  // }, []);
+
   const setArguments = useCallback((newTree) => {
+    console.log("🔄 setArguments appelé");
+    if (newTree) {
+      const allArgs = extractAllArguments(newTree);
+      console.log(
+        "📊 Arguments dans nouvel arbre:",
+        allArgs.map((a) => a.id)
+      );
+      initializeCountersFromItems(allArgs, "arg");
+    } else {
+      console.log("🔄 Réinitialisation du compteur arg");
+      resetCounter("arg");
+    }
     setArgumentTree(newTree);
   }, []);
-
   // Fonction pour extraire tous les arguments d'un arbre
 
   const countAllArguments = (tree) => {
