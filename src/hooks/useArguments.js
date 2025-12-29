@@ -237,10 +237,6 @@ export function useArguments(initialArgumentTree = null) {
     [argumentTree]
   );
 
-  // const importArguments = useCallback((importedTree) => {
-  //   setArgumentTree(importedTree);
-  // }, []);
-
   const importArguments = useCallback((importedTree) => {
     console.log("📥 IMPORT - Initialisation des compteurs");
     const allArgs = extractAllArguments(importedTree);
@@ -252,19 +248,11 @@ export function useArguments(initialArgumentTree = null) {
     setArgumentTree(importedTree);
   }, []);
 
-  // const resetArguments = useCallback(() => {
-  //   setArgumentTree(null);
-  // }, []);
-
   const resetArguments = useCallback(() => {
     console.log("🔄 resetArguments - Réinitialisation complète");
     resetCounter("arg");
     setArgumentTree(null);
   }, []);
-
-  // const setArguments = useCallback((newTree) => {
-  //   setArgumentTree(newTree);
-  // }, []);
 
   const setArguments = useCallback((newTree) => {
     console.log("🔄 setArguments appelé");
@@ -276,12 +264,11 @@ export function useArguments(initialArgumentTree = null) {
       );
       initializeCountersFromItems(allArgs, "arg");
     } else {
-      console.log("🔄 Réinitialisation du compteur arg");
+      console.log("🔄 Réinitialisation du compteur arg (arbre null)");
       resetCounter("arg");
     }
     setArgumentTree(newTree);
   }, []);
-  // Fonction pour extraire tous les arguments d'un arbre
 
   const countAllArguments = (tree) => {
     let count = 0;
