@@ -38,6 +38,7 @@ export function useArguments(initialArgumentTree = null) {
     }
   );
   const [lineMode, setLineMode] = useState(new Set());
+  const [expandedNodes, setExpandedNodes] = useState(new Set(["root"]));
   const [expandedParents, setExpandedParents] = useState(new Set()); // Parents dont on voit les enfants
 
   const [argumentCodes, setArgumentCodes] = useState({});
@@ -238,18 +239,18 @@ export function useArguments(initialArgumentTree = null) {
   );
 
   const importArguments = useCallback((importedTree) => {
-    console.log("📥 IMPORT - Initialisation des compteurs");
+    // console.log("📥 IMPORT - Initialisation des compteurs");
     const allArgs = extractAllArguments(importedTree);
-    console.log(
-      "📊 Arguments détectés:",
-      allArgs.map((a) => a.id)
-    );
+    // console.log(
+    //   "📊 Arguments détectés:",
+    //   allArgs.map((a) => a.id)
+    // );
     initializeCountersFromItems(allArgs, "arg");
     setArgumentTree(importedTree);
   }, []);
 
   const resetArguments = useCallback(() => {
-    console.log("🔄 resetArguments - Réinitialisation complète");
+    // console.log("🔄 resetArguments - Réinitialisation complète");
     resetCounter("arg");
     setArgumentTree(null);
   }, []);
@@ -331,6 +332,57 @@ export function useArguments(initialArgumentTree = null) {
     });
   }, []);
 
+  // Toggle un nœud spécifique
+  const toggleNodeExpansion = useCallback(
+    (nodeId) => {
+      console.log("🔘 toggleNodeExpansion appelé pour:", nodeId);
+      console.log("   expandedNodes avant:", Array.from(expandedNodes));
+      setExpandedNodes((prev) => {
+        const next = new Set(prev);
+        if (next.has(nodeId)) {
+          next.delete(nodeId);
+          console.log("   → Supprimé", nodeId);
+        } else {
+          next.add(nodeId);
+          console.log("   → Ajouté", nodeId);
+        }
+        console.log("   expandedNodes après:", Array.from(next));
+        return next;
+      });
+    },
+    [expandedNodes]
+  );
+
+  const expandAllNodes = useCallback(() => {
+    console.log("🔘 expandAllNodes appelé");
+    if (!argumentTree) {
+      console.log("   ❌ Arbre vide");
+      return;
+    }
+    const allIds = new Set(["root"]);
+    const collectIds = (node) => {
+      if (node.id) allIds.add(node.id);
+      node.children?.forEach(collectIds);
+    };
+    collectIds(argumentTree);
+    console.log("   → IDs à développer:", Array.from(allIds));
+    setExpandedNodes(allIds);
+  }, [argumentTree]);
+
+  const collapseAllNodes = useCallback(() => {
+    console.log("🔘 collapseAllNodes appelé");
+    console.log("   → Réinitialisation à ['root']");
+    setExpandedNodes(new Set(["root"]));
+  }, []);
+
+  // Vérifier si un nœud est développé
+  const isNodeExpanded = useCallback(
+    (nodeId) => {
+      return expandedNodes.has(nodeId);
+    },
+    [expandedNodes]
+  );
+
   return {
     // État
     argumentTree,
@@ -360,5 +412,12 @@ export function useArguments(initialArgumentTree = null) {
     allToLineMode,
     allToCardMode,
     toggleLineMode,
+
+    // Compact and expanded modes
+    expandedNodes,
+    toggleNodeExpansion,
+    expandAllNodes,
+    collapseAllNodes,
+    isNodeExpanded,
   };
 }

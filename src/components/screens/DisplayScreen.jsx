@@ -37,6 +37,13 @@ export function DisplayScreen({
   allToCardMode,
   toggleLineMode,
 
+  // Expanded and compact modes
+  expandedNodes,
+  toggleNodeExpansion,
+  expandAllNodes,
+  collapseAllNodes,
+  isNodeExpanded,
+
   // Props pour les définitions
   definitions = [],
   onAddDefinition,
@@ -159,6 +166,11 @@ export function DisplayScreen({
               allToLineMode={allToLineMode}
               allToCardMode={allToCardMode}
               toggleLineMode={toggleLineMode}
+              expandedNodes={expandedNodes}
+              toggleNodeExpansion={toggleNodeExpansion}
+              expandAllNodes={expandAllNodes}
+              collapseAllNodes={collapseAllNodes}
+              isNodeExpanded={isNodeExpanded}
             />
           )}
 

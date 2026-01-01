@@ -246,11 +246,18 @@ export function useArgumentaire() {
     onUpdateReference: referencesHook.updateReference,
     onDeleteReference: referencesHook.deleteReference,
 
-    // Mode collapse
+    // Modes line et card
     lineMode: argumentsHook.lineMode,
     allToLineMode: argumentsHook.allToLineMode,
     allToCardMode: argumentsHook.allToCardMode,
     toggleLineMode: argumentsHook.toggleLineMode,
+
+    // === MODE COMPACT/DÉVELOPPÉ ===
+    expandedNodes: argumentsHook.expandedNodes,
+    toggleNodeExpansion: argumentsHook.toggleNodeExpansion,
+    expandAllNodes: argumentsHook.expandAllNodes,
+    collapseAllNodes: argumentsHook.collapseAllNodes,
+    isNodeExpanded: argumentsHook.isNodeExpanded,
 
     // Débug
     _debug: {

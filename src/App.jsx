@@ -65,6 +65,12 @@ function App() {
                 allToLineMode={argumentaire.allToLineMode}
                 allToCardMode={argumentaire.allToCardMode}
                 toggleLineMode={argumentaire.toggleLineMode}
+                // expanded and compact modes
+                expandedNodes={argumentaire.expandedNodes}
+                toggleNodeExpansion={argumentaire.toggleNodeExpansion}
+                expandAllNodes={argumentaire.expandAllNodes}
+                collapseAllNodes={argumentaire.collapseAllNodes}
+                isNodeExpanded={argumentaire.isNodeExpanded}
                 // Définitions
                 definitions={argumentaire.definitions}
                 onAddDefinition={argumentaire.onAddDefinition}

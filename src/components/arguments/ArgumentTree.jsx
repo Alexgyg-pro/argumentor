@@ -32,9 +32,15 @@ function ArgumentNode({
   getArgumentColor,
   lineMode = new Set(),
   toggleLineMode = () => {},
+
+  // NOUVEAU : Mode compact/développé
+  isExpanded = true,
+  isNodeExpanded = () => true, // ← Par défaut développé pour compatibilité
+  toggleNodeExpansion = () => {}, // ← Fonction pour toggle
 }) {
   const isLineMode = lineMode.has(argument.id);
   const hasChildren = argument.children && argument.children.length > 0;
+  const shouldShowChildren = isExpanded && hasChildren; // ← MODIFIÉ
   const code = getArgumentCode
     ? getArgumentCode(argument.id)
     : `#${argument.id}`;
@@ -147,6 +153,7 @@ function ArgumentNode({
       </>
     );
   }
+  // MODE CARTE
   return (
     <>
       <div
@@ -159,6 +166,20 @@ function ArgumentNode({
       >
         <div className={styles.argumentHeader}>
           <div>
+            {/* Bouton toggle pour développer/réduire */}
+            {hasChildren && (
+              <button
+                className={styles.toggleExpandButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log("▶/▼ cliqué pour:", argument.id);
+                  toggleNodeExpansion(argument.id);
+                }}
+                title={isExpanded ? "Réduire" : "Développer"}
+              >
+                {isExpanded ? "▼" : "▶"}
+              </button>
+            )}
             {argument.natura === "validity" ? (
               <TargetIcon size={12} />
             ) : argument.natura === "relevance" ? (
@@ -239,7 +260,7 @@ function ArgumentNode({
         </div>
       </div>
       {/* Affichage récursif des enfants */}
-      {hasChildren && (
+      {/* {hasChildren && (
         <div className={styles.argumentChildren}>
           {argument.children.map((child) => (
             <ArgumentNode
@@ -254,6 +275,29 @@ function ArgumentNode({
               getArgumentColor={getArgumentColor}
               lineMode={lineMode}
               toggleLineMode={toggleLineMode}
+            />
+          ))}
+        </div>
+      )} */}
+      {shouldShowChildren && ( // ← MODIFIÉ (était juste hasChildren)
+        <div className={styles.argumentChildren}>
+          {argument.children.map((child) => (
+            <ArgumentNode
+              key={child.id}
+              argument={child}
+              depth={depth + 1}
+              onAddArgument={onAddArgument}
+              onEditArgument={onEditArgument}
+              onDeleteArgument={onDeleteArgument}
+              references={references}
+              getArgumentCode={getArgumentCode}
+              getArgumentColor={getArgumentColor}
+              lineMode={lineMode}
+              toggleLineMode={toggleLineMode}
+              // NOUVEAU : passer les props d'expansion
+              isExpanded={isNodeExpanded(child.id)} // ← isNodeExpanded (fonction)
+              onToggleNodeExpansion={toggleNodeExpansion} // ← toggleNodeExpansion (pas onToggleExpansion) <-----------
+              isNodeExpanded={isNodeExpanded} // ← repasse la fonction
             />
           ))}
         </div>
@@ -284,7 +328,21 @@ export function ArgumentTree({
   allToLineMode = () => {},
   allToCardMode = () => {},
   toggleLineMode,
+
+  // Expanded & compact modes
+  expandedNodes = new Set(),
+  toggleNodeExpansion = () => {},
+  expandAllNodes = () => {},
+  collapseAllNodes = () => {},
+  isNodeExpanded = () => true,
 }) {
+  console.log("🌳 ArgumentTree rendu");
+  console.log(
+    "   expandedNodes:",
+    expandedNodes ? Array.from(expandedNodes) : "undefined"
+  );
+  console.log("   Type de expandedNodes:", typeof expandedNodes);
+
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [editingArgument, setEditingArgument] = useState(null);
   const [parentId, setParentId] = useState("root");
@@ -361,6 +419,24 @@ export function ArgumentTree({
         </div>
         <div>
           <button
+            onClick={() => {
+              console.log("🖱️ Bouton TEST Développer cliqué");
+              expandAllNodes();
+            }}
+            style={{ background: "lightblue", marginLeft: "10px" }}
+          >
+            TEST Développer
+          </button>
+          <button
+            onClick={() => {
+              console.log("🖱️ Bouton TEST Réduire cliqué");
+              collapseAllNodes();
+            }}
+            style={{ background: "lightcoral", marginLeft: "10px" }}
+          >
+            TEST Réduire
+          </button>
+          <button
             onClick={allToLineMode}
             style={{ padding: "8px 16px", marginRight: "10px" }}
           >
@@ -396,6 +472,10 @@ export function ArgumentTree({
               getArgumentColor={getArgumentColor} // ← Passe les fonctions
               lineMode={lineMode}
               toggleLineMode={toggleLineMode}
+              // NOUVEAU
+              isExpanded={isNodeExpanded(argument.id)} // ← booléen pour CET enfant
+              onToggleNodeExpansion={toggleNodeExpansion} // ← même fonction pour tous
+              isNodeExpanded={isNodeExpanded} // ← repasse la fonction aux enfants
             />
           ))}
         </div>
