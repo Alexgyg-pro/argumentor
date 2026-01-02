@@ -113,6 +113,20 @@ function ArgumentNode({
                 : `#${argument.id}`}
             </span>
 
+            {/* NOUVEAU : Bouton toggle pour mode ligne */}
+            {hasChildren && (
+              <button
+                className={styles.lineModeToggle}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleNodeExpansion(argument.id);
+                }}
+                title={isExpanded ? "Réduire" : "Développer"}
+              >
+                {isExpanded ? "▼" : "▶"}
+              </button>
+            )}
+
             {/* Titre (tronqué) */}
             <span className={styles.lineModeClaim} title={argument.claim}>
               {argument.claim.length > 60
@@ -120,24 +134,11 @@ function ArgumentNode({
                 : argument.claim}
             </span>
             {toggleButton}
-            {/* Indicateur enfants */}
-            {/* {argument.children?.length > 0 && (
-              <span className={styles.childCount}>
-                ({argument.children.length})
-              </span>
-            )} */}
-
-            {/* Références mini */}
-            {/* {associatedRefs.length > 0 && (
-              <span className={styles.lineModeRefs}>
-                📚{associatedRefs.length}
-              </span>
-            )} */}
           </div>
         </div>
 
         {/* 🎯 IMPORTANT : Enfants TOUJOURS visibles */}
-        {argument.children && argument.children.length > 0 && (
+        {isExpanded && argument.children && argument.children.length > 0 && (
           <div className={styles.lineModeChildren}>
             {argument.children.map((child) => (
               <ArgumentNode
@@ -152,6 +153,10 @@ function ArgumentNode({
                 onAddArgument={onAddArgument}
                 onEditArgument={onEditArgument}
                 onDeleteArgument={onDeleteArgument}
+                // NOUVEAU : ajouter ces 3 props
+                isExpanded={isNodeExpanded(child.id)} // ← booléen
+                toggleNodeExpansion={toggleNodeExpansion} // ← fonction
+                isNodeExpanded={isNodeExpanded} // ← fonction
               />
             ))}
           </div>
@@ -281,25 +286,6 @@ function ArgumentNode({
         </div>
       </div>
       {/* Affichage récursif des enfants */}
-      {/* {hasChildren && (
-        <div className={styles.argumentChildren}>
-          {argument.children.map((child) => (
-            <ArgumentNode
-              key={child.id}
-              argument={child}
-              depth={depth + 1}
-              onAddArgument={onAddArgument}
-              onEditArgument={onEditArgument}
-              onDeleteArgument={onDeleteArgument}
-              references={references}
-              getArgumentCode={getArgumentCode}
-              getArgumentColor={getArgumentColor}
-              lineMode={lineMode}
-              toggleLineMode={toggleLineMode}
-            />
-          ))}
-        </div>
-      )} */}
       {shouldShowChildren && ( // ← MODIFIÉ (était juste hasChildren)
         <div className={styles.argumentChildren}>
           {argument.children.map((child) => (

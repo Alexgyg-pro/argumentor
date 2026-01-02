@@ -443,3 +443,30 @@
 .lineModeChildren {
   margin-left: 20px;
 }
+
+/* Bouton toggle pour mode ligne */
+.lineModeToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0 8px 0 0;
+  font-size: 0.8em;
+  color: #666;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lineModeToggle:hover {
+  color: #333;
+}
+
+/* Ajuster l'espacement */
+.lineModeContent {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacement entre les éléments */
+}
