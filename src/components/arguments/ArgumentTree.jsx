@@ -38,12 +38,6 @@ function ArgumentNode({
   isNodeExpanded = () => true, // ← Par défaut développé pour compatibilité
   toggleNodeExpansion = () => {}, // ← Fonction pour toggle
 }) {
-  console.log("🎯 ArgumentNode rendu pour:", argument.id);
-  console.log("   toggleNodeExpansion est:", typeof toggleNodeExpansion);
-  console.log(
-    "   toggleNodeExpansion === fonction ?",
-    typeof toggleNodeExpansion === "function"
-  );
   const isLineMode = lineMode.has(argument.id);
   const hasChildren = argument.children && argument.children.length > 0;
   const shouldShowChildren = isExpanded && hasChildren; // ← MODIFIÉ
@@ -343,13 +337,6 @@ export function ArgumentTree({
   collapseAllNodes = () => {},
   isNodeExpanded = () => true,
 }) {
-  console.log("🌳 ArgumentTree rendu");
-  console.log(
-    "   expandedNodes:",
-    expandedNodes ? Array.from(expandedNodes) : "undefined"
-  );
-  console.log("   Type de expandedNodes:", typeof expandedNodes);
-
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [editingArgument, setEditingArgument] = useState(null);
   const [parentId, setParentId] = useState("root");

@@ -1,4 +1,4 @@
-// src/layout/Menu.jsx
+// src/components/layout/Menu.jsx
 
 import { confirmIfDirty } from "../../utils/confirm.js";
 import styles from "./Menu.module.css";
@@ -69,11 +69,12 @@ export function Menu({
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            onExport?.();
+            onExport?.(); // ← Exporter PDF
           }}
           className={styles.menuItem}
+          title="Exporter au format PDF"
         >
-          Exporter
+          📄 Exporter PDF
         </a>
         <a
           href="#"

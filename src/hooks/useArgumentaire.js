@@ -1,8 +1,10 @@
 // src/hooks/useArgumentaire.js
+import React from "react";
 import { useState, useRef, useCallback } from "react";
 import { useArguments } from "./useArguments";
 import { useDefinitions } from "./useDefinitions";
 import { useReferences } from "./useReferences";
+// import { generatePdf } from "../utils/pdfUtils";
 
 export function useArgumentaire() {
   // ============ ÉTAT DE L'ARGUMENTAIRE ============
@@ -168,13 +170,6 @@ export function useArgumentaire() {
   };
 
   /**
-   * Exporte en PDF (à implémenter plus tard)
-   */
-  const handleExportPdf = () => {
-    console.log("📄 Export PDF - à implémenter");
-  };
-
-  /**
    * Compte tous les arguments dans l'arbre
    */
   const countArguments = useCallback(() => {
@@ -184,6 +179,80 @@ export function useArgumentaire() {
   const countNeutralArguments = useCallback(() => {
     return argumentsHook.countNeutralArguments();
   }, [argumentsHook]);
+
+  /**
+   * Exporte en PDF (à implémenter plus tard)
+   */
+  const handleExportPdf = useCallback(async () => {
+    try {
+      console.log("📄 Début génération PDF");
+
+      // Validation des données
+      if (!argumentsHook.argumentTree) {
+        alert(
+          "Aucun argumentaire à exporter. Veuillez créer ou importer un argumentaire d'abord."
+        );
+        return;
+      }
+
+      // Import dynamique pour éviter le bundle initial
+      const { pdf } = await import("@react-pdf/renderer");
+      const { PdfDocument } = await import("../components/pdf/PdfDocument");
+
+      const pdfData = {
+        thesis,
+        context,
+        forma,
+        tree: argumentsHook.argumentTree || { children: [] },
+        definitions: definitionsHook.definitions || [],
+        references: referencesHook.references || [],
+        getArgumentCode: argumentsHook.getArgumentCode || ((id) => id),
+      };
+
+      console.log("📊 Données pour PDF:", pdfData);
+
+      // Création du PDF
+      const element = React.createElement(PdfDocument, pdfData);
+      const instance = pdf(element);
+      const blob = await instance.toBlob();
+
+      // Téléchargement
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+
+      // Nom du fichier
+      let fileName = "argumentaire.pdf";
+      if (thesis && thesis.trim()) {
+        const cleanThesis = thesis
+          .substring(0, 40)
+          .replace(/[^a-z0-9\s]/gi, "")
+          .replace(/\s+/g, "_");
+        fileName = `argumentaire_${cleanThesis}.pdf`;
+      }
+
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      console.log("✅ PDF généré avec succès:", fileName);
+    } catch (error) {
+      console.error("❌ Erreur lors de la génération du PDF:", error);
+      alert(
+        `Erreur lors de la génération du PDF: ${error.message}\n\nVérifie la console pour plus de détails.`
+      );
+    }
+  }, [
+    thesis,
+    context,
+    forma,
+    argumentsHook.argumentTree,
+    argumentsHook.getArgumentCode,
+    definitionsHook.definitions,
+    referencesHook.references,
+  ]);
 
   // ============ RETOUR DU HOOK ============
   return {
@@ -227,6 +296,7 @@ export function useArgumentaire() {
     handleFileSelect,
     handleDownload,
     handleSave,
+    handleExportPdf,
     handleExportPdf,
 
     // === ACTIONS SUR LES ARGUMENTS ===
