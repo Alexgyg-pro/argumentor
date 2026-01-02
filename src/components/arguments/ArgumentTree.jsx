@@ -38,6 +38,12 @@ function ArgumentNode({
   isNodeExpanded = () => true, // ← Par défaut développé pour compatibilité
   toggleNodeExpansion = () => {}, // ← Fonction pour toggle
 }) {
+  console.log("🎯 ArgumentNode rendu pour:", argument.id);
+  console.log("   toggleNodeExpansion est:", typeof toggleNodeExpansion);
+  console.log(
+    "   toggleNodeExpansion === fonction ?",
+    typeof toggleNodeExpansion === "function"
+  );
   const isLineMode = lineMode.has(argument.id);
   const hasChildren = argument.children && argument.children.length > 0;
   const shouldShowChildren = isExpanded && hasChildren; // ← MODIFIÉ
@@ -172,8 +178,23 @@ function ArgumentNode({
                 className={styles.toggleExpandButton}
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log("▶/▼ cliqué pour:", argument.id);
-                  toggleNodeExpansion(argument.id);
+                  console.log("🖱️ Bouton ▶/▼ cliqué pour:", argument.id);
+                  console.log(
+                    "   toggleNodeExpansion disponible ?",
+                    !!toggleNodeExpansion
+                  );
+                  console.log("   Type:", typeof toggleNodeExpansion);
+                  if (
+                    toggleNodeExpansion &&
+                    typeof toggleNodeExpansion === "function"
+                  ) {
+                    console.log("   → Appel de toggleNodeExpansion...");
+                    toggleNodeExpansion(argument.id);
+                  } else {
+                    console.log(
+                      "   ❌ toggleNodeExpansion n'est pas une fonction !"
+                    );
+                  }
                 }}
                 title={isExpanded ? "Réduire" : "Développer"}
               >
@@ -296,7 +317,7 @@ function ArgumentNode({
               toggleLineMode={toggleLineMode}
               // NOUVEAU : passer les props d'expansion
               isExpanded={isNodeExpanded(child.id)} // ← isNodeExpanded (fonction)
-              onToggleNodeExpansion={toggleNodeExpansion} // ← toggleNodeExpansion (pas onToggleExpansion) <-----------
+              toggleNodeExpansion={toggleNodeExpansion} // ← toggleNodeExpansion (pas onToggleExpansion) <-----------
               isNodeExpanded={isNodeExpanded} // ← repasse la fonction
             />
           ))}
@@ -418,42 +439,50 @@ export function ArgumentTree({
           <h3>Arguments</h3>
         </div>
         <div>
-          <button
-            onClick={() => {
-              console.log("🖱️ Bouton TEST Développer cliqué");
-              expandAllNodes();
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              marginBottom: "5px",
             }}
-            style={{ background: "lightblue", marginLeft: "10px" }}
           >
-            TEST Développer
-          </button>
-          <button
-            onClick={() => {
-              console.log("🖱️ Bouton TEST Réduire cliqué");
-              collapseAllNodes();
-            }}
-            style={{ background: "lightcoral", marginLeft: "10px" }}
-          >
-            TEST Réduire
-          </button>
-          <button
-            onClick={allToLineMode}
-            style={{ padding: "8px 16px", marginRight: "10px" }}
-          >
-            Tout en ligne
-          </button>
-          <button
-            onClick={allToCardMode}
-            style={{ padding: "8px 16px", marginRight: "10px" }}
-          >
-            Tout en carte
-          </button>
-          <button
-            onClick={() => handleAddArgumentClick("root")}
-            className={styles.addButton}
-          >
-            Ajouter un argument
-          </button>
+            <button
+              onClick={() => handleAddArgumentClick("root")}
+              className={styles.addButton}
+            >
+              Ajouter un argument
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                expandAllNodes();
+              }}
+              style={{ padding: "8px 16px", marginRight: "10px" }}
+            >
+              Développer
+            </button>
+            <button
+              onClick={() => {
+                collapseAllNodes();
+              }}
+              style={{ padding: "8px 16px", marginRight: "10px" }}
+            >
+              Réduire
+            </button>
+            <button
+              onClick={allToLineMode}
+              style={{ padding: "8px 16px", marginRight: "10px" }}
+            >
+              Tout en ligne
+            </button>
+            <button
+              onClick={allToCardMode}
+              style={{ padding: "8px 16px", marginRight: "10px" }}
+            >
+              Tout en carte
+            </button>
+          </div>
         </div>
       </div>
       {tree.children.length === 0 ? (
@@ -474,7 +503,7 @@ export function ArgumentTree({
               toggleLineMode={toggleLineMode}
               // NOUVEAU
               isExpanded={isNodeExpanded(argument.id)} // ← booléen pour CET enfant
-              onToggleNodeExpansion={toggleNodeExpansion} // ← même fonction pour tous
+              toggleNodeExpansion={toggleNodeExpansion} // ← même fonction pour tous
               isNodeExpanded={isNodeExpanded} // ← repasse la fonction aux enfants
             />
           ))}

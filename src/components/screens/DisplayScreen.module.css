@@ -44,6 +44,10 @@
   transition: background-color 0.3s ease;
 }
 
+.addButton {
+  margin-right: 10px;
+}
+
 .editArgumentaireButton:hover,
 .addButton:hover,
 .argumentActions button:hover {
