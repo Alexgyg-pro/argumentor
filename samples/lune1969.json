@@ -1,0 +1,305 @@
+{
+  "thesis": "Les Américains ont marché sur la Lune en 1969.",
+  "context": "Depuis le COVID, nombre de personnes sont tentées de remettre en cause les discours les mieux établis.",
+  "forma": "Descriptif",
+  "definitions": [
+    {
+      "id": "def00001",
+      "term": "Ceinture de Van Allen",
+      "definition": "Les ceintures de Van Allen sont des régions de particules chargées (protons et électrons) piégées par le champ magnétique terrestre, situées à environ 1 000 à 60 000 km d’altitude. Elles contiennent des radiations ionisantes qui peuvent endommager les équipements électroniques et poser un risque pour la santé humaine."
+    },
+    {
+      "id": "def00002",
+      "term": "Pro- et anti-Apollo",
+      "definition": "Les parti prenants de ce débat. Les premiers pensent que les Américains ont marché sur la Lune de1969à 1972, les seconds qu'on n'a jamais marché sur la Lune."
+    }
+  ],
+  "globalReferences": [
+    {
+      "id": "ref00001",
+      "title": "NASA Technical Reports",
+      "content": "Données originales"
+    },
+    {
+      "id": "ref00002",
+      "title": "NASA, Apollo Experience Report – Protection Against Radiation (1973)",
+      "content": "Ce rapport explique que la trajectoire des missions Apollo évitait les zones les plus dangereuses des ceintures."
+    },
+    {
+      "id": "ref00003",
+      "title": "Bailey, J. V., Radiation Protection and Instrumentation, NASA SP-368 (1975)",
+      "content": "Le module de commande Apollo était équipé d’un blindage en aluminium et d’autres matériaux qui offraient une protection contre les radiations. Les doses reçues par les astronautes étaient mesurées par des dosimètres et se situaient entre 0,16 et 1,14 rads par mission, bien en dessous des seuils dangereux pour une exposition aiguë (environ 100 rads pour des effets graves)."
+    },
+    {
+      "id": "ref00004",
+      "title": "Space Physics par James Van Allen lui-même (1983)",
+      "content": "Les ceintures de Van Allen contiennent principalement des protons à haute énergie et des électrons. Les protons à haute énergie sont moins pénétrants que prévu, et le blindage du vaisseau était suffisant pour bloquer la plupart d’entre eux. Les électrons, bien que nombreux, ont une énergie moindre et sont plus facilement arrêtés par les matériaux du vaisseau."
+    },
+    {
+      "id": "ref00005",
+      "title": "Apollo 11 Preliminary Science Report, NASA SP-214 (1969).",
+      "content": "Les astronautes portaient des dosimètres personnels, et les données montrent que l’exposition totale pendant les missions Apollo était comparable à celle reçue lors d’un vol spatial en orbite basse (comme pour les missions Gemini). Les niveaux de radiation n’ont jamais dépassé les limites de sécurité établies par la NASA."
+    },
+    {
+      "id": "ref00006",
+      "title": "The Van Allen Belts and the Upper Atmosphere, NASA Technical Note D-1557 (1962)",
+      "content": "Les scientifiques de la NASA avaient modélisé les ceintures de Van Allen grâce aux données des satellites Explorer et Pioneer dans les années 1950 et 1960. Ces modèles ont permis de calculer les doses attendues et de concevoir des protections adéquates. Les connaissances de l'époque étaient suffisantes pour garantir la sécurité des astronautes."
+    },
+    {
+      "id": "ref00007",
+      "title": "A Funny Thing Happened on the Way to the Moon (2001) de Bart Sibre",
+      "content": "Documentaire."
+    },
+    {
+      "id": "ref00008",
+      "title": "Moon Hoax Debate",
+      "content": "Forum Internet."
+    },
+    {
+      "id": "ref00009",
+      "title": "We Never Went to the Moon de Bill Kaysing (1976)",
+      "content": "Livre"
+    },
+    {
+      "id": "ref00010",
+      "title": "Journal of Geophysical Research, 2009, étude japonaise indépendante",
+      "content": "La sonde SELENE de l'agence spatiale japonaise JAXA (Kaguya, 2007-2009) a imagé les sites Apollo 11, 15 et 17 avec une résolution de 10 m, montrant les modules et les traces."
+    },
+    {
+      "id": "ref00011",
+      "title": "Current Science, revue indienne, 2020",
+      "content": "La sonde Chandrayaan-2 (2019) et Chandrayaan-3 (2023) de l'agence spatiale indienne ISRO ont confirmé les sites Apollo via spectrométrie et imagerie haute résolution."
+    },
+    {
+      "id": "ref00012",
+      "title": "Chinese Journal of Aeronautics, 2012",
+      "content": "Chang'e-2 de l'agence spatiale chinoise CNSA (2010) a photographié le site Apollo 11"
+    },
+    {
+      "id": "ref00013",
+      "title": "The Van Allen belts: are they dangerous? ; Blog ESA Orion (2022)",
+      "content": "Confirme que les 25 astronautes Apollo (9 missions) ont traversé les ceintures sans symptômes radiationnels, avec des doses négligeables grâce à la vitesse (environ 40 000 km/h). L'ESA note que les astronautes de l'ISS traversent déjà les bords des ceintures quotidiennement sans problème.\nCollaboration ESA-JAXA sur le European Space Radiation Array (ERSA, 2024) : Instrument pour mesurer les radiations au-delà des ceintures, basé sur des modèles incluant les données Apollo pour valider les seuils de sécurité."
+    }
+  ],
+  "tree": {
+    "id": "root",
+    "claim": "Les Américains ont marché sur la Lune en 1969.",
+    "children": [
+      {
+        "id": "arg00001",
+        "parentId": "root",
+        "claim": "On a les images et vidéos.",
+        "claimComment": "",
+        "causa": "pro",
+        "forma": "descriptif",
+        "natura": "validity",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.7,
+        "references": [],
+        "children": []
+      },
+      {
+        "id": "arg00002",
+        "parentId": "root",
+        "claim": "Les traces sont toujours visibles",
+        "claimComment": "",
+        "causa": "pro",
+        "forma": "descriptif",
+        "natura": "validity",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.4,
+        "references": ["ref00010", "ref00011", "ref00012"],
+        "children": []
+      },
+      {
+        "id": "arg00003",
+        "parentId": "root",
+        "claim": "Aucun pays ennemi n'a contesté",
+        "claimComment": "",
+        "causa": "pro",
+        "forma": "descriptif",
+        "natura": "validity",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.6,
+        "references": [],
+        "children": []
+      },
+      {
+        "id": "arg00004",
+        "parentId": "root",
+        "claim": "L'informatique moderne en hérite",
+        "claimComment": "",
+        "causa": "pro",
+        "forma": "descriptif",
+        "natura": "validity",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.3,
+        "references": [],
+        "children": []
+      },
+      {
+        "id": "arg00005",
+        "parentId": "root",
+        "claim": "La ceinture de Van Allen était infranchissable",
+        "claimComment": "",
+        "causa": "contra",
+        "forma": "descriptif",
+        "natura": "validity",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.8,
+        "references": ["ref00013"],
+        "children": [
+          {
+            "id": "arg00008",
+            "parentId": "arg00005",
+            "claim": "Trajectoire polaire évitait les zones denses",
+            "claimComment": "",
+            "causa": "contra",
+            "forma": "descriptif",
+            "natura": "validity",
+            "validity": 0.5,
+            "relevance": 0.5,
+            "value": 0.5,
+            "weight": 0.1,
+            "references": ["ref00002"],
+            "children": [
+              {
+                "id": "arg00009",
+                "parentId": "arg00008",
+                "claim": "Calculs orbitaux disponibles",
+                "claimComment": "",
+                "causa": "pro",
+                "forma": "descriptif",
+                "natura": "validity",
+                "validity": 0.5,
+                "relevance": 0.5,
+                "value": 0.5,
+                "weight": 0.2,
+                "references": ["ref00002"],
+                "children": []
+              },
+              {
+                "id": "arg00010",
+                "parentId": "arg00008",
+                "claim": "Dosimétrie des astronautes < limites autorisées",
+                "claimComment": "",
+                "causa": "pro",
+                "forma": "descriptif",
+                "natura": "validity",
+                "validity": 0.5,
+                "relevance": 0.5,
+                "value": 0.5,
+                "weight": 0.7,
+                "references": ["ref00005", "ref00006"],
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "arg00011",
+            "parentId": "arg00005",
+            "claim": "Blindage anti-radiation trop lourd",
+            "claimComment": "",
+            "causa": "pro",
+            "forma": "descriptif",
+            "natura": "validity",
+            "validity": 0.5,
+            "relevance": 0.5,
+            "value": 0.5,
+            "weight": 0.8,
+            "references": [],
+            "children": [
+              {
+                "id": "arg00012",
+                "parentId": "arg00011",
+                "claim": "Masse incompatible avec fusée Saturn V",
+                "claimComment": "",
+                "causa": "pro",
+                "forma": "descriptif",
+                "natura": "validity",
+                "validity": 0.5,
+                "relevance": 0.5,
+                "value": 0.5,
+                "weight": 0.6,
+                "references": [],
+                "children": []
+              },
+              {
+                "id": "arg00013",
+                "parentId": "arg00011",
+                "claim": "Technologie 1960 insuffisante",
+                "claimComment": "",
+                "causa": "pro",
+                "forma": "descriptif",
+                "natura": "validity",
+                "validity": 0.5,
+                "relevance": 0.5,
+                "value": 0.5,
+                "weight": 0.1,
+                "references": [],
+                "children": []
+              },
+              {
+                "id": "arg00014",
+                "parentId": "arg00011",
+                "claim": "Le blindage à base d'aluminium était suffisant.",
+                "claimComment": "",
+                "causa": "contra",
+                "forma": "descriptif",
+                "natura": "validity",
+                "validity": 0.5,
+                "relevance": 0.5,
+                "value": 0.5,
+                "weight": 0.4,
+                "references": ["ref00003"],
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "arg00006",
+        "parentId": "root",
+        "claim": "Les photos sont trop parfaites.",
+        "claimComment": "",
+        "causa": "contra",
+        "forma": "descriptif",
+        "natura": "validity",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.6,
+        "references": [],
+        "children": []
+      },
+      {
+        "id": "arg00007",
+        "parentId": "root",
+        "claim": "Pourquoi ne peut-on plus y retourner ?",
+        "claimComment": "",
+        "causa": "contra",
+        "forma": "descriptif",
+        "natura": "validity",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.6,
+        "references": [],
+        "children": []
+      }
+    ]
+  },
+  "version": "1.0",
+  "downloadedAt": "2024-12-29T19:30:00.000Z"
+}

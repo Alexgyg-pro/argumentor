@@ -207,6 +207,7 @@ export function useArgumentaire() {
         definitions: definitionsHook.definitions || [],
         references: referencesHook.references || [],
         getArgumentCode: argumentsHook.getArgumentCode || ((id) => id),
+        getArgumentColor: argumentsHook.getArgumentColor,
       };
 
       console.log("📊 Données pour PDF:", pdfData);

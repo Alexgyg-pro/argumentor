@@ -200,7 +200,38 @@ const styles = StyleSheet.create({
 // ========== COMPOSANTS ==========
 
 // Helper pour la couleur du code
-const getCodeStyle = (causa) => {
+// const getCodeStyle = (causa) => {
+//   switch (causa) {
+//     case "pro":
+//       return styles.proCode;
+//     case "contra":
+//       return styles.contraCode;
+//     default:
+//       return styles.neutralCode;
+//   }
+// };
+
+// Fonction helper pour la couleur
+const getCodeStyle = (argument, getArgumentColor) => {
+  if (getArgumentColor && typeof getArgumentColor === "function") {
+    const color = getArgumentColor(argument.id);
+    switch (color) {
+      case "blue":
+        return styles.proCode;
+      case "red":
+        return styles.contraCode;
+      case "gray":
+        return styles.neutralCode;
+      default:
+        // Fallback sur causa
+        return getCodeStyleByCausa(argument.causa);
+    }
+  } else {
+    return getCodeStyleByCausa(argument.causa);
+  }
+};
+
+const getCodeStyleByCausa = (causa) => {
   switch (causa) {
     case "pro":
       return styles.proCode;
@@ -212,7 +243,12 @@ const getCodeStyle = (causa) => {
 };
 
 // Composant récursif pour les arguments (sommaire)
-const ArgumentPdfNode = ({ argument, depth, getArgumentCode }) => {
+const ArgumentPdfNode = ({
+  argument,
+  depth,
+  getArgumentCode,
+  getArgumentColor,
+}) => {
   const code = getArgumentCode ? getArgumentCode(argument.id) : argument.id;
 
   return (
@@ -220,7 +256,12 @@ const ArgumentPdfNode = ({ argument, depth, getArgumentCode }) => {
       style={[styles.keepTogether, { marginLeft: depth * 15, marginBottom: 6 }]}
     >
       <Text style={[styles.argumentItem, styles.noBreak]}>
-        <Text style={[styles.argumentCode, getCodeStyle(argument.causa)]}>
+        <Text
+          style={[
+            styles.argumentCode,
+            getCodeStyle(argument, getArgumentColor),
+          ]}
+        >
           {code}
         </Text>
         <Link src={`#arg-${argument.id}`} style={styles.link}>
@@ -233,6 +274,7 @@ const ArgumentPdfNode = ({ argument, depth, getArgumentCode }) => {
           argument={child}
           depth={depth + 1}
           getArgumentCode={getArgumentCode}
+          getArgumentColor={getArgumentColor}
         />
       ))}
     </View>
@@ -240,7 +282,12 @@ const ArgumentPdfNode = ({ argument, depth, getArgumentCode }) => {
 };
 
 // Composant pour les détails d'arguments
-const ArgumentDetails = ({ argument, getArgumentCode, references = [] }) => {
+const ArgumentDetails = ({
+  argument,
+  getArgumentCode,
+  getArgumentColor,
+  references = [],
+}) => {
   const code = getArgumentCode ? getArgumentCode(argument.id) : argument.id;
 
   // Références associées à cet argument
@@ -255,7 +302,8 @@ const ArgumentDetails = ({ argument, getArgumentCode, references = [] }) => {
     >
       {/* Titre avec code coloré */}
       <Text style={styles.argumentTitle}>
-        <Text style={getCodeStyle(argument.causa)}>{code}</Text> -{" "}
+        <Text style={getCodeStyle(argument, getArgumentColor)}>{code}</Text> -{" "}
+        {argument.claim}
         {argument.claim}
       </Text>
 
@@ -313,6 +361,7 @@ export const PdfDocument = ({
   definitions = [],
   references = [],
   getArgumentCode = (id) => id,
+  getArgumentColor = () => "gray",
 }) => {
   // Fonction récursive pour collecter tous les arguments
   const collectAllArguments = (node, all = []) => {
@@ -383,6 +432,7 @@ export const PdfDocument = ({
                 argument={arg}
                 depth={0}
                 getArgumentCode={getArgumentCode}
+                getArgumentColor={getArgumentColor}
               />
             ))
           )}
@@ -403,6 +453,7 @@ export const PdfDocument = ({
               key={arg.id}
               argument={arg}
               getArgumentCode={getArgumentCode}
+              getArgumentColor={getArgumentColor}
               references={references}
             />
           ))}
