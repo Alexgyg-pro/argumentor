@@ -2,6 +2,18 @@
 
 ### Short term Backlog
 
+##### GitHub URGENT
+
+Argumentor premier du nom est sur GitHub, mais cette version n'ira pas plus loin, elle peut être supprimée. La version Argumentor 2 a à peine commencé, elle n'est qu'en local, et peut être supprimé. Argumentor 3 est la version courante, mais elle n'est qu'en local. Ce serait bien quelle prenne la place de la première version. Attention, je crois qu'il y a un token ou je ne sais quoi à renouveller.
+
+##### unuseful controls
+
+Dans le formulaire d'ajout et modification d'argument, tous les contrôles ne sont pas utiles. Les masquer, désactiver ou supprimer.
+
+##### Close button
+
+Dans les formulaires, le bouton pour fermer la fenêtre en haut à droite, le hover n'est vraiment pas terrible.
+
 ##### Forme heritage
 
 En tant qu'utilisateur, je veux que lorsque je créé un argument, ou que je le déplace, il prenne la forme de l'argument parent.

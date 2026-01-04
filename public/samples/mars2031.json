@@ -1,0 +1,76 @@
+{
+  "thesis": "Il faut tenter de coloniser la planète Mars.",
+  "context": "On sait que c'est le projet d'une vie d'Elon Musk, qu'il construit Starship dans ce seul but, et qu'il a 2029 ou 2031 comme dates pour faire marcher un homme sur la planète rouge.",
+  "forma": "Normatif",
+  "definitions": [],
+  "globalReferences": [],
+  "tree": {
+    "id": "root",
+    "claim": "Il faut coloniser la planète Mars.",
+    "children": [
+      {
+        "id": "arg00001",
+        "parentId": "root",
+        "claim": "C'est dans la nature de l'homme d'aller toujours plus loin.",
+        "claimComment": "Cela peut paraître déraisonnable de vouloir aller sur Mars, mais s'il n'y avait des des hommes pour aller toujours plus loin, il n'y aurait jamais eu d'humanité.",
+        "causa": "pro",
+        "forma": "descriptif",
+        "natura": "relevance",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.5,
+        "references": [],
+        "children": []
+      },
+      {
+        "id": "arg00002",
+        "parentId": "root",
+        "claim": "S'il n'y a pas d'alternative à la Terre, un seul astéroïde pourra détruire l'humanité.",
+        "claimComment": "",
+        "causa": "pro",
+        "forma": "descriptif",
+        "natura": "validity",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.5,
+        "references": [],
+        "children": [
+          {
+            "id": "arg00003",
+            "parentId": "arg00002",
+            "claim": "La probabilité que cela arrive est quasiment nulle.",
+            "claimComment": "",
+            "causa": "contra",
+            "forma": "descriptif",
+            "natura": "validity",
+            "validity": 0.5,
+            "relevance": 0.5,
+            "value": 0.5,
+            "weight": 0.5,
+            "references": [],
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "arg00004",
+        "parentId": "root",
+        "claim": "Cela provoquera la mort de nombreux explorateurs.",
+        "claimComment": "",
+        "causa": "contra",
+        "forma": "descriptif",
+        "natura": "relevance",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.5,
+        "references": [],
+        "children": []
+      }
+    ]
+  },
+  "version": "1.0",
+  "downloadedAt": "2026-01-04T18:51:12.957Z"
+}

@@ -119,7 +119,90 @@ export function useArgumentaire() {
     };
     reader.readAsText(file);
   };
+  /**
+   * Charge un exemple depuis le dossier public/samples/
+   */
+  const handleLoadExample = async (filename) => {
+    console.log(`📥 Chargement de l'exemple: ${filename}`);
+    console.log(`🔗 URL tentée: /samples/${filename}`);
+    try {
+      console.log(`📥 Chargement de l'exemple: ${filename}`);
 
+      // Chemin vers le dossier public/samples/
+      const response = await fetch(`/samples/${filename}`);
+      console.log(`📄 Réponse fetch:`, response.status, response.statusText);
+
+      if (!response.ok) {
+        throw new Error(`Fichier non trouvé: /samples/${filename}`);
+      }
+
+      // const jsonData = await response.json();
+      const text = await response.text();
+      console.log(
+        `📝 Contenu brut (premiers 500 caractères):`,
+        text.substring(0, 500)
+      );
+      const jsonData = JSON.parse(text);
+      console.log(`✅ JSON parsé:`, {
+        thesis: jsonData.thesis,
+        context: jsonData.context,
+        forma: jsonData.forma,
+        definitionsCount: jsonData.definitions?.length || 0,
+        referencesCount: jsonData.globalReferences?.length || 0,
+        treeExists: !!jsonData.tree,
+      });
+
+      // 1. Métadonnées
+      setThesis(jsonData.thesis || "");
+      setContext(jsonData.context || "");
+      setForma(jsonData.forma || "Descriptif");
+
+      console.log(`📊 Métadonnées définies:`, {
+        thesis: jsonData.thesis || "",
+        context: jsonData.context || "",
+        forma: jsonData.forma || "Descriptif",
+      });
+
+      // 2. Arbre d'arguments
+      const treeToImport = jsonData.tree || {
+        id: "root",
+        claim: jsonData.thesis || "",
+        children: [],
+      };
+
+      console.log(`🌳 Arbre à importer:`, treeToImport);
+      argumentsHook.importArguments(treeToImport);
+      console.log(`✅ Arbre importé via argumentsHook`);
+
+      // 3. Définitions
+      definitionsHook.importDefinitions(jsonData.definitions || []);
+
+      // 4. Références
+      referencesHook.importReferences(jsonData.globalReferences || []);
+
+      // 5. État
+      setCurrentMode("display");
+      setIsDirty(false);
+
+      console.log("✅ Exemple chargé avec succès:", jsonData.thesis);
+
+      // Force un re-render pour voir les changements
+      setTimeout(() => {
+        console.log("🔄 Re-render forcé après chargement");
+      }, 100);
+
+      return true;
+    } catch (error) {
+      console.error("❌ Erreur lors du chargement de l'exemple:", error);
+      console.error("📋 Détails:", {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      });
+      alert(`Erreur lors du chargement de l'exemple: ${error.message}`);
+      return false;
+    }
+  };
   /**
    * Exporte l'argumentaire complet en JSON
    */
@@ -297,7 +380,7 @@ export function useArgumentaire() {
     handleFileSelect,
     handleDownload,
     handleSave,
-    handleExportPdf,
+    handleLoadExample,
     handleExportPdf,
 
     // === ACTIONS SUR LES ARGUMENTS ===

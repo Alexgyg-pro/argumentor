@@ -15,7 +15,7 @@ export function HelpModal({ isOpen, onClose, onLoadExample }) {
   const examples = [
     {
       id: "lune1969",
-      title: "🌙 Lune 1969",
+      title: "Lune 1969",
       description:
         "Un argumentaire complet sur le débat concernant l'alunissage de 1969",
       file: "lune1969.json",
@@ -24,26 +24,35 @@ export function HelpModal({ isOpen, onClose, onLoadExample }) {
       lastUpdated: "2024-12-15",
     },
     {
-      id: "teletravail",
-      title: "🏠 Télétravail",
-      description: "Pour ou contre le télétravail généralisé ?",
-      file: "teletravail.json",
+      id: "mars2031",
+      title: "Mars 2031l",
+      description: "Il faut tenter de coloniser Mars",
+      file: "mars2031.json",
       arguments: 8,
       references: 5,
       lastUpdated: "2024-12-10",
-      comingSoon: true,
     },
-    {
-      id: "react-vs-vue",
-      title: "⚛️ React vs Vue",
-      description:
-        "Comparaison des frameworks front-end pour un projet d'entreprise",
-      file: "react_vs_vue.json",
-      arguments: 6,
-      references: 4,
-      lastUpdated: "2024-12-05",
-      comingSoon: true,
-    },
+    // {
+    //   id: "teletravail",
+    //   title: "🏠 Télétravail",
+    //   description: "Pour ou contre le télétravail généralisé ?",
+    //   file: "teletravail.json",
+    //   arguments: 8,
+    //   references: 5,
+    //   lastUpdated: "2024-12-10",
+    //   comingSoon: true,
+    // },
+    // {
+    //   id: "react-vs-vue",
+    //   title: "⚛️ React vs Vue",
+    //   description:
+    //     "Comparaison des frameworks front-end pour un projet d'entreprise",
+    //   file: "react_vs_vue.json",
+    //   arguments: 6,
+    //   references: 4,
+    //   lastUpdated: "2024-12-05",
+    //   comingSoon: true,
+    // },
   ];
 
   // Contenu des onglets
@@ -61,11 +70,45 @@ export function HelpModal({ isOpen, onClose, onLoadExample }) {
     return { __html: htmlContent };
   };
 
-  const handleLoadExample = (example) => {
+  // const handleLoadExample = (example) => {
+  //   console.log("Chargement de l'exemple:", example.title);
+  //   if (onLoadExample) {
+  //     onLoadExample(example.file);
+  //   }
+  //   onClose();
+  // };
+
+  // const handleLoadExample = async (filename) => {
+  //   console.log(`🔄 Dans Menu.jsx, appel de handleLoadExample avec:`, filename);
+
+  //   try {
+  //     const success = await onLoadExample(filename); // onLoadExample vient du hook
+  //     console.log(`✅ Résultat de handleLoadExample:`, success);
+
+  //     if (success) {
+  //       // Optionnel: afficher un message de succès
+  //       // alert(`Exemple "${filename}" chargé avec succès!`);
+  //     }
+  //   } catch (error) {
+  //     console.error(`❌ Erreur dans Menu.jsx:`, error);
+  //   }
+
+  //   // Ferme la modale
+  //   setShowHelp(false);
+  // };
+
+  const handleExampleClick = (example) => {
     console.log("Chargement de l'exemple:", example.title);
-    if (onLoadExample) {
+
+    // Vérifie que la fonction existe
+    if (onLoadExample && typeof onLoadExample === "function") {
+      // Appelle avec juste le nom du fichier
       onLoadExample(example.file);
+    } else {
+      console.error("❌ Erreur: onLoadExample n'est pas une fonction");
     }
+
+    // Ferme la modale
     onClose();
   };
 
@@ -154,7 +197,7 @@ export function HelpModal({ isOpen, onClose, onLoadExample }) {
                           className={styles.loadButton}
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleLoadExample(example);
+                            handleExampleClick(example);
                           }}
                         >
                           Charger cet exemple

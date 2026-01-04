@@ -24,6 +24,7 @@ function App() {
         onSave={argumentaire.handleSave}
         onDownload={argumentaire.handleDownload}
         onExport={argumentaire.handleExportPdf}
+        onLoadExample={argumentaire.handleLoadExample}
       />
       <main className={styles.main}>
         <div className={styles.contentContainer}>

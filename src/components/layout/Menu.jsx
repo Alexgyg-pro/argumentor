@@ -13,9 +13,11 @@ export function Menu({
   onExport,
   onHelp,
   isDirty,
+  onLoadExample,
 }) {
   const [helpOpen, setHelpOpen] = useState(false);
   console.log("📋 Menu rendu, helpOpen:", helpOpen);
+  //const { handleLoadExample } = useArgumentaire();
 
   return (
     <nav className={styles.menu}>
@@ -78,7 +80,7 @@ export function Menu({
           className={styles.menuItem}
           title="Exporter au format PDF"
         >
-          📄 Exporter PDF
+          Exporter PDF
         </a>
         <a
           href="#"
@@ -95,7 +97,11 @@ export function Menu({
       </div>
       {/* Modal d'aide */}
       {helpOpen && (
-        <HelpModal isOpen={helpOpen} onClose={() => setHelpOpen(false)} />
+        <HelpModal
+          isOpen={helpOpen}
+          onClose={() => setHelpOpen(false)}
+          onLoadExample={onLoadExample}
+        />
       )}
     </nav>
   );

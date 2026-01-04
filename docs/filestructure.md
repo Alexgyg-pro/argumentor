@@ -4,8 +4,10 @@ docs/
 ├── Diagramme UI.drawio
 ├── filestructure.md
 └── rules.md
-samples/
-└── lune1969.json
+public/
+└── samples/
+│ ├── lune1969.json
+│ └── mars2031.json
 src/
 ├── assets/
 │ ├── react.svg
