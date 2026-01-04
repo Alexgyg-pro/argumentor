@@ -1,30 +1,330 @@
 /* src/components/help/HelpModal.module.css */
 
-/* Plus besoin de .overlay et .modal, gérés par Modal.jsx */
+/* IMPORTANT: On ne contrôle pas directement la hauteur de .helpModal 
+   car c'est géré par le composant Modal parent.
+   On va plutôt s'assurer que le contenu interne occupe toujours 
+   la même hauteur quelle que soit l'onglet. */
 
+/* Le conteneur principal doit prendre toute la hauteur du Modal parent */
+.helpModal {
+  max-width: 800px;
+  /* Pas de height ici, c'est le Modal parent qui contrôle */
+  width: 90vw; /* Largeur relative à la vue */
+  display: flex;
+  flex-direction: column;
+  /* Hauteur maximale pour le Modal parent */
+  max-height: 80vh;
+}
+
+/* Conteneur qui prend toute la hauteur disponible */
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Prend toute la hauteur du parent */
+  min-height: 500px; /* Hauteur minimale garantie */
+}
+
+/* Onglets */
 .tabs {
   display: flex;
-  border-bottom: 1px solid #eaeaea;
-  margin: -20px -20px 20px -20px; /* Compense le padding de la modal */
+  border-bottom: 1px solid #e0e0e0;
   background: #f8f9fa;
-  padding: 0 20px;
+  padding: 0 2rem;
+  gap: 0;
+  margin: 0;
+  flex-shrink: 0; /* Empêche le rétrécissement */
 }
 
 .tab {
-  /* ... styles inchangés ... */
+  padding: 14px 24px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: #7f8c8d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+  min-width: 120px;
+  flex: 1;
 }
 
-.content {
-  max-height: 50vh;
-  overflow-y: auto;
+.tab:hover {
+  color: #34495e;
+  background-color: #f1f1f1;
+}
+
+.tab.active {
+  color: #3498db;
+  border-bottom: 3px solid #3498db;
+  background-color: white;
+  font-weight: 500;
+}
+
+.tabLabel {
+  white-space: nowrap;
+}
+
+/* Zone de contenu principale - Prend tout l'espace restant */
+.contentArea {
+  flex: 1; /* Prend tout l'espace vertical disponible */
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Important pour le contenu scrollable */
+  overflow: hidden; /* Cache les débordements */
+}
+
+/* Contenu avec défilement */
+.scrollableContent {
+  flex: 1; /* Prend tout l'espace disponible */
+  overflow-y: auto; /* Défilement vertical */
   line-height: 1.6;
+  background: #fafafa;
+  border-radius: 0 0 6px 6px;
+  padding: 1.5rem;
+  border: 1px solid #eee;
+  border-top: none;
+  /* Hauteur minimale garantie */
+  min-height: 350px;
 }
 
+/* Conteneur spécifique pour les exemples */
+.examplesContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.examplesList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 200px; /* Hauteur minimale pour la liste */
+}
+
+.exampleCard {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exampleCard:hover {
+  border-color: #3498db;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1);
+  transform: translateY(-2px);
+}
+
+.exampleTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.exampleDescription {
+  font-size: 14px;
+  color: #7f8c8d;
+  line-height: 1.5;
+}
+
+.exampleDetails {
+  font-size: 12px;
+  color: #95a5a6;
+  display: flex;
+  gap: 12px;
+}
+
+.exampleDetails span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.loadButton {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  align-self: flex-start;
+  margin-top: 8px;
+}
+
+.loadButton:hover {
+  background-color: #2980b9;
+}
+
+/* Styles pour le contenu Markdown */
+.markdownContent {
+  font-size: 15px;
+  color: #2c3e50;
+  height: 100%; /* Prend toute la hauteur disponible */
+}
+
+.markdownContent h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.markdownContent h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #34495e;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.markdownContent h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #34495e;
+  margin: 1.25rem 0 0.75rem 0;
+}
+
+.markdownContent p {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.markdownContent ul,
+.markdownContent ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.markdownContent li {
+  margin-bottom: 0.5rem;
+}
+
+.markdownContent strong {
+  font-weight: 600;
+  color: #34495e;
+}
+
+.markdownContent em {
+  font-style: italic;
+  color: #7f8c8d;
+}
+
+.markdownContent blockquote {
+  border-left: 4px solid #e0e0e0;
+  padding-left: 1rem;
+  margin: 1.25rem 0;
+  color: #7f8c8d;
+  font-style: italic;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Pied de page */
 .footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #eaeaea;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  flex-shrink: 0; /* Empêche le rétrécissement */
+}
+
+.primaryButton {
+  padding: 0.5rem 1.5rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.primaryButton:hover {
+  background-color: #2980b9;
+}
+
+.version {
+  font-size: 12px;
+  color: #95a5a6;
+}
+
+/* Scrollbar personnalisée */
+.scrollableContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollableContent::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.scrollableContent::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.scrollableContent::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Adaptation pour les petits écrans */
+@media (max-width: 640px) {
+  .helpModal {
+    width: 95vw;
+    max-height: 90vh;
+  }
+
+  .tabs {
+    padding: 0;
+  }
+
+  .tab {
+    padding: 12px 16px;
+    font-size: 13px;
+    min-width: auto;
+  }
+
+  .scrollableContent {
+    padding: 1.25rem;
+    min-height: 300px;
+  }
+
+  .exampleCard {
+    padding: 12px;
+  }
+
+  .markdownContent h1 {
+    font-size: 20px;
+  }
+
+  .markdownContent h2 {
+    font-size: 18px;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
 }

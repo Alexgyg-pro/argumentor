@@ -1,144 +1,205 @@
-// src/components/HelpModal.jsx
+// src/components/help/HelpModal.jsx
 import { useState } from "react";
 import { Modal } from "../modals/Modal";
 import styles from "./HelpModal.module.css";
+import { welcomeContent } from "./contents/welcome";
+import { theoryContent } from "./contents/theory";
+import { instructionsContent } from "./contents/instructions";
 
-export function HelpModal({ isOpen, onClose }) {
+export function HelpModal({ isOpen, onClose, onLoadExample }) {
   const [activeTab, setActiveTab] = useState("welcome");
-  console.log("🆘 HelpModal rendu, isOpen:", isOpen);
-  if (!isOpen) {
-    console.log("❌ HelpModal non rendu car isOpen = false");
-    return null;
-  }
+
+  if (!isOpen) return null;
+
+  // Liste des exemples disponibles
+  const examples = [
+    {
+      id: "lune1969",
+      title: "🌙 Lune 1969",
+      description:
+        "Un argumentaire complet sur le débat concernant l'alunissage de 1969",
+      file: "lune1969.json",
+      arguments: 12,
+      references: 8,
+      lastUpdated: "2024-12-15",
+    },
+    {
+      id: "teletravail",
+      title: "🏠 Télétravail",
+      description: "Pour ou contre le télétravail généralisé ?",
+      file: "teletravail.json",
+      arguments: 8,
+      references: 5,
+      lastUpdated: "2024-12-10",
+      comingSoon: true,
+    },
+    {
+      id: "react-vs-vue",
+      title: "⚛️ React vs Vue",
+      description:
+        "Comparaison des frameworks front-end pour un projet d'entreprise",
+      file: "react_vs_vue.json",
+      arguments: 6,
+      references: 4,
+      lastUpdated: "2024-12-05",
+      comingSoon: true,
+    },
+  ];
+
+  // Contenu des onglets
+  const tabContents = {
+    welcome: welcomeContent,
+    theory: theoryContent,
+    manual: instructionsContent,
+    examples: `
+      <h2>🎯 Exemples d'argumentaires</h2>
+      <p>Sélectionnez un exemple ci-dessous pour le charger dans l'application :</p>
+    `,
+  };
+
+  const createMarkup = (htmlContent) => {
+    return { __html: htmlContent };
+  };
+
+  const handleLoadExample = (example) => {
+    console.log("Chargement de l'exemple:", example.title);
+    if (onLoadExample) {
+      onLoadExample(example.file);
+    }
+    onClose();
+  };
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       title="📚 Argumentor - Aide"
-      size="large" // Si ta modal supporte différentes tailles
-      className={styles.helpModal} // Classe CSS optionnelle
+      size="large"
+      className={styles.helpModal}
     >
-      {/* Onglets */}
-      <div className={styles.tabs}>
-        {[
-          { id: "welcome", label: "👋 Bienvenue", emoji: "👋" },
-          { id: "theory", label: "📚 Théorie", emoji: "📚" },
-          { id: "manual", label: "🛠️ Mode d'emploi", emoji: "🛠️" },
-          { id: "examples", label: "🎯 Exemples", emoji: "🎯" },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            className={`${styles.tab} ${
-              activeTab === tab.id ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab(tab.id)}
-            title={tab.label}
-          >
-            <span className={styles.tabEmoji}>{tab.emoji}</span>
-            <span className={styles.tabLabel}>{tab.label}</span>
+      <div className={styles.modalContainer}>
+        {/* Onglets */}
+        <div className={styles.tabs}>
+          {[
+            { id: "welcome", label: "Bienvenue" },
+            { id: "theory", label: "Théorie" },
+            { id: "manual", label: "Mode d'emploi" },
+            { id: "examples", label: "Exemples" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              className={`${styles.tab} ${
+                activeTab === tab.id ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab(tab.id)}
+              title={tab.label}
+            >
+              <span className={styles.tabLabel}>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Zone de contenu principale */}
+        <div className={styles.contentArea}>
+          <div className={styles.scrollableContent}>
+            {activeTab === "examples" ? (
+              <div className={styles.examplesContainer}>
+                <div
+                  className={styles.markdownContent}
+                  dangerouslySetInnerHTML={createMarkup(tabContents.examples)}
+                />
+
+                <div className={styles.examplesList}>
+                  {examples.map((example) => (
+                    <div
+                      key={example.id}
+                      className={styles.exampleCard}
+                      onClick={
+                        !example.comingSoon
+                          ? () => handleLoadExample(example)
+                          : undefined
+                      }
+                      style={{
+                        opacity: example.comingSoon ? 0.6 : 1,
+                        cursor: example.comingSoon ? "default" : "pointer",
+                      }}
+                    >
+                      <div className={styles.exampleTitle}>
+                        {example.title}
+                        {example.comingSoon && (
+                          <span
+                            style={{
+                              fontSize: "11px",
+                              background: "#f0f0f0",
+                              color: "#666",
+                              padding: "2px 6px",
+                              borderRadius: "3px",
+                              marginLeft: "8px",
+                            }}
+                          >
+                            Bientôt
+                          </span>
+                        )}
+                      </div>
+                      <div className={styles.exampleDescription}>
+                        {example.description}
+                      </div>
+                      <div className={styles.exampleDetails}>
+                        <span>📊 {example.arguments} arguments</span>
+                        <span>📚 {example.references} références</span>
+                        <span>🕒 {example.lastUpdated}</span>
+                      </div>
+                      {!example.comingSoon && (
+                        <button
+                          className={styles.loadButton}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLoadExample(example);
+                          }}
+                        >
+                          Charger cet exemple
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div
+                  style={{
+                    marginTop: "20px",
+                    fontSize: "14px",
+                    color: "#7f8c8d",
+                  }}
+                >
+                  <p>
+                    <strong>💡 Comment utiliser les exemples :</strong>
+                  </p>
+                  <ul style={{ marginLeft: "20px", marginTop: "8px" }}>
+                    <li>Cliquez sur un exemple pour le charger</li>
+                    <li>Explorez la structure de l'argumentaire</li>
+                    <li>Modifiez-le pour créer votre propre version</li>
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <div
+                className={styles.markdownContent}
+                dangerouslySetInnerHTML={createMarkup(tabContents[activeTab])}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Pied de page */}
+        <div className={styles.footer}>
+          <button className={styles.primaryButton} onClick={onClose}>
+            {activeTab === "examples"
+              ? "Retour à l'application"
+              : "Commencer à argumenter !"}
           </button>
-        ))}
-      </div>
-
-      {/* Contenu */}
-      <div className={styles.content}>
-        <div
-          className={styles.markdownContent}
-          dangerouslySetInnerHTML={{
-            __html: formatMarkdown(helpContent[activeTab]),
-          }}
-        />
-      </div>
-
-      {/* Pied de page */}
-      <div className={styles.footer}>
-        <button className={styles.primaryButton} onClick={onClose}>
-          Commencer à argumenter !
-        </button>
-        <div className={styles.version}>Version 0.1 - Décembre 2024</div>
+          <div className={styles.version}>Version 0.1 - Décembre 2024</div>
+        </div>
       </div>
     </Modal>
-    // <div
-    //   style={{
-    //     position: "fixed",
-    //     top: "0",
-    //     left: "0",
-    //     width: "100vw",
-    //     height: "100vh",
-    //     backgroundColor: "rgba(0,0,0,0.5)",
-    //     zIndex: 9999,
-    //     display: "flex",
-    //     justifyContent: "center",
-    //     alignItems: "center",
-    //   }}
-    // >
-    //   <div
-    //     style={{
-    //       background: "white",
-    //       padding: "30px",
-    //       borderRadius: "10px",
-    //       width: "80%",
-    //       maxWidth: "800px",
-    //       maxHeight: "80vh",
-    //       overflow: "auto",
-    //     }}
-    //   >
-    //     <h2>TEST - Modal d'aide</h2>
-    //     <p>Si tu vois ça, la modal fonctionne !</p>
-    //     <button onClick={onClose}>Fermer</button>
-    //   </div>
-    // </div>
-    // <div className={styles.overlay}>
-    //   <div className={styles.modal}>
-    //     <div className={styles.header}>
-    //       <h2>📚 Argumentor - Aide</h2>
-    //       <button className={styles.closeButton} onClick={onClose}>
-    //         ×
-    //       </button>
-    //     </div>
-
-    //     <div className={styles.tabs}>
-    //       {["welcome", "theory", "manual", "examples"].map((tab) => (
-    //         <button
-    //           key={tab}
-    //           className={`${styles.tab} ${
-    //             activeTab === tab ? styles.active : ""
-    //           }`}
-    //           onClick={() => setActiveTab(tab)}
-    //         >
-    //           {tab === "welcome" && "👋 Bienvenue"}
-    //           {tab === "theory" && "📚 Théorie"}
-    //           {tab === "manual" && "🛠️ Mode d'emploi"}
-    //           {tab === "examples" && "🎯 Exemples"}
-    //         </button>
-    //       ))}
-    //     </div>
-
-    //     <div className={styles.content}>
-    //       {activeTab === "welcome" && (
-    //         <div className={styles.section}>
-    //           <h3>Bienvenue dans Argumentor</h3>
-    //           {/* Ton texte Bienvenue ici */}
-    //         </div>
-    //       )}
-
-    //       {activeTab === "theory" && (
-    //         <div className={styles.section}>
-    //           <h3>La théorie derrière Argumentor</h3>
-    //           {/* Ton texte Théorie ici */}
-    //         </div>
-    //       )}
-
-    //       {/* ... autres onglets */}
-    //     </div>
-
-    //     <div className={styles.footer}>
-    //       <button className={styles.primaryButton} onClick={onClose}>
-    //         Commencer à argumenter !
-    //       </button>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
