@@ -4,6 +4,8 @@ docs/
 ├── Diagramme UI.drawio
 ├── filestructure.md
 └── rules.md
+samples/
+└── lune1969.json
 src/
 ├── assets/
 │ ├── react.svg
@@ -16,14 +18,21 @@ src/
 | │ ├── Icons.jsx
 │ ├── definitions/
 | │ ├── DefinitionsList.jsx
-| │ ├── forms/
-| | │ ├── ArgumentaireForm.jsx
-| | │ ├── ArgumentForm.jsx
-| | │ ├── DefinitionForm.jsx
-| | │ ├── Forms.jsx
-| | │ ├── Forms.module.css
-| | │ ├── ReferenceForm.jsx
-| | │ ├── ReferenceSelector.jsx
+│ ├── forms/
+| │ ├── ArgumentaireForm.jsx
+| │ ├── ArgumentForm.jsx
+| │ ├── DefinitionForm.jsx
+| │ ├── Forms.jsx
+| │ ├── Forms.module.css
+| │ ├── ReferenceForm.jsx
+| │ ├── ReferenceSelector.jsx
+│ ├── help/
+| │ ├── contents/
+| | │ ├── instructions.js
+| | │ ├── theory.js
+| | │ ├── welcome.js
+| │ ├── HelpModal.jsx
+| │ ├── HelpModal.module.css
 │ ├── layout/
 | │ ├── Footer.jsx
 | │ ├── Header.jsx

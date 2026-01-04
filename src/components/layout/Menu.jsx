@@ -1,6 +1,7 @@
 // src/components/layout/Menu.jsx
-
+import { useState } from "react";
 import { confirmIfDirty } from "../../utils/confirm.js";
+import { HelpModal } from "../help/HelpModal";
 import styles from "./Menu.module.css";
 
 export function Menu({
@@ -13,6 +14,9 @@ export function Menu({
   onHelp,
   isDirty,
 }) {
+  const [helpOpen, setHelpOpen] = useState(false);
+  console.log("📋 Menu rendu, helpOpen:", helpOpen);
+
   return (
     <nav className={styles.menu}>
       <div className={styles.leftSection}>
@@ -80,13 +84,19 @@ export function Menu({
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            onHelp?.();
+            console.log("🖱️ Clic sur ?");
+            setHelpOpen(true);
+            console.log("✅ helpOpen devrait être true maintenant");
           }}
           className={styles.menuItem}
         >
           ?
         </a>
       </div>
+      {/* Modal d'aide */}
+      {helpOpen && (
+        <HelpModal isOpen={helpOpen} onClose={() => setHelpOpen(false)} />
+      )}
     </nav>
   );
 }
