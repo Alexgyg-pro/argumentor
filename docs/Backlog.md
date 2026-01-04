@@ -42,6 +42,10 @@ Ajouter des calculs pour pondérer les arguments et l'ensemble de l'argumentaire
 
 Il ne faut pas un graphique, mais il faut y mettre un lien vers l'accueil de l'application.
 
+##### Sample folder scan
+
+si on veut ajouter des argumentaires dans le dossier samples et qu'ils apparaissent dans l'onglet Exemples de l'aide, il faut aussi mettre à jour le fichier HelpModal. Il vaut mieux qu'il regarde ce qu'il y a dans ce dossier et qu'il le liste. A voir, parce que ça sera moins élégant.
+
 ### Short term done
 
 ### Long term Backlog

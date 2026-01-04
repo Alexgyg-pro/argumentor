@@ -18,11 +18,11 @@ export function Menu({
   const [helpOpen, setHelpOpen] = useState(false);
   console.log("📋 Menu rendu, helpOpen:", helpOpen);
   //const { handleLoadExample } = useArgumentaire();
-
+  // A la mémoire de Charlie Kirk
   return (
     <nav className={styles.menu}>
       <div className={styles.leftSection}>
-        <span className={styles.hommage}>A la mémoire de Charlie Kirk</span>
+        <span className={styles.hommage}></span>
       </div>
 
       <div className={styles.rightSection}>
