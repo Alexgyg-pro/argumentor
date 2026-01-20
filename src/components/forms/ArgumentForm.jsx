@@ -190,7 +190,7 @@ export function ArgumentForm({
           </select>
         </FormField>
 
-        <FormField label="Validité" className={styles.halfWidth}>
+        {/* <FormField label="Validité" className={styles.halfWidth}>
           <input
             type="range"
             min="0"
@@ -230,7 +230,7 @@ export function ArgumentForm({
           <span className={styles.rangeValue}>
             {formData.relevance.toFixed(1)}
           </span>
-        </FormField>
+        </FormField> */}
 
         <FormField label="Valeur" className={styles.halfWidth}>
           <input
