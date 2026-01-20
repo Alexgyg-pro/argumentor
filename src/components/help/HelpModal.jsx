@@ -240,7 +240,7 @@ export function HelpModal({ isOpen, onClose, onLoadExample }) {
               ? "Retour à l'application"
               : "Commencer à argumenter !"}
           </button>
-          <div className={styles.version}>Version 0.1 - Décembre 2024</div>
+          <div className={styles.version}>Version 0.1 - 11 janvier 2026</div>
         </div>
       </div>
     </Modal>

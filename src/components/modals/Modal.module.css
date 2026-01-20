@@ -50,7 +50,6 @@
 .closeButton:hover {
   color: #333;
   background: #f5f5f5;
-  border-radius: 50%;
 }
 
 /* src/components/modals/Modal.module.css */
@@ -136,4 +135,5 @@
 
 .closeButton:hover {
   background-color: #2980b9;
+  transition: opacity 0.2s ease;
 }

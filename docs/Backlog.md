@@ -2,17 +2,9 @@
 
 ### Short term Backlog
 
-##### GitHub URGENT
-
-Argumentor premier du nom est sur GitHub, mais cette version n'ira pas plus loin, elle peut être supprimée. La version Argumentor 2 a à peine commencé, elle n'est qu'en local, et peut être supprimé. Argumentor 3 est la version courante, mais elle n'est qu'en local. Ce serait bien quelle prenne la place de la première version. Attention, je crois qu'il y a un token ou je ne sais quoi à renouveller.
-
 ##### unuseful controls
 
 Dans le formulaire d'ajout et modification d'argument, tous les contrôles ne sont pas utiles. Les masquer, désactiver ou supprimer.
-
-##### Close button
-
-Dans les formulaires, le bouton pour fermer la fenêtre en haut à droite, le hover n'est vraiment pas terrible.
 
 ##### Forme heritage
 
@@ -46,7 +38,24 @@ Il ne faut pas un graphique, mais il faut y mettre un lien vers l'accueil de l'a
 
 si on veut ajouter des argumentaires dans le dossier samples et qu'ils apparaissent dans l'onglet Exemples de l'aide, il faut aussi mettre à jour le fichier HelpModal. Il vaut mieux qu'il regarde ce qu'il y a dans ce dossier et qu'il le liste. A voir, parce que ça sera moins élégant.
 
+##### Improve pdf layout
+
+Les textes sont un peu gros, revoir les couleurs.
+
 ### Short term done
+
+##### Close button
+
+Dans les formulaires, le bouton pour fermer la fenêtre en haut à droite, le hover n'est vraiment pas terrible.
+
+##### Improve help texts
+
+Réviser les textes, éventuellement agrandir la police et ajouter des titres pour aérer.
+Au passage où il est question de déséquilibre psychologique auquel Authenticator n'y peut rien, ajouter qu'on a le droit de penser contre les experts.
+
+##### GitHub URGENT
+
+Argumentor premier du nom est sur GitHub, mais cette version n'ira pas plus loin, elle peut être supprimée. La version Argumentor 2 a à peine commencé, elle n'est qu'en local, et peut être supprimé. Argumentor 3 est la version courante, mais elle n'est qu'en local. Ce serait bien quelle prenne la place de la première version. Attention, je crois qu'il y a un token ou je ne sais quoi à renouveller.
 
 ### Long term Backlog
 
