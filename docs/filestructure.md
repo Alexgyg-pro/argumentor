@@ -1,13 +1,17 @@
 # Current README.md file structure
 
 docs/
+├── Backlog.md
 ├── Diagramme UI.drawio
 ├── filestructure.md
 └── rules.md
+node_modules/
+└── .../
 public/
 └── samples/
 │ ├── lune1969.json
 │ └── mars2031.json
+└── vite.svg
 src/
 ├── assets/
 │ ├── react.svg
@@ -49,6 +53,8 @@ src/
 | │ ├── Modal.module.css
 | │ ├── ReferenceModal.jsx
 | │ ├── ReferencePreviewModal.jsx
+│ ├── pdf/
+| │ ├── PdfDocument.jsx
 │ ├── references/
 | │ ├── ReferenceList.jsx
 │ ├── screens/ # Main view components
@@ -68,6 +74,7 @@ src/
 │ ├── confirm.js
 │ ├── definitionUtils.js
 │ ├── idUtils.js
+│ ├── pdfUtils.js
 │ ├── referenceUtils.js
 └── App.css
 └── App.jsx

@@ -2,10 +2,6 @@
 
 ### Short term Backlog
 
-##### unuseful controls
-
-Dans le formulaire d'ajout et modification d'argument, tous les contrôles ne sont pas utiles. Les masquer, désactiver ou supprimer.
-
 ##### Forme heritage
 
 En tant qu'utilisateur, je veux que lorsque je créé un argument, ou que je le déplace, il prenne la forme de l'argument parent.
@@ -24,7 +20,7 @@ En tant que développeur, je veux que les blocs Collapsed et Expanded soient deu
 
 ##### Forma list
 
-En tant qu'utilisateur il me soit donné le choix entre descriptif et normatif (descriptif par défaut), mais qu'il y ait sur la liste également Esthétique en mode disabled. Ceci aussi bien sur la liste du formulaire de l'argumentaire que celui du formulaire d'argument.
+En tant qu'utilisateur je veux qu'il me soit donné le choix entre descriptif et normatif (descriptif par défaut), mais qu'il y ait sur la liste également Esthétique en mode disabled. Ceci aussi bien sur la liste du formulaire de l'argumentaire que celui du formulaire d'argument.
 
 ##### Calculations
 
@@ -43,6 +39,10 @@ si on veut ajouter des argumentaires dans le dossier samples et qu'ils apparaiss
 Les textes sont un peu gros, revoir les couleurs.
 
 ### Short term done
+
+##### unuseful controls
+
+Dans le formulaire d'ajout et modification d'argument, tous les contrôles ne sont pas utiles. Les masquer, désactiver ou supprimer.
 
 ##### Close button
 

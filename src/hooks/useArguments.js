@@ -35,7 +35,7 @@ export function useArguments(initialArgumentTree = null) {
       id: "root",
       claim: "",
       children: [],
-    }
+    },
   );
   const [lineMode, setLineMode] = useState(new Set());
   const [expandedNodes, setExpandedNodes] = useState(new Set(["root"]));
@@ -49,7 +49,7 @@ export function useArguments(initialArgumentTree = null) {
       const codes = recalculateCodesAndColors(
         argumentTree,
         findParentById,
-        true // parentEstPourTheseDefault
+        true, // parentEstPourTheseDefault
       );
       setArgumentCodes(codes);
     }
@@ -59,7 +59,7 @@ export function useArguments(initialArgumentTree = null) {
     (argumentId) => {
       return argumentCodes[argumentId]?.code || `#${argumentId}`;
     },
-    [argumentCodes]
+    [argumentCodes],
   );
 
   // Fonction pour obtenir la couleur d'un argument
@@ -67,7 +67,7 @@ export function useArguments(initialArgumentTree = null) {
     (argumentId) => {
       return argumentCodes[argumentId]?.color || "gray";
     },
-    [argumentCodes]
+    [argumentCodes],
   );
 
   const addArgument = useCallback(
@@ -117,7 +117,7 @@ export function useArguments(initialArgumentTree = null) {
 
       setArgumentTree((prev) => addToTree(prev));
     },
-    [argumentTree]
+    [argumentTree],
   );
 
   const updateArgument = useCallback(
@@ -136,7 +136,7 @@ export function useArguments(initialArgumentTree = null) {
 
       setArgumentTree((prev) => updateInTree(prev));
     },
-    [argumentTree]
+    [argumentTree],
   );
 
   const deleteArgument = useCallback(
@@ -163,38 +163,77 @@ export function useArguments(initialArgumentTree = null) {
 
       setArgumentTree((prev) => deleteFromTree(prev));
     },
-    [argumentTree]
+    [argumentTree],
   );
 
   const moveArgument = useCallback(
     (argumentId, newParentId) => {
       if (!argumentTree) return;
 
+      console.log("🔄 MOVE_ARGUMENT appelé", { argumentId, newParentId });
+      console.log("📊 Arbre avant:", JSON.stringify(argumentTree, null, 2));
+
       // Trouver les acteurs
       const argument = findArgumentById(argumentTree, argumentId);
       const oldParent = findArgumentById(argumentTree, argument?.parentId);
       const newParent = findArgumentById(argumentTree, newParentId);
 
+      console.log(
+        "🎯 Argument trouvé:",
+        argument?.id,
+        "causa:",
+        argument?.causa,
+      );
+      console.log("👴 Ancien parent:", oldParent?.id);
+      console.log("👶 Nouveau parent:", newParent?.id);
+
       if (!argument || !oldParent || !newParent) {
         console.error(
-          "Impossible de trouver un des éléments pour le déplacement"
+          "Impossible de trouver un des éléments pour le déplacement",
         );
         return;
       }
 
+      // Fonction récursive pour définir tous les arguments comme neutres
+      const setAllToNeutral = (arg) => {
+        console.log(
+          `🔶 setAllToNeutral: ${arg.id} (ancien: ${arg.causa}) → neutralis`,
+        );
+        arg.causa = "neutralis";
+        if (arg.children && arg.children.length > 0) {
+          console.log(`   ↳ ${arg.children.length} enfant(s) à transformer`);
+          arg.children.forEach((child) => setAllToNeutral(child));
+        }
+      };
+
+      // Créer une copie de l'argument et de ses descendants
+      const argumentCopy = JSON.parse(JSON.stringify(argument));
+      console.log(
+        "📋 Copie créée:",
+        argumentCopy.id,
+        "causa:",
+        argumentCopy.causa,
+      );
+
+      // Appliquer la transformation "neutre" à toute la sous-arborescence
+      setAllToNeutral(argumentCopy);
+      console.log("✅ Transformation appliquée sur la copie");
+
       // Créer une copie de l'arbre
       const newTree = JSON.parse(JSON.stringify(argumentTree));
+      console.log("🌳 Nouvel arbre créé (copie)");
 
       // Fonction helper pour trouver et modifier un nœud
       const modifyNode = (node, nodeId, modifier) => {
         if (node.id === nodeId) {
+          console.log(`🔧 modifyNode: modification de ${nodeId}`);
           return modifier(node);
         }
         if (node.children) {
           return {
             ...node,
             children: node.children.map((child) =>
-              modifyNode(child, nodeId, modifier)
+              modifyNode(child, nodeId, modifier),
             ),
           };
         }
@@ -202,12 +241,18 @@ export function useArguments(initialArgumentTree = null) {
       };
 
       // 1. Retirer de l'ancien parent
+      console.log("✂️ Retrait de l'ancien parent...");
       const treeAfterRemoval = modifyNode(newTree, oldParent.id, (parent) => ({
         ...parent,
-        children: parent.children.filter((child) => child.id !== argumentId),
+        children: parent.children.filter((child) => {
+          const removed = child.id !== argumentId;
+          if (!removed) console.log(`   ↳ Retrait de ${child.id}`);
+          return removed;
+        }),
       }));
 
-      // 2. Ajouter au nouveau parent
+      // 2. Ajouter au nouveau parent (AVEC LA COPIE TRANSFORMÉE)
+      console.log("📌 Ajout au nouveau parent...");
       const treeAfterAddition = modifyNode(
         treeAfterRemoval,
         newParent.id,
@@ -215,27 +260,43 @@ export function useArguments(initialArgumentTree = null) {
           ...parent,
           children: [
             ...parent.children,
-            { ...argument, parentId: newParentId },
+            { ...argumentCopy, parentId: newParentId },
           ],
-        })
+        }),
       );
 
-      // 3. Mettre à jour le parentId de l'argument
-      const finalTree = modifyNode(treeAfterAddition, argumentId, (arg) => ({
-        ...arg,
-        parentId: newParentId,
-      }));
+      // Vérifier l'état final
+      const finalArgument = findArgumentById(treeAfterAddition, argumentId);
+      console.log("🔍 État final de l'argument:", {
+        id: finalArgument?.id,
+        causa: finalArgument?.causa,
+        parentId: finalArgument?.parentId,
+      });
 
-      setArgumentTree(finalTree);
+      console.log(
+        "🌳 Arbre final:",
+        JSON.stringify(treeAfterAddition, null, 2),
+      );
+
+      setArgumentTree(treeAfterAddition);
+      console.log("✅ Arbre mis à jour");
+
+      setTimeout(() => {
+        const currentArgument = findArgumentById(argumentTree, argumentId);
+        console.log("🔄 Vérification différée:", {
+          id: currentArgument?.id,
+          causa: currentArgument?.causa,
+        });
+      }, 100);
     },
-    [argumentTree]
+    [argumentTree],
   );
 
   const getPossibleParents = useCallback(
     (argumentId) => {
       return getPossibleNewParents(argumentTree, argumentId);
     },
-    [argumentTree]
+    [argumentTree],
   );
 
   const importArguments = useCallback((importedTree) => {
@@ -261,7 +322,7 @@ export function useArguments(initialArgumentTree = null) {
       const allArgs = extractAllArguments(newTree);
       console.log(
         "📊 Arguments dans nouvel arbre:",
-        allArgs.map((a) => a.id)
+        allArgs.map((a) => a.id),
       );
       initializeCountersFromItems(allArgs, "arg");
     } else {
@@ -350,7 +411,7 @@ export function useArguments(initialArgumentTree = null) {
         return next;
       });
     },
-    [expandedNodes]
+    [expandedNodes],
   );
 
   const expandAllNodes = useCallback(() => {
@@ -380,7 +441,7 @@ export function useArguments(initialArgumentTree = null) {
     (nodeId) => {
       return expandedNodes.has(nodeId);
     },
-    [expandedNodes]
+    [expandedNodes],
   );
 
   return {
