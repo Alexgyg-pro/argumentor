@@ -61,7 +61,7 @@ export function getPossibleNewParents(tree, argumentId) {
 export const recalculateCodesAndColors = (
   argumentTree,
   findParentById,
-  parentEstPourTheseDefault = true
+  parentEstPourTheseDefault = true,
 ) => {
   const result = {};
 
@@ -71,7 +71,7 @@ export const recalculateCodesAndColors = (
     node,
     parentCode = "",
     parentColor = "blue",
-    parentEstPourThese = parentEstPourTheseDefault
+    parentEstPourThese = parentEstPourTheseDefault,
   ) => {
     if (node.id === "root") return;
 
@@ -79,10 +79,10 @@ export const recalculateCodesAndColors = (
     const siblings = parent?.children || [];
 
     const sameTypeSiblings = siblings.filter(
-      (sibling) => sibling.causa === node.causa
+      (sibling) => sibling.causa === node.causa,
     );
     const index = sameTypeSiblings.findIndex(
-      (sibling) => sibling.id === node.id
+      (sibling) => sibling.id === node.id,
     );
 
     const segment = `${
@@ -108,12 +108,12 @@ export const recalculateCodesAndColors = (
 
     // 🎯 PROPAGER LA BONNE VALEUR AUX ENFANTS
     node.children?.forEach((child) =>
-      calculateForNode(child, code, color, estPourThese)
+      calculateForNode(child, code, color, estPourThese),
     );
   };
 
   argumentTree.children.forEach((child) =>
-    calculateForNode(child, "", "blue", parentEstPourTheseDefault)
+    calculateForNode(child, "", "blue", parentEstPourTheseDefault),
   );
 
   return result;

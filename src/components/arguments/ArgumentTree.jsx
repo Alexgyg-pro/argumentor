@@ -51,7 +51,7 @@ function ArgumentNode({
 
   // Obtenir les références associées à cet argument
   const associatedRefs = references.filter((ref) =>
-    argument.references?.includes(ref.id)
+    argument.references?.includes(ref.id),
   );
   const [previewReference, setPreviewReference] = useState(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
@@ -180,7 +180,7 @@ function ArgumentNode({
                   console.log("🖱️ Bouton ▶/▼ cliqué pour:", argument.id);
                   console.log(
                     "   toggleNodeExpansion disponible ?",
-                    !!toggleNodeExpansion
+                    !!toggleNodeExpansion,
                   );
                   console.log("   Type:", typeof toggleNodeExpansion);
                   if (
@@ -191,7 +191,7 @@ function ArgumentNode({
                     toggleNodeExpansion(argument.id);
                   } else {
                     console.log(
-                      "   ❌ toggleNodeExpansion n'est pas une fonction !"
+                      "   ❌ toggleNodeExpansion n'est pas une fonction !",
                     );
                   }
                 }}
@@ -342,28 +342,65 @@ export function ArgumentTree({
   const [parentId, setParentId] = useState("root");
 
   const handleArgumentSave = (argumentData) => {
+    console.log("💾 handleArgumentSave appelé", {
+      editingArgument: editingArgument?.id,
+      argumentData: {
+        ...argumentData,
+        claim: argumentData.claim?.substring(0, 50) + "...",
+      },
+      hasParent: !!argumentData.parentId,
+      editingArgumentParent: editingArgument?.parentId,
+    });
+
     if (editingArgument) {
       // Vérifier si le parent a changé
       const hasParentChanged =
         argumentData.parentId &&
         argumentData.parentId !== editingArgument.parentId;
 
-      if (hasParentChanged) {
-        // 1. Déplacer l'argument
-        onMoveArgument(editingArgument.id, argumentData.parentId);
+      console.log("🔍 Vérification changement parent:", {
+        newParentId: argumentData.parentId,
+        oldParentId: editingArgument.parentId,
+        hasParentChanged,
+      });
 
-        // 2. Mettre à jour les autres données (sans parentId)
-        const { parentId, ...dataWithoutParent } = argumentData;
+      if (hasParentChanged) {
+        console.log("🚚 DÉPLACEMENT DÉTECTÉ - Forçage causa à 'neutralis'");
+
+        // 1. Créer une copie des données avec causa forcé à "neutralis"
+        const dataForMove = {
+          ...argumentData,
+          causa: "neutralis", // ← FORCER neutre pour le déplacement
+        };
+
+        console.log("📦 Données pour déplacement:", {
+          ...dataForMove,
+          claim: dataForMove.claim?.substring(0, 50) + "...",
+        });
+
+        // 2. Déplacer avec la nouvelle causa
+        console.log(
+          `📤 Appel onMoveArgument(${editingArgument.id}, ${dataForMove.parentId})`,
+        );
+        onMoveArgument(editingArgument.id, dataForMove.parentId);
+
+        // 3. Mettre à jour les autres données (sans parentId)
+        const { parentId, ...dataWithoutParent } = dataForMove; // ← Utiliser dataForMove, pas argumentData !
+        console.log(
+          "📝 Données pour édition (sans parentId):",
+          dataWithoutParent,
+        );
         onEditArgument(editingArgument.id, dataWithoutParent);
       } else {
-        // Mode modification simple
+        console.log("✏️ MODIFICATION SIMPLE (pas de déplacement)");
         onEditArgument(editingArgument.id, argumentData);
       }
     } else {
-      // Mode création
+      console.log("🆕 CRÉATION d'argument");
       onAddArgument(parentId, argumentData);
     }
 
+    console.log("✅ handleArgumentSave terminé");
     setShowArgumentForm(false);
     setEditingArgument(null);
     setParentId("root");

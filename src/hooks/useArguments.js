@@ -45,12 +45,22 @@ export function useArguments(initialArgumentTree = null) {
 
   // Recalculer les codes quand l'arbre change
   useEffect(() => {
+    console.log("🔄 useEffect - Recalcul des codes et couleurs");
     if (argumentTree) {
+      console.log(
+        "🌳 argumentTree reçu:",
+        JSON.stringify(argumentTree, null, 2),
+      );
       const codes = recalculateCodesAndColors(
         argumentTree,
         findParentById,
         true, // parentEstPourTheseDefault
       );
+      console.log("🎨 Codes recalculés:", Object.keys(codes).length);
+      Object.entries(codes).forEach(([id, data]) => {
+        const arg = findArgumentById(argumentTree, id);
+        console.log(`  ${id}: ${data.code} (causa dans arbre: ${arg?.causa})`);
+      });
       setArgumentCodes(codes);
     }
   }, [argumentTree]);
@@ -166,131 +176,104 @@ export function useArguments(initialArgumentTree = null) {
     [argumentTree],
   );
 
-  const moveArgument = useCallback(
-    (argumentId, newParentId) => {
-      if (!argumentTree) return;
+  const moveArgument = useCallback((argumentId, newParentId) => {
+    setArgumentTree((prevTree) => {
+      if (!prevTree) return prevTree;
 
-      console.log("🔄 MOVE_ARGUMENT appelé", { argumentId, newParentId });
-      console.log("📊 Arbre avant:", JSON.stringify(argumentTree, null, 2));
+      console.log("🔄 MOVE_ARGUMENT - VERSION transformInTree");
 
-      // Trouver les acteurs
-      const argument = findArgumentById(argumentTree, argumentId);
-      const oldParent = findArgumentById(argumentTree, argument?.parentId);
-      const newParent = findArgumentById(argumentTree, newParentId);
+      // 1. Copie profonde
+      const treeCopy = JSON.parse(JSON.stringify(prevTree));
 
-      console.log(
-        "🎯 Argument trouvé:",
-        argument?.id,
-        "causa:",
-        argument?.causa,
-      );
-      console.log("👴 Ancien parent:", oldParent?.id);
-      console.log("👶 Nouveau parent:", newParent?.id);
-
-      if (!argument || !oldParent || !newParent) {
-        console.error(
-          "Impossible de trouver un des éléments pour le déplacement",
-        );
-        return;
-      }
-
-      // Fonction récursive pour définir tous les arguments comme neutres
-      const setAllToNeutral = (arg) => {
-        console.log(
-          `🔶 setAllToNeutral: ${arg.id} (ancien: ${arg.causa}) → neutralis`,
-        );
-        arg.causa = "neutralis";
-        if (arg.children && arg.children.length > 0) {
-          console.log(`   ↳ ${arg.children.length} enfant(s) à transformer`);
-          arg.children.forEach((child) => setAllToNeutral(child));
-        }
-      };
-
-      // Créer une copie de l'argument et de ses descendants
-      const argumentCopy = JSON.parse(JSON.stringify(argument));
-      console.log(
-        "📋 Copie créée:",
-        argumentCopy.id,
-        "causa:",
-        argumentCopy.causa,
-      );
-
-      // Appliquer la transformation "neutre" à toute la sous-arborescence
-      setAllToNeutral(argumentCopy);
-      console.log("✅ Transformation appliquée sur la copie");
-
-      // Créer une copie de l'arbre
-      const newTree = JSON.parse(JSON.stringify(argumentTree));
-      console.log("🌳 Nouvel arbre créé (copie)");
-
-      // Fonction helper pour trouver et modifier un nœud
-      const modifyNode = (node, nodeId, modifier) => {
-        if (node.id === nodeId) {
-          console.log(`🔧 modifyNode: modification de ${nodeId}`);
-          return modifier(node);
-        }
+      // 2. Fonction de recherche
+      const findInCopy = (node, targetId) => {
+        if (node.id === targetId) return node;
         if (node.children) {
-          return {
-            ...node,
-            children: node.children.map((child) =>
-              modifyNode(child, nodeId, modifier),
-            ),
-          };
+          for (const child of node.children) {
+            const found = findInCopy(child, targetId);
+            if (found) return found;
+          }
         }
-        return node;
+        return null;
       };
 
-      // 1. Retirer de l'ancien parent
-      console.log("✂️ Retrait de l'ancien parent...");
-      const treeAfterRemoval = modifyNode(newTree, oldParent.id, (parent) => ({
-        ...parent,
-        children: parent.children.filter((child) => {
-          const removed = child.id !== argumentId;
-          if (!removed) console.log(`   ↳ Retrait de ${child.id}`);
-          return removed;
-        }),
-      }));
+      const argument = findInCopy(treeCopy, argumentId);
+      const oldParent = argument
+        ? findInCopy(treeCopy, argument.parentId)
+        : null;
+      const newParent = findInCopy(treeCopy, newParentId);
 
-      // 2. Ajouter au nouveau parent (AVEC LA COPIE TRANSFORMÉE)
-      console.log("📌 Ajout au nouveau parent...");
-      const treeAfterAddition = modifyNode(
-        treeAfterRemoval,
-        newParent.id,
-        (parent) => ({
-          ...parent,
-          children: [
-            ...parent.children,
-            { ...argumentCopy, parentId: newParentId },
-          ],
-        }),
-      );
+      if (!argument || !oldParent || !newParent) return prevTree;
 
-      // Vérifier l'état final
-      const finalArgument = findArgumentById(treeAfterAddition, argumentId);
-      console.log("🔍 État final de l'argument:", {
-        id: finalArgument?.id,
-        causa: finalArgument?.causa,
-        parentId: finalArgument?.parentId,
+      console.log("🎯 État initial dans treeCopy:", {
+        argument: argument.id,
+        argumentCausa: argument.causa,
+        child: argument.children?.[0]?.id,
+        childCausa: argument.children?.[0]?.causa,
       });
 
-      console.log(
-        "🌳 Arbre final:",
-        JSON.stringify(treeAfterAddition, null, 2),
+      // 3. Fonction qui modifie DIRECTEMENT dans treeCopy
+      const transformInTree = (nodeId) => {
+        const node = findInCopy(treeCopy, nodeId);
+        if (node) {
+          console.log(`🔶 ${nodeId}: ${node.causa} → neutralis`);
+          node.causa = "neutralis";
+          if (node.children) {
+            node.children.forEach((child) => {
+              console.log(`  ↳ Transformation de l'enfant: ${child.id}`);
+              transformInTree(child.id);
+            });
+          }
+        }
+      };
+
+      // 4. Appliquer la transformation
+      transformInTree(argumentId);
+
+      // 5. Vérification IMMÉDIATE dans treeCopy
+      console.log("🔍 Vérification dans treeCopy après transformation:");
+      const checkArg = findInCopy(treeCopy, argumentId);
+      if (checkArg) {
+        console.log(`  ${checkArg.id}: ${checkArg.causa}`);
+        if (checkArg.children) {
+          checkArg.children.forEach((child) => {
+            console.log(`  ${child.id}: ${child.causa}`);
+          });
+        }
+      }
+
+      // 6. Retirer de l'ancien parent
+      oldParent.children = oldParent.children.filter(
+        (child) => child.id !== argumentId,
       );
 
-      setArgumentTree(treeAfterAddition);
-      console.log("✅ Arbre mis à jour");
+      // 7. Mettre à jour le parentId
+      argument.parentId = newParentId;
 
-      setTimeout(() => {
-        const currentArgument = findArgumentById(argumentTree, argumentId);
-        console.log("🔄 Vérification différée:", {
-          id: currentArgument?.id,
-          causa: currentArgument?.causa,
-        });
-      }, 100);
-    },
-    [argumentTree],
-  );
+      // 8. Ajouter au nouveau parent
+      newParent.children = newParent.children || [];
+      newParent.children.push(argument);
+
+      // 9. Vérification FINALE dans treeCopy
+      console.log("✅ État final dans treeCopy:");
+      const finalArg = findInCopy(treeCopy, argumentId);
+      if (finalArg) {
+        console.log(
+          `  ${finalArg.id}: ${finalArg.causa}, parent: ${finalArg.parentId}`,
+        );
+        if (finalArg.children) {
+          finalArg.children.forEach((child) => {
+            console.log(`  ${child.id}: ${child.causa}`);
+          });
+        }
+      }
+
+      // 10. DEBUG : Afficher tout l'arbre pour vérifier
+      console.log("🌳 treeCopy complet:", JSON.stringify(treeCopy, null, 2));
+
+      return treeCopy;
+    });
+  }, []);
 
   const getPossibleParents = useCallback(
     (argumentId) => {
