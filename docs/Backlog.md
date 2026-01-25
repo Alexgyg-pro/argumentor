@@ -2,13 +2,17 @@
 
 ### Short term Backlog
 
+#### isDirty
+
+On dirait que toutes les modifications ne conduisent pas à l'affichage d'une alerte avant l'ouverture d'un autre argumentaire ou la création d'un nouveau. Vérifier et si nécessaire, corriger.
+
+#### Composant boutons crud
+
+En tant que développeur, j'aimerais que les boutons Ajouter, Modifier, Déplacer, supprimer un argument pourraient peut-être être un composant à part. Ca simplifierait le code de ArgumentNode.
+
 ##### Forme heritage
 
 En tant qu'utilisateur, je veux que lorsque je créé un argument, ou que je le déplace, il prenne la forme de l'argument parent.
-
-##### Default cause
-
-En tant qu'utilisateur, je veux que lorsque je déplace un argument, lui et tous ses enfants prenent une cause neutre.
 
 ##### File split
 
@@ -39,6 +43,10 @@ si on veut ajouter des argumentaires dans le dossier samples et qu'ils apparaiss
 Les textes sont un peu gros, revoir les couleurs.
 
 ### Short term done
+
+##### Default cause
+
+En tant qu'utilisateur, je veux que lorsque je déplace un argument, lui et tous ses enfants prenent une cause neutre.
 
 ##### unuseful controls
 

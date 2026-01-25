@@ -99,7 +99,7 @@ export function useArgumentaire() {
             id: "root",
             claim: jsonData.thesis || "",
             children: [],
-          }
+          },
         );
 
         // 3. Définitions
@@ -140,7 +140,7 @@ export function useArgumentaire() {
       const text = await response.text();
       console.log(
         `📝 Contenu brut (premiers 500 caractères):`,
-        text.substring(0, 500)
+        text.substring(0, 500),
       );
       const jsonData = JSON.parse(text);
       console.log(`✅ JSON parsé:`, {
@@ -234,7 +234,7 @@ export function useArgumentaire() {
     const fileName = thesis
       ? `argumentaire_${thesis.substring(0, 20)}.json`.replace(
           /[^a-z0-9]/gi,
-          "_"
+          "_",
         )
       : "argumentaire.json";
     a.download = fileName;
@@ -273,7 +273,7 @@ export function useArgumentaire() {
       // Validation des données
       if (!argumentsHook.argumentTree) {
         alert(
-          "Aucun argumentaire à exporter. Veuillez créer ou importer un argumentaire d'abord."
+          "Aucun argumentaire à exporter. Veuillez créer ou importer un argumentaire d'abord.",
         );
         return;
       }
@@ -325,7 +325,7 @@ export function useArgumentaire() {
     } catch (error) {
       console.error("❌ Erreur lors de la génération du PDF:", error);
       alert(
-        `Erreur lors de la génération du PDF: ${error.message}\n\nVérifie la console pour plus de détails.`
+        `Erreur lors de la génération du PDF: ${error.message}\n\nVérifie la console pour plus de détails.`,
       );
     }
   }, [
@@ -337,7 +337,14 @@ export function useArgumentaire() {
     definitionsHook.definitions,
     referencesHook.references,
   ]);
-
+  // Ajoute ce log dans useArgumentaire.js
+  console.log("🔍 useArgumentaire - argumentsHook:", {
+    hasMoveArgument: !!argumentsHook.moveArgument,
+    type: typeof argumentsHook.moveArgument,
+    allFunctions: Object.keys(argumentsHook).filter(
+      (k) => typeof argumentsHook[k] === "function",
+    ),
+  });
   // ============ RETOUR DU HOOK ============
   return {
     // === ÉTAT ===

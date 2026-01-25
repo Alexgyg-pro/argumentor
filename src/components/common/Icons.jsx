@@ -82,11 +82,19 @@ export const LinkIcon = ({ size = 16, ...props }) => (
 
 // Icône Pertinence (Lien fort)
 export const RelevanceIcon = ({ size = 16, ...props }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
-    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-    <line x1="8" y1="8" x2="16" y2="16"/>
-    <line x1="8" y1="16" x2="16" y2="8"/>
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    {...props}
+  >
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    <line x1="8" y1="8" x2="16" y2="16" />
+    <line x1="8" y1="16" x2="16" y2="8" />
   </svg>
 );
 
@@ -103,13 +111,12 @@ export const ArrowUpDownIcon = ({ size = 16, ...props }) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="m3 16 4 4 4-4"/>
-    <path d="M7 20V4"/>
-    <path d="m21 8-4-4-4 4"/>
-    <path d="M17 4v16"/>
+    <path d="m3 16 4 4 4-4" />
+    <path d="M7 20V4" />
+    <path d="m21 8-4-4-4 4" />
+    <path d="M17 4v16" />
   </svg>
-); 
-
+);
 
 // Icône Flèche Haut-Bas Double
 export const ArrowUpDownIcon2 = ({ size = 16, ...props }) => (
@@ -124,9 +131,9 @@ export const ArrowUpDownIcon2 = ({ size = 16, ...props }) => (
     strokeLinejoin="round"
     {...props}
   >
-    <line x1="12" y1="3" x2="12" y2="21"/>
-    <polyline points="7 8 12 3 17 8"/>
-    <polyline points="7 16 12 21 17 16"/>
+    <line x1="12" y1="3" x2="12" y2="21" />
+    <polyline points="7 8 12 3 17 8" />
+    <polyline points="7 16 12 21 17 16" />
   </svg>
 );
 
@@ -143,8 +150,8 @@ export const ChevronUpDownIcon = ({ size = 16, ...props }) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="m7 15 5 5 5-5"/>
-    <path d="m7 9 5-5 5 5"/>
+    <path d="m7 15 5 5 5-5" />
+    <path d="m7 9 5-5 5 5" />
   </svg>
 );
 
@@ -161,11 +168,10 @@ export const ChevronUpDownIcon2 = ({ size = 16, ...props }) => (
     strokeLinejoin="round"
     {...props}
   >
-    <polyline points="8 13 12 9 16 13"/>
-    <polyline points="8 11 12 15 16 11"/>
+    <polyline points="8 13 12 9 16 13" />
+    <polyline points="8 11 12 15 16 11" />
   </svg>
 );
-
 
 // Icône Ajouter
 export const PlusIcon = ({ size = 16, ...props }) => (
@@ -297,5 +303,47 @@ export const NewIcon = ({ size = 16, ...props }) => (
     <polyline points="14 2 14 8 20 8"></polyline>
     <line x1="12" y1="18" x2="12" y2="12"></line>
     <line x1="9" y1="15" x2="15" y2="15"></line>
+  </svg>
+);
+
+// Icône Déplacement
+export const MoveIcon = ({ size = 16, ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="3 5 18 14"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path
+      d="M5 7H13"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+    />
+    <path
+      d="M11 17H19"
+      stroke="currentColor"
+      stroke-width="1.4"
+      stroke-linecap="round"
+    />
+    <path
+      d="M12 9V15"
+      stroke="currentColor"
+      stroke-width="1.4"
+      stroke-linecap="round"
+    />
+    <path
+      d="M10.5 13.5 L12 15 L13.5 13.5"
+      stroke="currentColor"
+      stroke-width="1.4"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
   </svg>
 );

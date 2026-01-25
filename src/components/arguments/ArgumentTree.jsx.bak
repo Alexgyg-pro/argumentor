@@ -1,17 +1,26 @@
 // src/components/ArgumentTree.jsx
+/* ***********  ATTENTION ! IL Y A DEUX FONCTIONS DANS CE FICHIER : ArgumentNode et ArgumentTree ************/
 import { useState } from "react";
 import { ArgumentModal } from "../modals/ArgumentModal";
 import { MoveArgumentModal } from "../modals/MoveArgumentModal";
 import { ReferencePreviewModal } from "../modals/ReferencePreviewModal";
 import styles from "../screens/DisplayScreen.module.css";
 import {
+  ReticleIcon,
+  ReticleIcon2,
   TargetIcon,
   LinkIcon,
+  RelevanceIcon,
+  ArrowUpDownIcon,
+  ArrowUpDownIcon2,
+  ChevronUpDownIcon,
+  ChevronUpDownIcon2,
   TrashIcon,
   EditIcon,
   PlusIcon,
   MoveIcon,
 } from "../common/Icons";
+// import { Icon } from "./common/Icon";
 
 // Composant récursif pour un argument
 function ArgumentNode({
@@ -19,6 +28,7 @@ function ArgumentNode({
   depth = 0,
   onDeleteArgument,
   onEditArgument,
+  onMoveArgument,
   onAddArgument,
   openMoveModal,
   references = [],
@@ -27,21 +37,32 @@ function ArgumentNode({
   lineMode = new Set(),
   toggleLineMode = () => {},
 
-  // Mode compact/développé
+  // NOUVEAU : Mode compact/développé
   isExpanded = true,
-  isNodeExpanded = () => true,
-  toggleNodeExpansion = () => {},
+  isNodeExpanded = () => true, // ← Par défaut développé pour compatibilité
+  toggleNodeExpansion = () => {}, // ← Fonction pour toggle
 }) {
+  console.log("🔍 ArgumentTree - Props:", {
+    id: argument.id,
+    hasOpenMoveModal: typeof openMoveModal,
+    openMoveModalValue: openMoveModal,
+    onMoveArgument: typeof onMoveArgument,
+    onMoveArgumentValue: onMoveArgument,
+    onEditArgument: typeof onEditArgument,
+    onDeleteArgument: typeof onDeleteArgument,
+  });
   const isLineMode = lineMode.has(argument.id);
   const hasChildren = argument.children && argument.children.length > 0;
-  const shouldShowChildren = isExpanded && hasChildren;
+  const shouldShowChildren = isExpanded && hasChildren; // ← MODIFIÉ
   const code = getArgumentCode
     ? getArgumentCode(argument.id)
     : `#${argument.id}`;
 
+  // 🎯 Récupérer la couleur - l'un c'est pour inline et l'autre pour card. Perser à l'unifier
   const borderColor = getArgumentColor ? getArgumentColor(argument.id) : "gray";
   const color = getArgumentColor ? getArgumentColor(argument.id) : "inherit";
 
+  // Obtenir les références associées à cet argument
   const associatedRefs = references.filter((ref) =>
     argument.references?.includes(ref.id),
   );
@@ -64,11 +85,13 @@ function ArgumentNode({
       }}
       title={isLineMode ? "Passer en mode carte" : "Passer en mode ligne"}
     >
+      {/* <ChevronUpDownIcon /> */}
       {isLineMode ? "📄" : "📏"}
     </button>
   );
 
   if (isLineMode) {
+    // MODE ENLIGNE
     return (
       <>
         <div
@@ -76,10 +99,12 @@ function ArgumentNode({
           style={{
             marginLeft: `${depth * 20}px`,
             borderLeft: `4px solid ${borderColor}`,
-            cursor: "default",
+            cursor: "default", // Flèche, pas main
           }}
+          onClick={() => console.log("Ligne cliquée")} // Pour debug
         >
           <div className={styles.lineModeContent}>
+            {/* Icône validité/pertinence */}
             <span className={styles.lineModeIcon}>
               {argument.natura === "validity" ? (
                 <TargetIcon size={12} />
@@ -88,12 +113,14 @@ function ArgumentNode({
               ) : null}
             </span>
 
+            {/* Code (p1C1, etc.) */}
             <span className={styles.lineModeCode}>
               {getArgumentCode
                 ? getArgumentCode(argument.id)
                 : `#${argument.id}`}
             </span>
 
+            {/* NOUVEAU : Bouton toggle pour mode ligne */}
             {hasChildren && (
               <button
                 className={styles.lineModeToggle}
@@ -107,6 +134,7 @@ function ArgumentNode({
               </button>
             )}
 
+            {/* Titre (tronqué) */}
             <span className={styles.lineModeClaim} title={argument.claim}>
               {argument.claim.length > 60
                 ? argument.claim.substring(0, 57) + "..."
@@ -116,6 +144,7 @@ function ArgumentNode({
           </div>
         </div>
 
+        {/* 🎯 IMPORTANT : Enfants TOUJOURS visibles */}
         {isExpanded && argument.children && argument.children.length > 0 && (
           <div className={styles.lineModeChildren}>
             {argument.children.map((child) => (
@@ -131,10 +160,11 @@ function ArgumentNode({
                 onAddArgument={onAddArgument}
                 onEditArgument={onEditArgument}
                 onDeleteArgument={onDeleteArgument}
-                openMoveModal={openMoveModal}
-                isExpanded={isNodeExpanded(child.id)}
-                toggleNodeExpansion={toggleNodeExpansion}
-                isNodeExpanded={isNodeExpanded}
+                // NOUVEAU : ajouter ces 3 props
+                isExpanded={isNodeExpanded(child.id)} // ← booléen
+                toggleNodeExpansion={toggleNodeExpansion} // ← fonction
+                isNodeExpanded={isNodeExpanded} // ← fonction
+                onMoveButtonClick={() => openMoveModal(argument)}
               />
             ))}
           </div>
@@ -142,7 +172,10 @@ function ArgumentNode({
       </>
     );
   }
-
+  console.log("🔍 ArgumentTree - avant de rendre ArgumentNode:", {
+    hasOpenMoveModal: typeof openMoveModal,
+    treeChildrenCount: tree.children.length,
+  });
   // MODE CARTE
   return (
     <>
@@ -156,12 +189,29 @@ function ArgumentNode({
       >
         <div className={styles.argumentHeader}>
           <div>
+            {/* Bouton toggle pour développer/réduire */}
             {hasChildren && (
               <button
                 className={styles.toggleExpandButton}
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleNodeExpansion(argument.id);
+                  console.log("🖱️ Bouton ▶/▼ cliqué pour:", argument.id);
+                  console.log(
+                    "   toggleNodeExpansion disponible ?",
+                    !!toggleNodeExpansion,
+                  );
+                  console.log("   Type:", typeof toggleNodeExpansion);
+                  if (
+                    toggleNodeExpansion &&
+                    typeof toggleNodeExpansion === "function"
+                  ) {
+                    console.log("   → Appel de toggleNodeExpansion...");
+                    toggleNodeExpansion(argument.id);
+                  } else {
+                    console.log(
+                      "   ❌ toggleNodeExpansion n'est pas une fonction !",
+                    );
+                  }
                 }}
                 title={isExpanded ? "Réduire" : "Développer"}
               >
@@ -177,13 +227,17 @@ function ArgumentNode({
             )}
             <span>{code}</span>
           </div>
-          <div>{toggleButton}</div>
+          <div>
+            {toggleButton}
+            {/* <ChevronUpDownIcon /> */}
+          </div>
         </div>
         <div className={styles.argumentBody}>
           <span className={styles.argumentId}>#{argument.id}</span> -{" "}
           <span className={styles.argumentClaim}>{argument.claim}</span>
         </div>
 
+        {/* AFFICHAGE DES RÉFÉRENCES ASSOCIÉES */}
         {associatedRefs.length > 0 && (
           <div className={styles.associatedReferences}>
             <div className={styles.referencesHeader}>
@@ -228,21 +282,23 @@ function ArgumentNode({
               }}
               title="Modifier l'argument"
             >
+              {/* <EditIcon size={12} /> */}
               <EditIcon size={12} />
             </button>
-
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                console.log("🖱️ Bouton Déplacer cliqué");
                 if (openMoveModal && typeof openMoveModal === "function") {
                   openMoveModal(argument);
+                } else {
+                  console.error("❌ openMoveModal invalide");
                 }
               }}
               title="Déplacer dans l'arbre"
             >
               <MoveIcon size={14} />
             </button>
-
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -255,8 +311,8 @@ function ArgumentNode({
           </div>
         </div>
       </div>
-
-      {shouldShowChildren && (
+      {/* Affichage récursif des enfants */}
+      {shouldShowChildren && ( // ← MODIFIÉ (était juste hasChildren)
         <div className={styles.argumentChildren}>
           {argument.children.map((child) => (
             <ArgumentNode
@@ -266,20 +322,20 @@ function ArgumentNode({
               onAddArgument={onAddArgument}
               onEditArgument={onEditArgument}
               onDeleteArgument={onDeleteArgument}
-              openMoveModal={openMoveModal}
               references={references}
               getArgumentCode={getArgumentCode}
               getArgumentColor={getArgumentColor}
               lineMode={lineMode}
               toggleLineMode={toggleLineMode}
-              isExpanded={isNodeExpanded(child.id)}
-              toggleNodeExpansion={toggleNodeExpansion}
-              isNodeExpanded={isNodeExpanded}
+              // NOUVEAU : passer les props d'expansion
+              isExpanded={isNodeExpanded(child.id)} // ← isNodeExpanded (fonction)
+              toggleNodeExpansion={toggleNodeExpansion} // ← toggleNodeExpansion (pas onToggleExpansion) <-----------
+              isNodeExpanded={isNodeExpanded} // ← repasse la fonction
             />
           ))}
         </div>
       )}
-
+      {/* Modale de prévisualisation */}
       <ReferencePreviewModal
         isOpen={showPreviewModal}
         onClose={() => setShowPreviewModal(false)}
@@ -299,10 +355,14 @@ export function ArgumentTree({
   references = [],
   getArgumentCode,
   getArgumentColor,
+
+  // Line & Card modes
   lineMode = new Set(),
   allToLineMode = () => {},
   allToCardMode = () => {},
   toggleLineMode,
+
+  // Expanded & compact modes
   expandedNodes = new Set(),
   toggleNodeExpansion = () => {},
   expandAllNodes = () => {},
@@ -314,6 +374,11 @@ export function ArgumentTree({
   const [parentId, setParentId] = useState("root");
   const [movingArgument, setMovingArgument] = useState(null);
 
+  const handleMoveArgument = (argument) => {
+    setMovingArgument(argument);
+  };
+
+  // Fonction pour ouvrir la modale de déplacement
   const openMoveModal = (argument) => {
     console.log("📤 Ouvrir modale de déplacement pour:", argument.id);
     setMovingArgument(argument);
@@ -322,21 +387,119 @@ export function ArgumentTree({
   const handleArgumentSave = (argumentData) => {
     console.log("💾 handleArgumentSave - ÉDITION SIMPLE", {
       editingArgument: editingArgument?.id,
+      argumentData: {
+        ...argumentData,
+        claim: argumentData.claim?.substring(0, 30) + "...",
+      },
     });
 
     if (editingArgument) {
+      // MODIFICATION SIMPLE - PAS DE DÉPLACEMENT ICI
+      // Ne pas inclure parentId dans les données d'édition
       const { parentId, ...editData } = argumentData;
       console.log("✏️ Appel onEditArgument pour:", editingArgument.id);
       onEditArgument(editingArgument.id, editData);
     } else {
+      // MODE CRÉATION
       console.log("🆕 Appel onAddArgument avec parent:", parentId);
       onAddArgument(parentId, argumentData);
     }
 
+    console.log("✅ handleArgumentSave terminé");
     setShowArgumentForm(false);
     setEditingArgument(null);
     setParentId("root");
   };
+
+  // const handleArgumentSave = (argumentData) => {
+  //   console.log("💾 handleArgumentSave - ÉDITION SIMPLE", {
+  //     editingArgument: editingArgument?.id,
+  //     argumentData: {
+  //       ...argumentData,
+  //       claim: argumentData.claim?.substring(0, 30) + "...",
+  //     },
+  //   });
+
+  //   if (editingArgument) {
+  //     // MODIFICATION SIMPLE - PAS DE DÉPLACEMENT ICI
+  //     console.log("✏️ Appel onEditArgument pour:", editingArgument.id);
+  //     onEditArgument(editingArgument.id, argumentData);
+  //   } else {
+  //     // MODE CRÉATION
+  //     console.log("🆕 Appel onAddArgument avec parent:", parentId);
+  //     onAddArgument(parentId, argumentData);
+  //   }
+
+  //   console.log("✅ handleArgumentSave terminé");
+  //   setShowArgumentForm(false);
+  //   setEditingArgument(null);
+  //   setParentId("root");
+  // };
+
+  // const handleArgumentSave = (argumentData) => {
+  //   console.log("💾 handleArgumentSave appelé", {
+  //     editingArgument: editingArgument?.id,
+  //     argumentData: {
+  //       ...argumentData,
+  //       claim: argumentData.claim?.substring(0, 50) + "...",
+  //     },
+  //     hasParent: !!argumentData.parentId,
+  //     editingArgumentParent: editingArgument?.parentId,
+  //   });
+
+  //   if (editingArgument) {
+  //     // Vérifier si le parent a changé
+  //     const hasParentChanged =
+  //       argumentData.parentId &&
+  //       argumentData.parentId !== editingArgument.parentId;
+
+  //     console.log("🔍 Vérification changement parent:", {
+  //       newParentId: argumentData.parentId,
+  //       oldParentId: editingArgument.parentId,
+  //       hasParentChanged,
+  //     });
+
+  //     if (hasParentChanged) {
+  //       console.log("🚚 DÉPLACEMENT DÉTECTÉ - Forçage causa à 'neutralis'");
+
+  //       // 1. Créer une copie des données avec causa forcé à "neutralis"
+  //       const dataForMove = {
+  //         ...argumentData,
+  //         causa: "neutralis", // ← FORCER neutre pour le déplacement
+  //       };
+
+  //       console.log("📦 Données pour déplacement:", {
+  //         ...dataForMove,
+  //         claim: dataForMove.claim?.substring(0, 50) + "...",
+  //       });
+
+  //       // 2. Déplacer avec la nouvelle causa
+  //       console.log(
+  //         `📤 Appel onMoveArgument(${editingArgument.id}, ${dataForMove.parentId})`,
+  //       );
+  //       onMoveArgument(editingArgument.id, dataForMove.parentId);
+
+  //       // 3. Mettre à jour les autres données (sans parentId)
+  //       const { parentId, ...dataWithoutParent } = dataForMove; // ← Utiliser dataForMove, pas argumentData !
+  //       console.log(
+  //         "📝 Données pour édition (sans parentId):",
+  //         dataWithoutParent,
+  //       );
+  //       onEditArgument(editingArgument.id, dataWithoutParent);
+  //     } else {
+  //       console.log("✏️ MODIFICATION SIMPLE (pas de déplacement)");
+  //       onEditArgument(editingArgument.id, argumentData);
+  //     }
+  //   } else {
+  //     console.log("🆕 CRÉATION d'argument");
+  //     onAddArgument(parentId, argumentData);
+  //   }
+
+  //   console.log("✅ handleArgumentSave terminé");
+  //   setShowArgumentForm(false);
+  //   setEditingArgument(null);
+  //   setParentId("root");
+  // };
 
   const handleArgumentCancel = () => {
     setShowArgumentForm(false);
@@ -351,12 +514,35 @@ export function ArgumentTree({
   };
 
   const handleEditArgumentClick = (argument) => {
-    setEditingArgument(argument);
+    setEditingArgument(argument); // Stocker l'argument à modifier
     setParentId(argument.parentId || "root");
     setShowArgumentForm(true);
   };
 
+  const handleMoveClick = (argument) => {
+    console.log("🖱️ Bouton Déplacer cliqué:", argument.id);
+    setMovingArgument(argument);
+  };
+
+  const handleTestClick = () => {
+    if (collapseAll && typeof collapseAll === "function") {
+      collapseAll();
+    } else {
+      console.error("❌ collapseAll n'est pas une fonction");
+    }
+  };
+
+  const testAllToLineMode = () => {
+    // Force un changement visible
+    if (lineMode && lineMode.size === 0) {
+      // Si vide, ajoute un ID factice
+      // Tu dois passer toggleLineMode pour ça
+    }
+  };
+
   return (
+    // <div className={styles.tabContainer}>
+    //   <div className={styles.tabHeader}>
     <div className={styles.container}>
       <div className={styles.header}>
         <div>
@@ -379,13 +565,17 @@ export function ArgumentTree({
           </div>
           <div>
             <button
-              onClick={expandAllNodes}
+              onClick={() => {
+                expandAllNodes();
+              }}
               style={{ padding: "8px 16px", marginRight: "10px" }}
             >
               Développer
             </button>
             <button
-              onClick={collapseAllNodes}
+              onClick={() => {
+                collapseAllNodes();
+              }}
               style={{ padding: "8px 16px", marginRight: "10px" }}
             >
               Réduire
@@ -415,21 +605,23 @@ export function ArgumentTree({
               argument={argument}
               onDeleteArgument={onDeleteArgument}
               onEditArgument={handleEditArgumentClick}
-              onAddArgument={handleAddArgumentClick}
+              onAddArgument={handleAddArgumentClick} // CORRECT: on passe la fonction, pas juste une référence
+              // onMoveArgument={handleMoveClick}
               openMoveModal={openMoveModal}
               references={references}
-              getArgumentCode={getArgumentCode}
-              getArgumentColor={getArgumentColor}
+              getArgumentCode={getArgumentCode} // ← Passe les fonctions
+              getArgumentColor={getArgumentColor} // ← Passe les fonctions
               lineMode={lineMode}
               toggleLineMode={toggleLineMode}
-              isExpanded={isNodeExpanded(argument.id)}
-              toggleNodeExpansion={toggleNodeExpansion}
-              isNodeExpanded={isNodeExpanded}
+              // NOUVEAU
+              isExpanded={isNodeExpanded(argument.id)} // ← booléen pour CET enfant
+              toggleNodeExpansion={toggleNodeExpansion} // ← même fonction pour tous
+              isNodeExpanded={isNodeExpanded} // ← repasse la fonction aux enfants
             />
           ))}
         </div>
       )}
-
+      {/* Modale pour ajouter/modifier un argument */}
       {showArgumentForm && (
         <ArgumentModal
           isOpen={showArgumentForm}
@@ -441,7 +633,7 @@ export function ArgumentTree({
           onGetPossibleParents={onGetPossibleParents}
         />
       )}
-
+      {/* Modale pour déplacer un argument */}
       {movingArgument && (
         <MoveArgumentModal
           isOpen={!!movingArgument}

@@ -41,17 +41,24 @@ export function ArgumentForm({
   }, [initialData]);
 
   // Deuxième useEffect : Charger les parents possibles en mode édition
-  useEffect(() => {
-    if (initialData.id && onGetPossibleParents) {
-      const parents = onGetPossibleParents(initialData.id);
-      setPossibleParents(parents);
+  // useEffect(() => {
+  //   if (initialData.id && onGetPossibleParents) {
+  //     const parents = onGetPossibleParents(initialData.id);
+  //     setPossibleParents(parents);
 
-      // Si initialData n'a pas de parentId, utiliser le parentId passé en prop
-      if (!initialData.parentId && parentId) {
-        setFormData((prev) => ({ ...prev, parentId }));
-      }
+  //     // Si initialData n'a pas de parentId, utiliser le parentId passé en prop
+  //     if (!initialData.parentId && parentId) {
+  //       setFormData((prev) => ({ ...prev, parentId }));
+  //     }
+  //   }
+  // }, [initialData.id, onGetPossibleParents, initialData.parentId, parentId]);
+
+  useEffect(() => {
+    // On garde seulement l'initialisation du parentId si besoin
+    if (!initialData.parentId && parentId) {
+      setFormData((prev) => ({ ...prev, parentId }));
     }
-  }, [initialData.id, onGetPossibleParents, initialData.parentId, parentId]);
+  }, [initialData.parentId, parentId]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -90,7 +97,7 @@ export function ArgumentForm({
 
   return (
     <Form onSubmit={handleSubmit}>
-      {initialData.id && possibleParents.length > 0 && (
+      {/* {initialData.id && possibleParents.length > 0 && (
         <FormField label="Changer le parent">
           <select
             value={formData.parentId}
@@ -116,7 +123,7 @@ export function ArgumentForm({
             {possibleParents.length === 0 && " Aucun autre parent disponible."}
           </small>
         </FormField>
-      )}
+      )} */}
 
       <FormField label="Énoncé de l'argument" required>
         <textarea

@@ -76,6 +76,13 @@ export function DisplayScreen({
     setShowEditForm(false);
   };
 
+  // Ajoute ce log
+  console.log("🔍 DisplayScreen - Props pour ArgumentTree:", {
+    onMoveArgument: typeof onMoveArgument,
+    onMoveArgumentValue: onMoveArgument,
+    source: "useArgumentaire",
+  });
+
   return (
     <div className={styles.displayScreen}>
       <main>
