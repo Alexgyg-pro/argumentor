@@ -11,6 +11,7 @@ export function ArgumentForm({
   parentId,
   references = [],
   onGetPossibleParents,
+  getParentForma,
 }) {
   const [formData, setFormData] = useState({
     claim: "",
@@ -59,6 +60,20 @@ export function ArgumentForm({
       setFormData((prev) => ({ ...prev, parentId }));
     }
   }, [initialData.parentId, parentId]);
+
+  // Toisième useEffect : Récupérer le forma du parent au chargement
+  useEffect(() => {
+    // Seulement en mode création (pas d'édition)
+    if (!initialData.id && getParentForma) {
+      const parentForma = getParentForma(parentId);
+      console.log("📋 Forma du parent:", parentForma, "pour parent:", parentId);
+
+      setFormData((prev) => ({
+        ...prev,
+        forma: parentForma || "descriptif", // Fallback si non trouvé
+      }));
+    }
+  }, [initialData.id, parentId, getParentForma]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -2,6 +2,18 @@
 
 ### Short term Backlog
 
+##### Calculations : value
+
+En tant qu'utilisateur, je veux pouvoir renseigner la valeur d'un argument, entre 0.0 et 1.0. La valeur de cet argument influence la validité ou la pertinence de l'argument parent selon que l'argument enfant est un argument de validité ou un argument de pertinence. Les scores de la validité et de la pertinence d'un argument vont de 0.00 à 1.00.
+
+##### Calculation : weight
+
+Ajouter des calculs pour pondérer les arguments et l'ensemble de l'argumentaire.
+
+##### Calculation : Global score of Argumentaire
+
+Calculer le score global de l'argumentaire à partir du poids de chaque argument.
+
 #### isDirty
 
 On dirait que toutes les modifications ne conduisent pas à l'affichage d'une alerte avant l'ouverture d'un autre argumentaire ou la création d'un nouveau. Vérifier et si nécessaire, corriger.
@@ -9,10 +21,6 @@ On dirait que toutes les modifications ne conduisent pas à l'affichage d'une al
 #### Composant boutons crud
 
 En tant que développeur, j'aimerais que les boutons Ajouter, Modifier, Déplacer, supprimer un argument pourraient peut-être être un composant à part. Ca simplifierait le code de ArgumentNode.
-
-##### Forme heritage
-
-En tant qu'utilisateur, je veux que lorsque je créé un argument, ou que je le déplace, il prenne la forme de l'argument parent.
 
 ##### File split
 
@@ -25,10 +33,6 @@ En tant que développeur, je veux que les blocs Collapsed et Expanded soient deu
 ##### Forma list
 
 En tant qu'utilisateur je veux qu'il me soit donné le choix entre descriptif et normatif (descriptif par défaut), mais qu'il y ait sur la liste également Esthétique en mode disabled. Ceci aussi bien sur la liste du formulaire de l'argumentaire que celui du formulaire d'argument.
-
-##### Calculations
-
-Ajouter des calculs pour pondérer les arguments et l'ensemble de l'argumentaire.
 
 ##### Logo
 
@@ -43,6 +47,10 @@ si on veut ajouter des argumentaires dans le dossier samples et qu'ils apparaiss
 Les textes sont un peu gros, revoir les couleurs.
 
 ### Short term done
+
+##### Forme heritage
+
+En tant qu'utilisateur, je veux que lorsque je créé un argument, ou que je le déplace, il prenne la forme de l'argument parent.
 
 ##### Default cause
 

@@ -308,11 +308,43 @@ export function ArgumentTree({
   expandAllNodes = () => {},
   collapseAllNodes = () => {},
   isNodeExpanded = () => true,
+  forma: argumentaireForma,
 }) {
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [editingArgument, setEditingArgument] = useState(null);
   const [parentId, setParentId] = useState("root");
   const [movingArgument, setMovingArgument] = useState(null);
+
+  // Fonction pour récupérer le forma d'un parent
+  const getParentForma = (parentId) => {
+    console.log("🔍 Recherche forma pour parent:", parentId);
+
+    // Si parent est la thèse (root), retourner le forma de l'argumentaire
+    if (parentId === "root") {
+      console.log("  → Parent est thèse, forma:", argumentaireForma);
+      // Convertir "Descriptif" → "descriptif", "Normatif" → "normatif", etc.
+      return argumentaireForma ? argumentaireForma.toLowerCase() : "descriptif";
+    }
+
+    // Sinon, chercher l'argument parent dans l'arbre
+    const findForma = (node, targetId) => {
+      if (node.id === targetId) {
+        console.log("  → Trouvé parent:", node.id, "forma:", node.forma);
+        return node.forma || "descriptif";
+      }
+      if (node.children) {
+        for (const child of node.children) {
+          const found = findForma(child, targetId);
+          if (found) return found;
+        }
+      }
+      return "descriptif"; // Fallback
+    };
+
+    const parentForma = findForma(tree, parentId);
+    console.log("  → Forma final:", parentForma);
+    return parentForma;
+  };
 
   const openMoveModal = (argument) => {
     console.log("📤 Ouvrir modale de déplacement pour:", argument.id);
@@ -439,6 +471,7 @@ export function ArgumentTree({
           parentId={parentId}
           references={references}
           onGetPossibleParents={onGetPossibleParents}
+          getParentForma={getParentForma}
         />
       )}
 

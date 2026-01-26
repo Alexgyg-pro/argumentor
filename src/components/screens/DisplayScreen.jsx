@@ -169,6 +169,7 @@ export function DisplayScreen({
               onMoveArgument={onMoveArgument}
               getArgumentCode={getArgumentCode}
               getArgumentColor={getArgumentColor}
+              forma={forma}
               lineMode={lineMode}
               allToLineMode={allToLineMode}
               allToCardMode={allToCardMode}

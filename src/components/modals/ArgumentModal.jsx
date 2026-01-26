@@ -10,6 +10,7 @@ export function ArgumentModal({
   parentId,
   references = [],
   onGetPossibleParents,
+  getParentForma,
 }) {
   if (!isOpen) return null;
 
@@ -27,6 +28,7 @@ export function ArgumentModal({
         onCancel={onClose}
         references={references}
         onGetPossibleParents={onGetPossibleParents}
+        getParentForma={getParentForma}
       />
     </Modal>
   );
