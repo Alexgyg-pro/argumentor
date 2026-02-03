@@ -45,21 +45,14 @@ export function useArguments(initialArgumentTree = null) {
 
   // Recalculer les codes quand l'arbre change
   useEffect(() => {
-    console.log("🔄 useEffect - Recalcul des codes et couleurs");
     if (argumentTree) {
-      console.log(
-        "🌳 argumentTree reçu:",
-        JSON.stringify(argumentTree, null, 2),
-      );
       const codes = recalculateCodesAndColors(
         argumentTree,
         findParentById,
         true, // parentEstPourTheseDefault
       );
-      console.log("🎨 Codes recalculés:", Object.keys(codes).length);
       Object.entries(codes).forEach(([id, data]) => {
         const arg = findArgumentById(argumentTree, id);
-        console.log(`  ${id}: ${data.code} (causa dans arbre: ${arg?.causa})`);
       });
       setArgumentCodes(codes);
     }
@@ -82,11 +75,7 @@ export function useArguments(initialArgumentTree = null) {
 
   const addArgument = useCallback(
     (parentId, data) => {
-      console.log("➕ addArgument appelé");
-      console.log("📊 Compteur arg avant:", getCounter("arg"));
-
       const newId = getNextId("arg"); // Générer l'ID une seule fois
-      console.log("🆔 Nouvel ID généré:", newId);
 
       const newArg = {
         id: newId, // Utiliser l'ID généré
@@ -103,8 +92,6 @@ export function useArguments(initialArgumentTree = null) {
         references: data.references || [],
         children: [],
       };
-
-      console.log("📊 Compteur arg après:", getCounter("arg"));
 
       if (!argumentTree) {
         setArgumentTree({
@@ -180,8 +167,6 @@ export function useArguments(initialArgumentTree = null) {
     setArgumentTree((prevTree) => {
       if (!prevTree) return prevTree;
 
-      console.log("🔄 MOVE_ARGUMENT - VERSION transformInTree");
-
       // 1. Copie profonde
       const treeCopy = JSON.parse(JSON.stringify(prevTree));
 
@@ -205,22 +190,13 @@ export function useArguments(initialArgumentTree = null) {
 
       if (!argument || !oldParent || !newParent) return prevTree;
 
-      console.log("🎯 État initial dans treeCopy:", {
-        argument: argument.id,
-        argumentCausa: argument.causa,
-        child: argument.children?.[0]?.id,
-        childCausa: argument.children?.[0]?.causa,
-      });
-
       // 3. Fonction qui modifie DIRECTEMENT dans treeCopy
       const transformInTree = (nodeId) => {
         const node = findInCopy(treeCopy, nodeId);
         if (node) {
-          console.log(`🔶 ${nodeId}: ${node.causa} → neutralis`);
           node.causa = "neutralis";
           if (node.children) {
             node.children.forEach((child) => {
-              console.log(`  ↳ Transformation de l'enfant: ${child.id}`);
               transformInTree(child.id);
             });
           }
@@ -231,14 +207,10 @@ export function useArguments(initialArgumentTree = null) {
       transformInTree(argumentId);
 
       // 5. Vérification IMMÉDIATE dans treeCopy
-      console.log("🔍 Vérification dans treeCopy après transformation:");
       const checkArg = findInCopy(treeCopy, argumentId);
       if (checkArg) {
-        console.log(`  ${checkArg.id}: ${checkArg.causa}`);
         if (checkArg.children) {
-          checkArg.children.forEach((child) => {
-            console.log(`  ${child.id}: ${child.causa}`);
-          });
+          checkArg.children.forEach((child) => {});
         }
       }
 
@@ -255,21 +227,16 @@ export function useArguments(initialArgumentTree = null) {
       newParent.children.push(argument);
 
       // 9. Vérification FINALE dans treeCopy
-      console.log("✅ État final dans treeCopy:");
       const finalArg = findInCopy(treeCopy, argumentId);
       if (finalArg) {
-        console.log(
-          `  ${finalArg.id}: ${finalArg.causa}, parent: ${finalArg.parentId}`,
-        );
         if (finalArg.children) {
           finalArg.children.forEach((child) => {
-            console.log(`  ${child.id}: ${child.causa}`);
+            // console.log(`  ${child.id}: ${child.causa}`);
           });
         }
       }
 
       // 10. DEBUG : Afficher tout l'arbre pour vérifier
-      console.log("🌳 treeCopy complet:", JSON.stringify(treeCopy, null, 2));
 
       return treeCopy;
     });
@@ -300,16 +267,11 @@ export function useArguments(initialArgumentTree = null) {
   }, []);
 
   const setArguments = useCallback((newTree) => {
-    console.log("🔄 setArguments appelé");
     if (newTree) {
       const allArgs = extractAllArguments(newTree);
-      console.log(
-        "📊 Arguments dans nouvel arbre:",
-        allArgs.map((a) => a.id),
-      );
+
       initializeCountersFromItems(allArgs, "arg");
     } else {
-      console.log("🔄 Réinitialisation du compteur arg (arbre null)");
       resetCounter("arg");
     }
     setArgumentTree(newTree);
@@ -362,15 +324,12 @@ export function useArguments(initialArgumentTree = null) {
   }, []);
 
   const toggleLineMode = useCallback((argumentId) => {
-    console.log("🔄 toggleLineMode pour:", argumentId);
     setLineMode((prev) => {
       const next = new Set(prev);
       if (next.has(argumentId)) {
         next.delete(argumentId);
-        console.log("  -> Supprimé, maintenant", next.size, "en ligne");
       } else {
         next.add(argumentId);
-        console.log("  -> Ajouté, maintenant", next.size, "en ligne");
       }
       return next;
     });
@@ -379,18 +338,13 @@ export function useArguments(initialArgumentTree = null) {
   // Toggle un nœud spécifique
   const toggleNodeExpansion = useCallback(
     (nodeId) => {
-      console.log("🔘 toggleNodeExpansion appelé pour:", nodeId);
-      console.log("   expandedNodes avant:", Array.from(expandedNodes));
       setExpandedNodes((prev) => {
         const next = new Set(prev);
         if (next.has(nodeId)) {
           next.delete(nodeId);
-          console.log("   → Supprimé", nodeId);
         } else {
           next.add(nodeId);
-          console.log("   → Ajouté", nodeId);
         }
-        console.log("   expandedNodes après:", Array.from(next));
         return next;
       });
     },
@@ -398,7 +352,6 @@ export function useArguments(initialArgumentTree = null) {
   );
 
   const expandAllNodes = useCallback(() => {
-    console.log("🔘 expandAllNodes appelé");
     if (!argumentTree) {
       console.log("   ❌ Arbre vide");
       return;
@@ -409,13 +362,10 @@ export function useArguments(initialArgumentTree = null) {
       node.children?.forEach(collectIds);
     };
     collectIds(argumentTree);
-    console.log("   → IDs à développer:", Array.from(allIds));
     setExpandedNodes(allIds);
   }, [argumentTree]);
 
   const collapseAllNodes = useCallback(() => {
-    console.log("🔘 collapseAllNodes appelé");
-    console.log("   → Réinitialisation à ['root']");
     setExpandedNodes(new Set(["root"]));
   }, []);
 

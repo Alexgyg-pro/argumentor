@@ -66,7 +66,6 @@ export function ArgumentForm({
     // Seulement en mode création (pas d'édition)
     if (!initialData.id && getParentForma) {
       const parentForma = getParentForma(parentId);
-      console.log("📋 Forma du parent:", parentForma, "pour parent:", parentId);
 
       setFormData((prev) => ({
         ...prev,

@@ -32,6 +32,15 @@ export function HelpModal({ isOpen, onClose, onLoadExample }) {
       references: 5,
       lastUpdated: "2024-12-10",
     },
+    {
+      id: "loyers",
+      title: "Augmentation des loyers",
+      description: "Il faut tenter de coloniser Mars",
+      file: "loyers.json",
+      arguments: 8,
+      references: 5,
+      lastUpdated: "2025-12-02",
+    },
     // {
     //   id: "teletravail",
     //   title: "🏠 Télétravail",

@@ -317,11 +317,8 @@ export function ArgumentTree({
 
   // Fonction pour récupérer le forma d'un parent
   const getParentForma = (parentId) => {
-    console.log("🔍 Recherche forma pour parent:", parentId);
-
     // Si parent est la thèse (root), retourner le forma de l'argumentaire
     if (parentId === "root") {
-      console.log("  → Parent est thèse, forma:", argumentaireForma);
       // Convertir "Descriptif" → "descriptif", "Normatif" → "normatif", etc.
       return argumentaireForma ? argumentaireForma.toLowerCase() : "descriptif";
     }
@@ -329,7 +326,6 @@ export function ArgumentTree({
     // Sinon, chercher l'argument parent dans l'arbre
     const findForma = (node, targetId) => {
       if (node.id === targetId) {
-        console.log("  → Trouvé parent:", node.id, "forma:", node.forma);
         return node.forma || "descriptif";
       }
       if (node.children) {
@@ -342,26 +338,18 @@ export function ArgumentTree({
     };
 
     const parentForma = findForma(tree, parentId);
-    console.log("  → Forma final:", parentForma);
     return parentForma;
   };
 
   const openMoveModal = (argument) => {
-    console.log("📤 Ouvrir modale de déplacement pour:", argument.id);
     setMovingArgument(argument);
   };
 
   const handleArgumentSave = (argumentData) => {
-    console.log("💾 handleArgumentSave - ÉDITION SIMPLE", {
-      editingArgument: editingArgument?.id,
-    });
-
     if (editingArgument) {
       const { parentId, ...editData } = argumentData;
-      console.log("✏️ Appel onEditArgument pour:", editingArgument.id);
       onEditArgument(editingArgument.id, editData);
     } else {
-      console.log("🆕 Appel onAddArgument avec parent:", parentId);
       onAddArgument(parentId, argumentData);
     }
 

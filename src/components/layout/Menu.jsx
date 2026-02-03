@@ -16,7 +16,6 @@ export function Menu({
   onLoadExample,
 }) {
   const [helpOpen, setHelpOpen] = useState(false);
-  console.log("📋 Menu rendu, helpOpen:", helpOpen);
   //const { handleLoadExample } = useArgumentaire();
   // A la mémoire de Charlie Kirk
   return (
@@ -86,9 +85,7 @@ export function Menu({
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            console.log("🖱️ Clic sur ?");
             setHelpOpen(true);
-            console.log("✅ helpOpen devrait être true maintenant");
           }}
           className={styles.menuItem}
         >

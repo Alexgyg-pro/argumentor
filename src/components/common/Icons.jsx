@@ -322,28 +322,28 @@ export const MoveIcon = ({ size = 16, ...props }) => (
     <path
       d="M5 7H13"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
+      strokeWidth="2"
+      strokeLinecap="round"
     />
     <path
       d="M11 17H19"
       stroke="currentColor"
-      stroke-width="1.4"
-      stroke-linecap="round"
+      strokeWidth="1.4"
+      strokeLinecap="round"
     />
     <path
       d="M12 9V15"
       stroke="currentColor"
-      stroke-width="1.4"
-      stroke-linecap="round"
+      strokeWidth="1.4"
+      strokeLinecap="round"
     />
     <path
       d="M10.5 13.5 L12 15 L13.5 13.5"
       stroke="currentColor"
-      stroke-width="1.4"
+      strokeWidth="1.4"
       fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
