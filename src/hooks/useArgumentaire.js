@@ -123,14 +123,9 @@ export function useArgumentaire() {
    * Charge un exemple depuis le dossier public/samples/
    */
   const handleLoadExample = async (filename) => {
-    console.log(`📥 Chargement de l'exemple: ${filename}`);
-    console.log(`🔗 URL tentée: /samples/${filename}`);
     try {
-      console.log(`📥 Chargement de l'exemple: ${filename}`);
-
       // Chemin vers le dossier public/samples/
       const response = await fetch(`/samples/${filename}`);
-      console.log(`📄 Réponse fetch:`, response.status, response.statusText);
 
       if (!response.ok) {
         throw new Error(`Fichier non trouvé: /samples/${filename}`);
@@ -138,30 +133,13 @@ export function useArgumentaire() {
 
       // const jsonData = await response.json();
       const text = await response.text();
-      console.log(
-        `📝 Contenu brut (premiers 500 caractères):`,
-        text.substring(0, 500),
-      );
+
       const jsonData = JSON.parse(text);
-      console.log(`✅ JSON parsé:`, {
-        thesis: jsonData.thesis,
-        context: jsonData.context,
-        forma: jsonData.forma,
-        definitionsCount: jsonData.definitions?.length || 0,
-        referencesCount: jsonData.globalReferences?.length || 0,
-        treeExists: !!jsonData.tree,
-      });
 
       // 1. Métadonnées
       setThesis(jsonData.thesis || "");
       setContext(jsonData.context || "");
       setForma(jsonData.forma || "Descriptif");
-
-      console.log(`📊 Métadonnées définies:`, {
-        thesis: jsonData.thesis || "",
-        context: jsonData.context || "",
-        forma: jsonData.forma || "Descriptif",
-      });
 
       // 2. Arbre d'arguments
       const treeToImport = jsonData.tree || {
@@ -170,9 +148,7 @@ export function useArgumentaire() {
         children: [],
       };
 
-      console.log(`🌳 Arbre à importer:`, treeToImport);
       argumentsHook.importArguments(treeToImport);
-      console.log(`✅ Arbre importé via argumentsHook`);
 
       // 3. Définitions
       definitionsHook.importDefinitions(jsonData.definitions || []);
@@ -183,13 +159,6 @@ export function useArgumentaire() {
       // 5. État
       setCurrentMode("display");
       setIsDirty(false);
-
-      console.log("✅ Exemple chargé avec succès:", jsonData.thesis);
-
-      // Force un re-render pour voir les changements
-      setTimeout(() => {
-        console.log("🔄 Re-render forcé après chargement");
-      }, 100);
 
       return true;
     } catch (error) {
@@ -268,8 +237,6 @@ export function useArgumentaire() {
    */
   const handleExportPdf = useCallback(async () => {
     try {
-      console.log("📄 Début génération PDF");
-
       // Validation des données
       if (!argumentsHook.argumentTree) {
         alert(
@@ -292,8 +259,6 @@ export function useArgumentaire() {
         getArgumentCode: argumentsHook.getArgumentCode || ((id) => id),
         getArgumentColor: argumentsHook.getArgumentColor,
       };
-
-      console.log("📊 Données pour PDF:", pdfData);
 
       // Création du PDF
       const element = React.createElement(PdfDocument, pdfData);
@@ -337,14 +302,7 @@ export function useArgumentaire() {
     definitionsHook.definitions,
     referencesHook.references,
   ]);
-  // Ajoute ce log dans useArgumentaire.js
-  console.log("🔍 useArgumentaire - argumentsHook:", {
-    hasMoveArgument: !!argumentsHook.moveArgument,
-    type: typeof argumentsHook.moveArgument,
-    allFunctions: Object.keys(argumentsHook).filter(
-      (k) => typeof argumentsHook[k] === "function",
-    ),
-  });
+
   // ============ RETOUR DU HOOK ============
   return {
     // === ÉTAT ===
@@ -373,6 +331,10 @@ export function useArgumentaire() {
     argumentCodes: argumentsHook.argumentCodes,
     getArgumentCode: argumentsHook.getArgumentCode,
     getArgumentColor: argumentsHook.getArgumentColor,
+
+    // Scores
+    scoredTree: argumentsHook.scoredTree,
+    globalScore: argumentsHook.globalScore,
 
     // Références techniques
     fileInputRef,

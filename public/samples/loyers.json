@@ -1,0 +1,108 @@
+{
+  "thesis": "Les loyers vont augmenter",
+  "context": "Exemple d'argumentaire descriptif extrait de Språk og argumentasjon (« Langage et argumentation »), de Olav Asheim, Kolbein Brede et Bjørn Thommessen.",
+  "forma": "Descriptif",
+  "definitions": [],
+  "globalReferences": [],
+  "tree": {
+    "id": "root",
+    "claim": "Les loyers vont augmenter",
+    "children": [
+      {
+        "id": "arg00005",
+        "parentId": "root",
+        "claim": "Les intérêts ont augmenté.",
+        "claimComment": "Selon la théorie, un argument principal ne peut être qu'un argument de validité.",
+        "causa": "pro",
+        "forma": "descriptif",
+        "natura": "validity",
+        "validity": 0.5,
+        "relevance": 0.5,
+        "value": 0.5,
+        "weight": 0.5,
+        "references": [],
+        "children": [
+          {
+            "id": "arg00006",
+            "parentId": "arg00005",
+            "claim": "La télévision a annoncé que les intérêts ont augmenté de 1%.",
+            "claimComment": "Le livre a été écrit dans les années 80. Il est clair que de nos jours personne n'accepterait un argument sur la seule base que cela a été dit à la télévision.",
+            "causa": "pro",
+            "forma": "descriptif",
+            "natura": "validity",
+            "validity": 0.5,
+            "relevance": 0.5,
+            "value": 0.5,
+            "weight": 0.5,
+            "references": [],
+            "children": [
+              {
+                "id": "arg00007",
+                "parentId": "arg00006",
+                "claim": "La télévision est une source fiable.",
+                "claimComment": "Voir le commentaire dans p1P1.",
+                "causa": "pro",
+                "forma": "descriptif",
+                "natura": "relevance",
+                "validity": 0.5,
+                "relevance": 0.5,
+                "value": 0.5,
+                "weight": 0.5,
+                "references": [],
+                "children": []
+              },
+              {
+                "id": "arg00008",
+                "parentId": "arg00006",
+                "claim": "Les intérêts représentent la moitié des charges couvertes par les loyers.",
+                "claimComment": "",
+                "causa": "pro",
+                "forma": "descriptif",
+                "natura": "relevance",
+                "validity": 0.5,
+                "relevance": 0.5,
+                "value": 0.5,
+                "weight": 0.5,
+                "references": [],
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "arg00009",
+            "parentId": "arg00005",
+            "claim": "Il y a d'autres facteurs qui déterminent les loyers et qui peuvent contrebalancer l'évolution des loyers.",
+            "claimComment": "",
+            "causa": "contra",
+            "forma": "descriptif",
+            "natura": "relevance",
+            "validity": 0.5,
+            "relevance": 0.5,
+            "value": 0.5,
+            "weight": 0.5,
+            "references": [],
+            "children": [
+              {
+                "id": "arg00010",
+                "parentId": "arg00009",
+                "claim": "les frais communaux se maintiennent au même niveau.",
+                "claimComment": "",
+                "causa": "contra",
+                "forma": "descriptif",
+                "natura": "validity",
+                "validity": 0.5,
+                "relevance": 0.5,
+                "value": 0.5,
+                "weight": 0.5,
+                "references": [],
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "version": "1.0",
+  "downloadedAt": "2026-02-03T19:46:47.663Z"
+}

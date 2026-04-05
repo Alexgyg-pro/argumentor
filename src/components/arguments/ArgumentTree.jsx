@@ -206,10 +206,32 @@ function ArgumentNode({
         )}
         <div className={styles.argumentFooter}>
           <p className={styles.natura}>{argument.natura}</p>
-          <small>
-            {argument.causa} | {argument.forma} | {argument.natura} | Validité:{" "}
-            {argument.validity} | Pertinence: {argument.relevance}
-          </small>
+          <div className={styles.argumentScores}>
+            <span
+              className={styles.scoreChip + " " + styles.scoreChipValidity}
+              title="Validité héritée des sous-arguments de validité (∈ −1 à +1)"
+            >
+              V {argument.validity != null ? argument.validity.toFixed(2) : "—"}
+            </span>
+            <span
+              className={styles.scoreChip + " " + styles.scoreChipRelevance}
+              title="Pertinence héritée des sous-arguments de pertinence (∈ −1 à +1)"
+            >
+              R {argument.relevance != null ? argument.relevance.toFixed(2) : "—"}
+            </span>
+            <span
+              className={styles.scoreChip + " " + styles.scoreChipWeight}
+              title="Poids = combinaison (courbe en S) de V et R. Pour une feuille sans sous-arguments positionnés, poids = 2×valeur−1."
+            >
+              W {argument.weight != null ? argument.weight.toFixed(2) : "—"}
+            </span>
+            <span
+              className={styles.scoreChip + " " + styles.scoreChipValue}
+              title="Valeur fixée par vous (0,0 à 1,0) — seule grandeur qui se propage vers le parent"
+            >
+              val. {(argument.value ?? 0.5).toFixed(1)}
+            </span>
+          </div>
           <div className={styles.argumentActions}>
             <button
               onClick={(e) => {
@@ -308,28 +330,48 @@ export function ArgumentTree({
   expandAllNodes = () => {},
   collapseAllNodes = () => {},
   isNodeExpanded = () => true,
+  forma: argumentaireForma,
 }) {
   const [showArgumentForm, setShowArgumentForm] = useState(false);
   const [editingArgument, setEditingArgument] = useState(null);
   const [parentId, setParentId] = useState("root");
   const [movingArgument, setMovingArgument] = useState(null);
 
+  // Fonction pour récupérer le forma d'un parent
+  const getParentForma = (parentId) => {
+    // Si parent est la thèse (root), retourner le forma de l'argumentaire
+    if (parentId === "root") {
+      // Convertir "Descriptif" → "descriptif", "Normatif" → "normatif", etc.
+      return argumentaireForma ? argumentaireForma.toLowerCase() : "descriptif";
+    }
+
+    // Sinon, chercher l'argument parent dans l'arbre
+    const findForma = (node, targetId) => {
+      if (node.id === targetId) {
+        return node.forma || "descriptif";
+      }
+      if (node.children) {
+        for (const child of node.children) {
+          const found = findForma(child, targetId);
+          if (found) return found;
+        }
+      }
+      return "descriptif"; // Fallback
+    };
+
+    const parentForma = findForma(tree, parentId);
+    return parentForma;
+  };
+
   const openMoveModal = (argument) => {
-    console.log("📤 Ouvrir modale de déplacement pour:", argument.id);
     setMovingArgument(argument);
   };
 
   const handleArgumentSave = (argumentData) => {
-    console.log("💾 handleArgumentSave - ÉDITION SIMPLE", {
-      editingArgument: editingArgument?.id,
-    });
-
     if (editingArgument) {
       const { parentId, ...editData } = argumentData;
-      console.log("✏️ Appel onEditArgument pour:", editingArgument.id);
       onEditArgument(editingArgument.id, editData);
     } else {
-      console.log("🆕 Appel onAddArgument avec parent:", parentId);
       onAddArgument(parentId, argumentData);
     }
 
@@ -439,6 +481,7 @@ export function ArgumentTree({
           parentId={parentId}
           references={references}
           onGetPossibleParents={onGetPossibleParents}
+          getParentForma={getParentForma}
         />
       )}
 

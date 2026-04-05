@@ -25,34 +25,22 @@ export function HelpModal({ isOpen, onClose, onLoadExample }) {
     },
     {
       id: "mars2031",
-      title: "Mars 2031l",
+      title: "Mars 2031",
       description: "Il faut tenter de coloniser Mars",
       file: "mars2031.json",
       arguments: 8,
       references: 5,
       lastUpdated: "2024-12-10",
     },
-    // {
-    //   id: "teletravail",
-    //   title: "🏠 Télétravail",
-    //   description: "Pour ou contre le télétravail généralisé ?",
-    //   file: "teletravail.json",
-    //   arguments: 8,
-    //   references: 5,
-    //   lastUpdated: "2024-12-10",
-    //   comingSoon: true,
-    // },
-    // {
-    //   id: "react-vs-vue",
-    //   title: "⚛️ React vs Vue",
-    //   description:
-    //     "Comparaison des frameworks front-end pour un projet d'entreprise",
-    //   file: "react_vs_vue.json",
-    //   arguments: 6,
-    //   references: 4,
-    //   lastUpdated: "2024-12-05",
-    //   comingSoon: true,
-    // },
+    {
+      id: "loyers",
+      title: "Augmentation des loyers",
+      description: "Il faut tenter de coloniser Mars",
+      file: "loyers.json",
+      arguments: 8,
+      references: 5,
+      lastUpdated: "2025-12-02",
+    },
   ];
 
   // Contenu des onglets
@@ -69,33 +57,6 @@ export function HelpModal({ isOpen, onClose, onLoadExample }) {
   const createMarkup = (htmlContent) => {
     return { __html: htmlContent };
   };
-
-  // const handleLoadExample = (example) => {
-  //   console.log("Chargement de l'exemple:", example.title);
-  //   if (onLoadExample) {
-  //     onLoadExample(example.file);
-  //   }
-  //   onClose();
-  // };
-
-  // const handleLoadExample = async (filename) => {
-  //   console.log(`🔄 Dans Menu.jsx, appel de handleLoadExample avec:`, filename);
-
-  //   try {
-  //     const success = await onLoadExample(filename); // onLoadExample vient du hook
-  //     console.log(`✅ Résultat de handleLoadExample:`, success);
-
-  //     if (success) {
-  //       // Optionnel: afficher un message de succès
-  //       // alert(`Exemple "${filename}" chargé avec succès!`);
-  //     }
-  //   } catch (error) {
-  //     console.error(`❌ Erreur dans Menu.jsx:`, error);
-  //   }
-
-  //   // Ferme la modale
-  //   setShowHelp(false);
-  // };
 
   const handleExampleClick = (example) => {
     console.log("Chargement de l'exemple:", example.title);
