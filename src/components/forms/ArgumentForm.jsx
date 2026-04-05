@@ -206,8 +206,6 @@ export function ArgumentForm({
           >
             <option value="validity">Validité</option>
             <option value="relevance">Pertinence</option>
-            <option value="value">Valeur</option>
-            <option value="weight">Poids</option>
           </select>
         </FormField>
 

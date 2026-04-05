@@ -52,6 +52,8 @@ function App() {
                 onFileSelect={argumentaire.handleFileSelect}
                 // Arguments
                 argumentTree={argumentaire.argumentTree}
+                scoredTree={argumentaire.scoredTree}
+                globalScore={argumentaire.globalScore}
                 onAddArgument={argumentaire.onAddArgument}
                 onEditArgument={argumentaire.onEditArgument}
                 onMoveArgument={argumentaire.onMoveArgument}

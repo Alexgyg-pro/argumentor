@@ -160,11 +160,6 @@ export function useArgumentaire() {
       setCurrentMode("display");
       setIsDirty(false);
 
-      // Force un re-render pour voir les changements
-      setTimeout(() => {
-        console.log("🔄 Re-render forcé après chargement");
-      }, 100);
-
       return true;
     } catch (error) {
       console.error("❌ Erreur lors du chargement de l'exemple:", error);
@@ -336,6 +331,10 @@ export function useArgumentaire() {
     argumentCodes: argumentsHook.argumentCodes,
     getArgumentCode: argumentsHook.getArgumentCode,
     getArgumentColor: argumentsHook.getArgumentColor,
+
+    // Scores
+    scoredTree: argumentsHook.scoredTree,
+    globalScore: argumentsHook.globalScore,
 
     // Références techniques
     fileInputRef,

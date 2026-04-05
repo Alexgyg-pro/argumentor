@@ -7,6 +7,34 @@ import styles from "./DisplayScreen.module.css";
 import { DefinitionsList } from "../definitions/DefinitionsList";
 import { ReferencesList } from "../references/ReferencesList";
 
+/**
+ * Barre de score global de l'argumentaire.
+ * score ∈ ]-10 ; +10[
+ */
+function GlobalScorePanel({ score }) {
+  // Positionne le marqueur sur la barre (0 % = -10, 50 % = 0, 100 % = +10)
+  const pct = ((score + 10) / 20) * 100;
+
+  const color =
+    score > 3 ? "#27ae60" : score < -3 ? "#e74c3c" : "#f39c12";
+
+  return (
+    <div className={styles.scorePanel}>
+      <span className={styles.scoreLabel}>Score global</span>
+      <div className={styles.scoreBarContainer}>
+        <div
+          className={styles.scoreBarMarker}
+          style={{ left: `${pct}%` }}
+        />
+      </div>
+      <span className={styles.scoreValue} style={{ color }}>
+        {score > 0 ? "+" : ""}
+        {score.toFixed(2)}
+      </span>
+    </div>
+  );
+}
+
 export function DisplayScreen({
   argumentaire,
   thesis,
@@ -21,6 +49,8 @@ export function DisplayScreen({
 
   // Props pour les arguments
   argumentTree,
+  scoredTree,
+  globalScore,
   onAddArgument,
   onEditArgument,
   onDeleteArgument,
@@ -107,6 +137,11 @@ export function DisplayScreen({
             </div>
           </div>
 
+          {/* Score global de l'argumentaire */}
+          {globalScore != null && (
+            <GlobalScorePanel score={globalScore} />
+          )}
+
           {/* Bandeau d'alerte pour arguments neutres */}
           {neutralArgumentsCount > 0 && (
             <div className={styles.neutralAlert}>
@@ -153,7 +188,7 @@ export function DisplayScreen({
           {/* Onglet Arguments */}
           {activeTab === "arguments" && (
             <ArgumentTree
-              tree={argumentTree}
+              tree={scoredTree || argumentTree}
               onAddArgument={onAddArgument}
               onEditArgument={onEditArgument}
               onDeleteArgument={onDeleteArgument}

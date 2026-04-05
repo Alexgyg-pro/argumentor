@@ -206,10 +206,20 @@ function ArgumentNode({
         )}
         <div className={styles.argumentFooter}>
           <p className={styles.natura}>{argument.natura}</p>
-          <small>
-            {argument.causa} | {argument.forma} | {argument.natura} | Validité:{" "}
-            {argument.validity} | Pertinence: {argument.relevance}
-          </small>
+          <div className={styles.argumentScores}>
+            <span className={styles.scoreChip + " " + styles.scoreChipValidity}>
+              V {argument.validity != null ? argument.validity.toFixed(2) : "—"}
+            </span>
+            <span className={styles.scoreChip + " " + styles.scoreChipRelevance}>
+              R {argument.relevance != null ? argument.relevance.toFixed(2) : "—"}
+            </span>
+            <span className={styles.scoreChip + " " + styles.scoreChipWeight}>
+              W {argument.weight != null ? argument.weight.toFixed(2) : "—"}
+            </span>
+            <small style={{ color: "#aaa" }}>
+              val. utilisateur : {(argument.value ?? 0.5).toFixed(1)}
+            </small>
+          </div>
           <div className={styles.argumentActions}>
             <button
               onClick={(e) => {

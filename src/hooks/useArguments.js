@@ -1,6 +1,6 @@
 // src/hooks/useArguments.js
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import {
   findArgumentById,
   getNextArgumentId,
@@ -14,6 +14,7 @@ import {
   resetCounter,
   getCounter,
 } from "../utils/idUtils";
+import { computeScores, computeGlobalScore } from "../utils/scoreUtils";
 
 const extractAllArguments = (tree) => {
   const args = [];
@@ -43,20 +44,29 @@ export function useArguments(initialArgumentTree = null) {
 
   const [argumentCodes, setArgumentCodes] = useState({});
 
-  // Recalculer les codes quand l'arbre change
+  // Recalculer les codes/couleurs quand l'arbre change
   useEffect(() => {
     if (argumentTree) {
       const codes = recalculateCodesAndColors(
         argumentTree,
         findParentById,
-        true, // parentEstPourTheseDefault
+        true,
       );
-      Object.entries(codes).forEach(([id, data]) => {
-        const arg = findArgumentById(argumentTree, id);
-      });
       setArgumentCodes(codes);
     }
   }, [argumentTree]);
+
+  // Arbre avec scores calculés (validity, relevance, weight)
+  const scoredTree = useMemo(() => {
+    if (!argumentTree) return null;
+    return computeScores(argumentTree);
+  }, [argumentTree]);
+
+  // Score global de l'argumentaire ∈ ]-10 ; +10[
+  const globalScore = useMemo(() => {
+    if (!scoredTree || !argumentCodes) return null;
+    return computeGlobalScore(scoredTree, argumentCodes);
+  }, [scoredTree, argumentCodes]);
 
   const getArgumentCode = useCallback(
     (argumentId) => {
@@ -206,15 +216,7 @@ export function useArguments(initialArgumentTree = null) {
       // 4. Appliquer la transformation
       transformInTree(argumentId);
 
-      // 5. Vérification IMMÉDIATE dans treeCopy
-      const checkArg = findInCopy(treeCopy, argumentId);
-      if (checkArg) {
-        if (checkArg.children) {
-          checkArg.children.forEach((child) => {});
-        }
-      }
-
-      // 6. Retirer de l'ancien parent
+      // 5. Retirer de l'ancien parent
       oldParent.children = oldParent.children.filter(
         (child) => child.id !== argumentId,
       );
@@ -226,19 +228,7 @@ export function useArguments(initialArgumentTree = null) {
       newParent.children = newParent.children || [];
       newParent.children.push(argument);
 
-      // 9. Vérification FINALE dans treeCopy
-      const finalArg = findInCopy(treeCopy, argumentId);
-      if (finalArg) {
-        if (finalArg.children) {
-          finalArg.children.forEach((child) => {
-            // console.log(`  ${child.id}: ${child.causa}`);
-          });
-        }
-      }
-
-      // 10. DEBUG : Afficher tout l'arbre pour vérifier
-
-      return treeCopy;
+        return treeCopy;
     });
   }, []);
 
@@ -382,6 +372,10 @@ export function useArguments(initialArgumentTree = null) {
     argumentTree,
     argumentCodes,
 
+    // Scores calculés
+    scoredTree,
+    globalScore,
+
     // Fonctions CRUD
     addArgument,
     updateArgument,
@@ -399,7 +393,7 @@ export function useArguments(initialArgumentTree = null) {
     // Import/export
     importArguments,
     resetArguments,
-    setArguments: setArgumentTree,
+    setArguments,  // fix: était setArgumentTree (le setter brut)
 
     // Line/Card-mode
     lineMode,
