@@ -62,10 +62,10 @@ export function computeScores(node) {
   const validity = sigmoid(rawValidity);
   const relevance = sigmoid(rawRelevance);
 
-  // Feuille sans enfants positionnés : le poids est l'évaluation directe de l'utilisateur
+  // Feuille sans enfants positionnés : le poids est directement la valeur utilisateur
   const weight = hasContributors
     ? sigmoid(rawValidity + rawRelevance)
-    : 2 * (node.value ?? 0.5) - 1;
+    : (node.value ?? 0.5);
 
   return {
     ...node,
