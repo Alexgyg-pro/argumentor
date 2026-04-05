@@ -16,10 +16,7 @@
         "causa": "pro",
         "forma": "descriptif",
         "natura": "relevance",
-        "validity": 0.5,
-        "relevance": 0.5,
         "value": 0.5,
-        "weight": 0.5,
         "references": [],
         "children": []
       },
@@ -31,10 +28,7 @@
         "causa": "pro",
         "forma": "descriptif",
         "natura": "validity",
-        "validity": 0.5,
-        "relevance": 0.5,
         "value": 0.5,
-        "weight": 0.5,
         "references": [],
         "children": [
           {
@@ -45,10 +39,7 @@
             "causa": "contra",
             "forma": "descriptif",
             "natura": "validity",
-            "validity": 0.5,
-            "relevance": 0.5,
             "value": 0.5,
-            "weight": 0.5,
             "references": [],
             "children": []
           }
@@ -62,15 +53,12 @@
         "causa": "contra",
         "forma": "descriptif",
         "natura": "relevance",
-        "validity": 0.5,
-        "relevance": 0.5,
         "value": 0.5,
-        "weight": 0.5,
         "references": [],
         "children": []
       }
     ]
   },
   "version": "1.0",
-  "downloadedAt": "2026-01-04T18:51:12.957Z"
+  "downloadedAt": "2026-04-05T18:45:53.191Z"
 }
