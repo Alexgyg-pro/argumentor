@@ -19,11 +19,8 @@ export function ArgumentForm({
     causa: "neutralis",
     forma: "descriptif",
     natura: "validity",
-    validity: 0.5,
-    relevance: 0.5,
     value: 0.5,
-    weight: 0.5,
-    references: [], // ← IDs des références associées
+    references: [],
     parentId: parentId,
     ...initialData,
   });
@@ -93,10 +90,7 @@ export function ArgumentForm({
         causa: "neutralis",
         forma: "descriptif",
         natura: "validity",
-        validity: 0.5,
-        relevance: 0.5,
         value: 0.5,
-        weight: 0.5,
         references: [],
       });
     }

@@ -88,17 +88,14 @@ export function useArguments(initialArgumentTree = null) {
       const newId = getNextId("arg"); // Générer l'ID une seule fois
 
       const newArg = {
-        id: newId, // Utiliser l'ID généré
+        id: newId,
         parentId,
         claim: data.claim || "",
         claimComment: data.claimComment || "",
         causa: data.causa || "neutralis",
         forma: data.forma || "descriptif",
         natura: data.natura || "validity",
-        validity: data.validity ?? 0.5,
-        relevance: data.relevance ?? 0.5,
         value: data.value ?? 0.5,
-        weight: data.weight ?? 0.5,
         references: data.references || [],
         children: [],
       };
