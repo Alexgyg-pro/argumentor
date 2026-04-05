@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DefinitionForm } from "../forms/DefinitionForm";
 import styles from "../screens/DisplayScreen.module.css";
-import { DefinitionModal } from "../modals/definitionModal";
+import { DefinitionModal } from "../modals/DefinitionModal";
 import {
   ReticleIcon,
   ReticleIcon2,
