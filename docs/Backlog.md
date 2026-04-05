@@ -1,34 +1,12 @@
 # Argumentor Backlog
 
-### Short term Backlog
+---
 
-##### Calculations : value
+## Backlog court terme
 
-En tant qu'utilisateur, je veux pouvoir renseigner la valeur d'un argument, entre 0.0 et 1.0. La valeur de cet argument influence la validité ou la pertinence de l'argument parent selon que l'argument enfant est un argument de validité ou un argument de pertinence. Les scores de la validité et de la pertinence d'un argument vont de 0.00 à 1.00.
-
-##### Calculation : weight
-
-Ajouter des calculs pour pondérer les arguments et l'ensemble de l'argumentaire.
-
-##### Calculation : Global score of Argumentaire
-
-Calculer le score global de l'argumentaire à partir du poids de chaque argument.
-
-#### isDirty
+##### isDirty
 
 On dirait que toutes les modifications ne conduisent pas à l'affichage d'une alerte avant l'ouverture d'un autre argumentaire ou la création d'un nouveau. Vérifier et si nécessaire, corriger.
-
-#### Composant boutons crud
-
-En tant que développeur, j'aimerais que les boutons Ajouter, Modifier, Déplacer, supprimer un argument pourraient peut-être être un composant à part. Ca simplifierait le code de ArgumentNode.
-
-##### File split
-
-En tant que développeur, je veux que ArgumentTree et ArgumentNode se retrouvent dans deux composants distincts afin d'alléger l'actuel ArgumentTree.jsx.
-
-##### Collapsed and expanded modes conponents
-
-En tant que développeur, je veux que les blocs Collapsed et Expanded soient deux composants distincs afin d'alléger l'actuel ArgumentTree.jsx.
 
 ##### Forma list
 
@@ -40,53 +18,80 @@ Il ne faut pas un graphique, mais il faut y mettre un lien vers l'accueil de l'a
 
 ##### Sample folder scan
 
-si on veut ajouter des argumentaires dans le dossier samples et qu'ils apparaissent dans l'onglet Exemples de l'aide, il faut aussi mettre à jour le fichier HelpModal. Il vaut mieux qu'il regarde ce qu'il y a dans ce dossier et qu'il le liste. A voir, parce que ça sera moins élégant.
+Si on veut ajouter des argumentaires dans le dossier samples et qu'ils apparaissent dans l'onglet Exemples de l'aide, il faut aussi mettre à jour le fichier HelpModal. Il vaut mieux qu'il regarde ce qu'il y a dans ce dossier et qu'il le liste.
 
 ##### Improve pdf layout
 
 Les textes sont un peu gros, revoir les couleurs.
 
-### Short term done
+##### Composant boutons crud
 
-##### Forme heritage
+En tant que développeur, les boutons Ajouter, Modifier, Déplacer, Supprimer un argument pourraient être un composant à part. Ça simplifierait le code de ArgumentNode.
 
-En tant qu'utilisateur, je veux que lorsque je créé un argument, ou que je le déplace, il prenne la forme de l'argument parent.
+##### File split
+
+En tant que développeur, je veux que ArgumentTree et ArgumentNode se retrouvent dans deux fichiers distincts afin d'alléger l'actuel ArgumentTree.jsx.
+
+---
+
+## Backlog long terme
+
+##### Argumentaire esthétique
+
+En tant qu'utilisateur, je veux pouvoir créer un argumentaire de type esthétique (beau/laid), en plus des types descriptif et normatif. Ce type introduit une troisième dimension d'évaluation : la **résonance**, en plus de la validité et de la pertinence. Le système de scoring devra être étendu pour intégrer cette troisième composante dans le calcul du poids.
+
+##### Sophismes
+
+En tant qu'utilisateur, je veux pouvoir associer un argument à un ou plusieurs sophismes connus (ad hominem, pente glissante, homme de paille…). Cela permettrait d'identifier les failles rhétoriques dans sa propre position ou dans celle de l'adversaire.
+
+##### Paires de débats
+
+Certaines structures de débat sont récurrentes et asymétriques : expert vs bon sens, modéré vs extrémiste (avec la prime à l'extrémiste), majorité vs minorité, etc. Chaque paire implique des stratégies argumentatives différentes selon le camp. Prévoir une bibliothèque de paires avec des guides de structure.
+
+##### Argument à double emploi
+
+Un même fait peut servir des positions opposées selon la série de prémisses dans laquelle il s'insère. Exemple : « Il y a beaucoup d'étrangers dans les prisons françaises » peut argumenter pour une politique migratoire plus stricte (droite) ou pour l'existence d'une discrimination systémique (gauche). Permettre qu'un argument puisse être instancié dans deux branches opposées de l'arbre, avec des rôles différents, sans être considéré comme une contradiction.
+
+##### Dédoublement de branches selon l'interlocuteur
+
+On ne débat pas de la même façon avec un interlocuteur qui accepte certaines prémisses de base qu'avec un autre qui les conteste. Exemple : l'argument citant l'ISS n'a pas le même poids face à quelqu'un qui accepte l'exploration spatiale et face à un platiste. Permettre de dupliquer ou de conditionner certaines branches de l'arbre selon le profil de l'interlocuteur. Lié à la fonctionnalité multi-argumentaire.
+
+##### Multi-argumentaire
+
+Les débats étant souvent complexes, Argumentor doit pouvoir gérer plusieurs argumentaires en parallèle — par exemple pour adapter sa position selon l'interlocuteur (plus à droite, plus à gauche, expert, néophyte). Lié au dédoublement de branches.
+
+##### Argumentor collaboratif
+
+Version avec backend, base de données et comptes utilisateurs, permettant à des équipes de travailler sur un même argumentaire. La version locale gratuite serait maintenue en parallèle.
+
+---
+
+## Terminé
+
+##### Calculations : value, weight, global score
+
+Implémentation complète du système de scoring : valeur utilisateur (0,0–1,0), validité et pertinence calculées récursivement depuis les enfants, poids via courbe en S (tanh), score global ±10. Les champs calculés ne sont plus stockés dans le JSON.
+
+##### Forma heritage
+
+Lorsqu'un argument est créé ou déplacé, il hérite de la forme de l'argument parent.
 
 ##### Default cause
 
-En tant qu'utilisateur, je veux que lorsque je déplace un argument, lui et tous ses enfants prenent une cause neutre.
+Lorsqu'un argument est déplacé, lui et tous ses enfants prennent une cause neutre.
 
-##### unuseful controls
+##### Unuseful controls
 
-Dans le formulaire d'ajout et modification d'argument, tous les contrôles ne sont pas utiles. Les masquer, désactiver ou supprimer.
+Dans le formulaire d'argument, les contrôles inutiles ont été masqués ou supprimés. Les options "value" et "weight" retirées du sélecteur de natura.
 
 ##### Close button
 
-Dans les formulaires, le bouton pour fermer la fenêtre en haut à droite, le hover n'est vraiment pas terrible.
+Hover du bouton de fermeture des formulaires corrigé.
 
 ##### Improve help texts
 
-Réviser les textes, éventuellement agrandir la police et ajouter des titres pour aérer.
-Au passage où il est question de déséquilibre psychologique auquel Authenticator n'y peut rien, ajouter qu'on a le droit de penser contre les experts.
+Textes de l'aide révisés, section scoring ajoutée dans Théorie et Mode d'emploi.
 
-##### GitHub URGENT
+##### GitHub / Déploiement
 
-Argumentor premier du nom est sur GitHub, mais cette version n'ira pas plus loin, elle peut être supprimée. La version Argumentor 2 a à peine commencé, elle n'est qu'en local, et peut être supprimé. Argumentor 3 est la version courante, mais elle n'est qu'en local. Ce serait bien quelle prenne la place de la première version. Attention, je crois qu'il y a un token ou je ne sais quoi à renouveller.
-
-### Long term Backlog
-
-##### multi-argumentaire
-
-Les débats étant souvent complexes, s'étalant sur plusieurs niveaux, Argumentor doit pouvoir gérer plusieurs argumentaires en même temps. Par exemple, pour prendre en compte qu'on ne débat pas de la même façon avec quelqu'un qui est politiquement plus à droite que nous,qu'avec quelqu'un qui est plus à gauche.
-
-##### argument multi-tâches
-
-Normalement, un argument ne doit avoir qu'une cause, Pour ou Contre. Dans la pratique, on voit qu'un même fait peut être un argument pour des positions opposées. Par exemple, Untel a été condamné par la justice. A, partant du principe que la justice est impartiale, dira que c'est la preuve que Untel est condamnable ; B, partant du principe que B est innocent, dira que c'est la preuve que la justice est partialle.
-Si x, y
-x
-Donc y
-Il faudra dans cette optique que di un argument peut occuper la position de x et d'y, il puisse être considéré comme deux arguments distincts.
-
-##### Argumentor premium
-
-Cette fois-ci, ça sera avec un backend et base de données et inscriptions - tout en gardant la possibilité gratuite de faire sans backend - avec la possibilité que des équipes puissent travailler sur un même argumentaire.
+Projet versionné sur GitHub, déployé sur Vercel : https://argumentor-a33q.vercel.app/
