@@ -207,17 +207,29 @@ function ArgumentNode({
         <div className={styles.argumentFooter}>
           <p className={styles.natura}>{argument.natura}</p>
           <div className={styles.argumentScores}>
-            <span className={styles.scoreChip + " " + styles.scoreChipValidity}>
+            <span
+              className={styles.scoreChip + " " + styles.scoreChipValidity}
+              title="Validité héritée des sous-arguments de validité (∈ −1 à +1)"
+            >
               V {argument.validity != null ? argument.validity.toFixed(2) : "—"}
             </span>
-            <span className={styles.scoreChip + " " + styles.scoreChipRelevance}>
+            <span
+              className={styles.scoreChip + " " + styles.scoreChipRelevance}
+              title="Pertinence héritée des sous-arguments de pertinence (∈ −1 à +1)"
+            >
               R {argument.relevance != null ? argument.relevance.toFixed(2) : "—"}
             </span>
-            <span className={styles.scoreChip + " " + styles.scoreChipWeight}>
+            <span
+              className={styles.scoreChip + " " + styles.scoreChipWeight}
+              title="Poids = combinaison (courbe en S) de V et R. Pour une feuille sans sous-arguments positionnés, poids = 2×valeur−1."
+            >
               W {argument.weight != null ? argument.weight.toFixed(2) : "—"}
             </span>
-            <small style={{ color: "#aaa" }}>
-              val. utilisateur : {(argument.value ?? 0.5).toFixed(1)}
+            <small
+              style={{ color: "#aaa" }}
+              title="Valeur fixée par vous (0,0 à 1,0) — seule grandeur qui se propage vers le parent"
+            >
+              val. : {(argument.value ?? 0.5).toFixed(1)}
             </small>
           </div>
           <div className={styles.argumentActions}>
