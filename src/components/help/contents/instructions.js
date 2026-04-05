@@ -15,7 +15,7 @@ export const instructionsContent = `
 <ul style="margin-left:20px; margin-top:8px; line-height:2em;">
   <li><strong style="color:#2980b9">V (Validité)</strong> : dans quelle mesure les sous-arguments de validité soutiennent (ou minent) cet argument. Valeur entre −1,0 et +1,0.</li>
   <li><strong style="color:#27ae60">R (Pertinence)</strong> : même chose pour les sous-arguments de pertinence.</li>
-  <li><strong style="color:#e67e22">W (Poids)</strong> : combinaison de V et R via une courbe en S. Représente la solidité globale de l’argument sur la base de ses sous-arguments. Entre −1,0 et +1,0.</li>
+  <li><strong style="color:#e67e22">W (Poids)</strong> : combinaison de V et R via une courbe en S. Représente la solidité globale de l’argument sur la base de ses sous-arguments. Entre −1,0 et +1,0. <em>Exception : un argument sans sous-arguments positionnés (une "feuille") n’a pas de V ni de R à combiner — son poids prend alors directement la valeur que vous lui avez fixée.</em></li>
 </ul>
 <p>La seule valeur que vous saisissez est la <strong>valeur</strong> (curseur de 0,0 à 1,0 dans le formulaire). C’est elle qui contribue au score de l’argument parent, selon que l’argument est Pour (elle s’ajoute) ou Contre (elle se soustrait).</p>
 <p><strong>Score global :</strong> le bandeau en haut de l’argumentaire agrège le poids de tous les arguments et affiche un score entre −10,0 et +10,0. Zéro signifie un argumentaire équilibré. Plus on se rapproche de ±10, plus l’argumentaire est tranché d’un côté.</p>
