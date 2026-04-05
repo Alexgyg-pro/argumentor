@@ -93,10 +93,7 @@
         "causa": "pro",
         "forma": "descriptif",
         "natura": "validity",
-        "validity": 0.5,
-        "relevance": 0.5,
         "value": 0.5,
-        "weight": 0.7,
         "references": [],
         "children": []
       },
@@ -108,11 +105,12 @@
         "causa": "pro",
         "forma": "descriptif",
         "natura": "validity",
-        "validity": 0.5,
-        "relevance": 0.5,
         "value": 0.5,
-        "weight": 0.4,
-        "references": ["ref00010", "ref00011", "ref00012"],
+        "references": [
+          "ref00010",
+          "ref00011",
+          "ref00012"
+        ],
         "children": []
       },
       {
@@ -123,10 +121,7 @@
         "causa": "pro",
         "forma": "descriptif",
         "natura": "validity",
-        "validity": 0.5,
-        "relevance": 0.5,
         "value": 0.5,
-        "weight": 0.6,
         "references": [],
         "children": []
       },
@@ -138,10 +133,7 @@
         "causa": "pro",
         "forma": "descriptif",
         "natura": "validity",
-        "validity": 0.5,
-        "relevance": 0.5,
         "value": 0.5,
-        "weight": 0.3,
         "references": [],
         "children": []
       },
@@ -153,11 +145,10 @@
         "causa": "contra",
         "forma": "descriptif",
         "natura": "validity",
-        "validity": 0.5,
-        "relevance": 0.5,
         "value": 0.5,
-        "weight": 0.8,
-        "references": ["ref00013"],
+        "references": [
+          "ref00013"
+        ],
         "children": [
           {
             "id": "arg00008",
@@ -167,11 +158,10 @@
             "causa": "contra",
             "forma": "descriptif",
             "natura": "validity",
-            "validity": 0.5,
-            "relevance": 0.5,
             "value": 0.5,
-            "weight": 0.1,
-            "references": ["ref00002"],
+            "references": [
+              "ref00002"
+            ],
             "children": [
               {
                 "id": "arg00009",
@@ -181,11 +171,10 @@
                 "causa": "pro",
                 "forma": "descriptif",
                 "natura": "validity",
-                "validity": 0.5,
-                "relevance": 0.5,
                 "value": 0.5,
-                "weight": 0.2,
-                "references": ["ref00002"],
+                "references": [
+                  "ref00002"
+                ],
                 "children": []
               },
               {
@@ -196,11 +185,11 @@
                 "causa": "pro",
                 "forma": "descriptif",
                 "natura": "validity",
-                "validity": 0.5,
-                "relevance": 0.5,
                 "value": 0.5,
-                "weight": 0.7,
-                "references": ["ref00005", "ref00006"],
+                "references": [
+                  "ref00005",
+                  "ref00006"
+                ],
                 "children": []
               }
             ]
@@ -213,10 +202,7 @@
             "causa": "pro",
             "forma": "descriptif",
             "natura": "validity",
-            "validity": 0.5,
-            "relevance": 0.5,
             "value": 0.5,
-            "weight": 0.8,
             "references": [],
             "children": [
               {
@@ -227,10 +213,7 @@
                 "causa": "pro",
                 "forma": "descriptif",
                 "natura": "validity",
-                "validity": 0.5,
-                "relevance": 0.5,
                 "value": 0.5,
-                "weight": 0.6,
                 "references": [],
                 "children": []
               },
@@ -242,10 +225,7 @@
                 "causa": "pro",
                 "forma": "descriptif",
                 "natura": "validity",
-                "validity": 0.5,
-                "relevance": 0.5,
                 "value": 0.5,
-                "weight": 0.1,
                 "references": [],
                 "children": []
               },
@@ -257,11 +237,10 @@
                 "causa": "contra",
                 "forma": "descriptif",
                 "natura": "validity",
-                "validity": 0.5,
-                "relevance": 0.5,
                 "value": 0.5,
-                "weight": 0.4,
-                "references": ["ref00003"],
+                "references": [
+                  "ref00003"
+                ],
                 "children": []
               }
             ]
@@ -276,10 +255,7 @@
         "causa": "contra",
         "forma": "descriptif",
         "natura": "validity",
-        "validity": 0.5,
-        "relevance": 0.5,
         "value": 0.5,
-        "weight": 0.6,
         "references": [],
         "children": []
       },
@@ -291,15 +267,12 @@
         "causa": "contra",
         "forma": "descriptif",
         "natura": "validity",
-        "validity": 0.5,
-        "relevance": 0.5,
         "value": 0.5,
-        "weight": 0.6,
         "references": [],
         "children": []
       }
     ]
   },
   "version": "1.0",
-  "downloadedAt": "2024-12-29T19:30:00.000Z"
+  "downloadedAt": "2026-04-05T18:43:58.151Z"
 }
