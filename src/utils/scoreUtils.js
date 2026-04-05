@@ -114,3 +114,18 @@ export function computeGlobalScore(scoredTree, argumentCodes) {
 
   return 10 * sigmoid(rawScore / GLOBAL_SCALE);
 }
+
+/**
+ * Supprime récursivement les champs calculés d'un arbre avant export ou import.
+ * Seule la valeur fixée par l'utilisateur (value) est conservée.
+ */
+export function stripComputedFields(node) {
+  if (!node) return null;
+
+  const { validity, relevance, weight, rawValidity, rawRelevance, ...rest } = node;
+
+  return {
+    ...rest,
+    children: (node.children || []).map(stripComputedFields),
+  };
+}

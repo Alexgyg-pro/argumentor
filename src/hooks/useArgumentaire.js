@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { useArguments } from "./useArguments";
 import { useDefinitions } from "./useDefinitions";
 import { useReferences } from "./useReferences";
+import { stripComputedFields } from "../utils/scoreUtils";
 // import { generatePdf } from "../utils/pdfUtils";
 
 export function useArgumentaire() {
@@ -93,13 +94,13 @@ export function useArgumentaire() {
         setContext(jsonData.context || "");
         setForma(jsonData.forma || "Descriptif");
 
-        // 2. Arbre d'arguments
+        // 2. Arbre d'arguments (on nettoie les champs calculés des anciennes versions)
         argumentsHook.importArguments(
-          jsonData.tree || {
+          stripComputedFields(jsonData.tree || {
             id: "root",
             claim: jsonData.thesis || "",
             children: [],
-          },
+          }),
         );
 
         // 3. Définitions
@@ -141,12 +142,12 @@ export function useArgumentaire() {
       setContext(jsonData.context || "");
       setForma(jsonData.forma || "Descriptif");
 
-      // 2. Arbre d'arguments
-      const treeToImport = jsonData.tree || {
+      // 2. Arbre d'arguments (on nettoie les champs calculés des anciennes versions)
+      const treeToImport = stripComputedFields(jsonData.tree || {
         id: "root",
         claim: jsonData.thesis || "",
         children: [],
-      };
+      });
 
       argumentsHook.importArguments(treeToImport);
 
@@ -185,7 +186,7 @@ export function useArgumentaire() {
       // Données structurées (même pattern pour tout)
       definitions: definitionsHook.definitions,
       globalReferences: referencesHook.references,
-      tree: argumentsHook.argumentTree,
+      tree: stripComputedFields(argumentsHook.argumentTree),
 
       // Métadonnées techniques
       version: "1.0",
