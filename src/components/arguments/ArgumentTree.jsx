@@ -225,12 +225,12 @@ function ArgumentNode({
             >
               W {argument.weight != null ? argument.weight.toFixed(2) : "—"}
             </span>
-            <small
-              style={{ color: "#aaa" }}
+            <span
+              className={styles.scoreChip + " " + styles.scoreChipValue}
               title="Valeur fixée par vous (0,0 à 1,0) — seule grandeur qui se propage vers le parent"
             >
-              val. : {(argument.value ?? 0.5).toFixed(1)}
-            </small>
+              val. {(argument.value ?? 0.5).toFixed(1)}
+            </span>
           </div>
           <div className={styles.argumentActions}>
             <button

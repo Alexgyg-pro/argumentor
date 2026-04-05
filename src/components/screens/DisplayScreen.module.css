@@ -466,6 +466,12 @@
   border: 1px solid #fad7a0;
 }
 
+.scoreChipValue {
+  background: #f3f0ff;
+  color: #6d28d9;
+  border: 1px solid #c4b5fd;
+}
+
 /* ===== BOUTONS TOGGLE MODE / EXPAND ===== */
 .toggleModeButton,
 .toggleExpandButton {
